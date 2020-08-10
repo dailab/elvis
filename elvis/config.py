@@ -10,8 +10,18 @@ class ElvisConfig:
     """
 
     def __init__(self, arrival_distribution, emissions_scenario, renewables_scenario,
-                 charging_points, vehicle_types, scheduling_policy, opening_hours):
-        """Create an ElvisConfig given all parameters."""
+                 charging_points, vehicle_types, scheduling_policy, opening_hours, timeParams,
+                 charging_events):
+        """Create an ElvisConfig given all parameters.
+
+        Args:
+            timeParams (tuple): start date as :obj: `datetime.datetime`,
+                end date as :obj: `datetime.datetime`,
+                step size as :obj: `datetime.timedelta`.
+            charging_events (int): Total amount of charging events per week.
+
+
+        """
 
         self.arrival_distribution = arrival_distribution
         self.emissions_scenario = emissions_scenario
@@ -20,6 +30,13 @@ class ElvisConfig:
         self.vehicle_types = vehicle_types
         self.scheduling_policy = scheduling_policy
         self.opening_hours = opening_hours
+
+        self.start_date = timeParams[0]
+        self.end_date = timeParams[1]
+        self.resolution = timeParams[2]
+
+        self.charging_events = charging_events
+
 
         # The cached results
         self._result = None
