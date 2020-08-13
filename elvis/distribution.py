@@ -74,6 +74,12 @@ class InterpolatedDistribution(Distribution):
         return y0 + (y1 - y0) * offset
 
     def __getitem__(self, key):
+        if key < self.points[0][0]:
+            return self.points[0][1]
+
+        if key >= self.points[-1][0]:
+            return self.points[-1][1]
+
         # find the closest point we have.
         min_i = 0
 
@@ -82,11 +88,43 @@ class InterpolatedDistribution(Distribution):
                 min_i = i
                 break
 
-        if min_i == 0:
+        p0 = self.points[min_i - 1]
+        p1 = self.points[min_i]
+        offset = (key - p0[0]) / (p1[0] - p0[0])
+
+        return self.interpolate(p0[1], p1[1], offset)
+
+    @property
+    def bounds(self):
+        return self._bounds
+
+class EquallySpacedInterpolatedDistribution(Distribution):
+    """A distribution that generates new values using some form of interpolation of a set of given points,
+     whose x values are the same distance apart."""
+
+    def __init__(self, points, bounds, interpolate):
+        self.points = points
+        self._bounds = bounds
+        self.interpolate = interpolate
+        self.distance_between_points = abs(points[1][0] - points[0][0])
+
+    @staticmethod
+    def linear(points, bounds):
+        return EquallySpacedInterpolatedDistribution(points, bounds, InterpolatedDistribution._linear_interpolation)
+
+    @staticmethod
+    def _linear_interpolation(y0, y1, offset):
+        return y0 + (y1 - y0) * offset
+
+    def __getitem__(self, key):
+        if key < self.points[0][0]:
             return self.points[0][1]
 
-        if min_i >= len(self.points):
+        if key >= self.points[-1][0]:
             return self.points[-1][1]
+
+        # find the closest point we have.
+        min_i = math.ceil((key - self.points[0][0]) / self.distance_between_points)
 
         p0 = self.points[min_i - 1]
         p1 = self.points[min_i]
