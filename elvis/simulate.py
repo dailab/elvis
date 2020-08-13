@@ -1,6 +1,7 @@
 import datetime
 import math
 import numpy as np
+import time
 
 import distribution
 
@@ -69,7 +70,7 @@ def create_vehicle_arrivals(config, time_steps):
     arrival_distribution = allign_distribution(arrival_distribution, time_steps[0], time_steps[-1])
 
     # Create distribution based on reordered arrival distribution
-    dist = distribution.InterpolatedDistribution.linear(
+    dist = distribution.EquallySpacedInterpolatedDistribution.linear(
         list(zip(list(range(len(arrival_distribution))), arrival_distribution)), None)
 
     # Calculate position of each time step at arrival distribution
@@ -89,6 +90,7 @@ def create_vehicle_arrivals(config, time_steps):
     arrivals = []
     corr_times = np.random.choice(corr_position, p=arrival_probability,
                                   size=math.ceil(num_charging_events * num_weeks))
+
     for corr_time in corr_times:
         arrivals.append(time_steps[corr_position.index(corr_time)])
 
@@ -118,11 +120,11 @@ def simulate(config):
 
 class TestConfig:
     def __init__(self):
-        self.start_date = datetime.datetime(2020, 1, 1, 22)
-        self.end_date = datetime.datetime(2020, 1, 18, 1, 15)
-        self.resolution = datetime.timedelta(minutes=30)
+        self.start_date = datetime.datetime(2020, 1, 1)
+        self.end_date = datetime.datetime(2020, 12, 31, 23, 59)
+        self.resolution = datetime.timedelta(minutes=1)
 
-        self.num_charging_events = 5
+        self.num_charging_events = 1000
 
         self.arrival_distribution = [0 for x in range(168)] #[np.random.uniform(0, 1) for x in range(168)]
         self.arrival_distribution[8] = 1
