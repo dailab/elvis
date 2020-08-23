@@ -1,6 +1,7 @@
 
 import sched
 
+
 class ElvisConfig:
     """This class contains the relevant parameters to execute the charging simulation.
 
@@ -11,14 +12,17 @@ class ElvisConfig:
 
     def __init__(self, arrival_distribution, emissions_scenario, renewables_scenario,
                  charging_points, vehicle_types, scheduling_policy, opening_hours, time_params,
-                 num_charging_events):
+                 num_charging_events, queue_length=0, disconnect_by_time=True):
         """Create an ElvisConfig given all parameters.
 
         Args:
-            time_params (tuple): start date as :obj: `datetime.datetime`,
+            time_params: (tuple): start date as :obj: `datetime.datetime`,
                 end date as :obj: `datetime.datetime`,
                 step size as :obj: `datetime.timedelta`.
-            num_charging_events (int): Total amount of charging events per week.
+            num_charging_events: (int): Total amount of charging events per week.
+            queue_length: (int): Max length of waiting queue for vehicles.
+            disconnect_by_time: (bool): True if cars are disconnected due to their parking time.
+            False if cars are disconnected due to their SOC limit.
 
 
         """
@@ -36,6 +40,8 @@ class ElvisConfig:
         self.resolution = time_params[2]
 
         self.num_charging_events = num_charging_events
+        self.queue_length = queue_length
+        self.disconnect_by_time = disconnect_by_time
 
 
         # The cached results
