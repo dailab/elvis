@@ -8,6 +8,7 @@ TODO:
 
 import datetime
 import queue
+import logging
 
 from elvis.charging_event_generator import create_charging_events
 from elvis.set_up_infrastructure import set_up_charging_points
@@ -54,11 +55,15 @@ def handle_car_arrival(charging_points, event, waiting_queue):
             connected_vehicle = connection_point.connected_vehicle
             if connected_vehicle is None:
                 connection_point.connect_vehicle(event)
+                logging.info(' Connect: %s', connection_point)
                 return waiting_queue
 
     # if connection points unavailable put arrival to queue if not full and queue being considered
     if not waiting_queue.full() and waiting_queue.maxsize > 0:
         waiting_queue.put(event)
+        logging.info(' Put %s to queue.', event)
+    else:
+        logging.info(' Queue is full -> Reject: %s', event)
     return waiting_queue
 
 
@@ -89,6 +94,8 @@ def update_queue(waiting_queue, current_time_step, by_time):
         # If waiting time is not longer than parking time remain in queue
         if arrival_time + parking_time > current_time_step:
             updated_queue.put(event)
+        else:
+            logging.info(' Remove: %s from queue.', event)
     return updated_queue
 
 
@@ -114,11 +121,14 @@ def update_charging_points(charging_points, waiting_queue, current_time_step, by
 
                     if arrival_time + parking_time <= current_time_step:
                         connection_point.disconnect_vehicle()
+                        logging.info(' Disconnect: %s', connection_point)
                         # immediately connect next waiting car
                         if waiting_queue.qsize() > 0:
                             connection_point.connect_vehicle(waiting_queue.get())
+                            logging.info(' Connect: %s from queue.', connection_point)
 
     # if SOC limit is reached: disconnect vehicle
+    # TODO: Test once power assignment is done.
     if by_time is False:
         for charging_point in charging_points:
             for connection_point in charging_point.connection_points:
@@ -129,6 +139,11 @@ def update_charging_points(charging_points, waiting_queue, current_time_step, by
 
                     if soc >= soc_target:
                         connection_point.disconnect_vehicle()
+                        logging.info(' Disconnect: %s', connection_point)
+                        # immediately connect next waiting car
+                        if waiting_queue.qsize() > 0:
+                            connection_point.connect_vehicle(waiting_queue.get())
+                            logging.info(' Connect: %s from queue.', connection_point)
 
     return waiting_queue
 
@@ -140,6 +155,10 @@ def simulate(config):
     Args:
         config (:obj: `ElvisConfig`): User input.
     """
+    # empty log file
+    with open('log.log', 'w'):
+        pass
+    logging.basicConfig(filename='log.log', level=logging.INFO)
     # get list with all time_steps as datetime.datetime
     time_steps = set_up_time_steps(config)
     # create arrival times as sorted list of datetime.datetime
@@ -151,7 +170,7 @@ def simulate(config):
 
     # loop over every time step
     for time_step in time_steps:
-
+        logging.info(' %s', time_step)
         # check if cars must be disconnected, if yes immediately connect car from queue if possible
         waiting_queue = update_queue(waiting_queue, time_step, config.disconnect_by_time)
 
