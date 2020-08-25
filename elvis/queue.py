@@ -24,11 +24,13 @@ class Queue:
         """Add item to queue if not already full."""
         if self.size() < self.maxsize:
             self.queue.append(item)
+            self.determine_next_leaving_time()
 
     def dequeue(self):
         """Get next item from queue if not empty."""
         if len(self.queue) < 1:
             return None
+        self.determine_next_leaving_time()
         return self.queue.pop(0)
 
     def size(self):
