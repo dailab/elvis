@@ -9,7 +9,7 @@ class ChargingEvent:
 
     """
     def __init__(self, arrival_time):
-        self.id = str(ChargingEvent.counter)
+        self.id = 'Charging event: ' + str(ChargingEvent.counter)
         ChargingEvent.counter += 1
         self.arrival_time = arrival_time
         self.parking_time = 5
@@ -18,7 +18,7 @@ class ChargingEvent:
         self.vehicle_type = 'this should be the car'
 
     def __str__(self):
-        print_out = 'Charging_event: ' + self.id + ', '
+        print_out = self.id + ', '
         print_out += 'Arrival time: ' + str(self.arrival_time) + ', '
         print_out += 'Parking_time: ' + str(self.parking_time) + ', '
         print_out += 'SOC: ' + str(self.soc) + ', '

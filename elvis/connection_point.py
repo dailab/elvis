@@ -10,6 +10,9 @@ lower limit or zero.
 class ConnectionPoint:
     """Represents a point of connection between :obj: `charging_point.ChargingPoint` and
     vehicles."""
+
+    counter = 1
+
     def __init__(self, limits, charging_point):
         """Create a connection point given all parameters.
 
@@ -18,6 +21,9 @@ class ConnectionPoint:
             charging_point: (:obj: `charging_point.ChargingPoint`): Charging point the connection
             point belongs to.
             """
+        self.id = 'Connection point: ' + str(ConnectionPoint.counter)
+        ConnectionPoint.counter += 1
+
         self.max_power = limits[0]
         self.min_power = limits[1]
 
@@ -26,7 +32,7 @@ class ConnectionPoint:
         self.charging_point = charging_point
 
     def __str__(self):
-        printout = str(self.connected_vehicle)
+        printout = str(self.id) + ' ' + str(self.connected_vehicle)
         return printout
 
     def connect_vehicle(self, event):

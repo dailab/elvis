@@ -28,7 +28,13 @@ class ChargingPoint:
         - Get values from config.
     """
 
+    counter = 1
+
     def __init__(self, num_connection_points):
+        # id
+        self.id = 'Charging point: ' + str(ChargingPoint.counter)
+        ChargingPoint.counter += 1
+
         # power limits
         self.min_charging_power = 10
         self.max_charging_power = 20
