@@ -6,3 +6,4 @@ elvis/__pycache__
 
 *.DS_Store
 *.log
+elvis/*.log
