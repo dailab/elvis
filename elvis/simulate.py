@@ -1,17 +1,14 @@
 """Simulation of the behavior of the charging infrastructure.
 
-TODO:
-- Should the waiting queue rather be a public variable instead of always passing
-    and returning it from function to function?
-- Faster way to find available conneciton_points necessary? Currently loop over all until one
-     that is available is found."""
+- TODO: What if connection points/charging points are not type manual but type automated."""
 
 import datetime
-import queue
 import logging
 
 from elvis.charging_event_generator import create_charging_events
-from elvis.set_up_infrastructure import set_up_charging_points
+from elvis.set_up_infrastructure import set_up_infrastructure
+from elvis.sched.schedulers import Uncontrolled
+from elvis.waitingqueue import WaitingQueue
 
 
 def set_up_time_steps(config):
@@ -48,7 +45,7 @@ def handle_car_arrival(free_connection_points, busy_connection_points, event, wa
         busy_connection_points: (set): Containing all :obj: `connection_points.ConnectionPoint`
             of the infrastructure that are currently busy.
         event: (:obj: `charging_event.ChargingEvent`): Arriving charging event.
-        waiting_queue: (:obj: `queue.Queue`): Containing the waiting vehicles
+        waiting_queue: (:obj: `queue.WaitingQueue`): Containing the waiting vehicles
     """
 
     # connect the arrival to an available connection point if possible
@@ -67,7 +64,7 @@ def handle_car_arrival(free_connection_points, busy_connection_points, event, wa
         waiting_queue.enqueue(event)
         logging.info(' Put %s to queue.', event)
     else:
-        logging.info(' Queue is full -> Reject: %s', event)
+        logging.info(' WaitingQueue is full -> Reject: %s', event)
     return waiting_queue
 
 
@@ -76,36 +73,35 @@ def update_queue(waiting_queue, current_time_step, by_time):
         therefore must leave.
 
     Args:
-        waiting_queue: (:obj: `queue.Queue`): Charging events waiting for available
+        waiting_queue: (:obj: `queue.WaitingQueue`): Charging events waiting for available
         connection point.
         current_time_step (:obj: `datetime.datetime`): current time step of the simulation.
         by_time: (bool): True if cars shall be disconnected with respect to their parking time.
         False if cars shall be disconnected due to their SOC target.
 
     Returns:
-        updated_queue: (:obj: `queue.Queue`): Queue with removed cars that are overdue.
+        updated_queue: (:obj: `queue.WaitingQueue`): WaitingQueue without removed cars
+            that are overdue.
     """
 
     if by_time is True and current_time_step >= waiting_queue.next_leave:
         to_delete = []
         for i in range(waiting_queue.size()):
             event = waiting_queue.queue[i]
-            arrival_time = event.arrival_time
-            parking_time = datetime.timedelta(hours=event.parking_time)
 
             # If waiting time is not longer than parking time remain in queue
-            if arrival_time + parking_time <= current_time_step:
+            if event.leaving_time <= current_time_step:
                 to_delete.insert(0, i)
 
         if len(to_delete) > 0:
             for i in to_delete:
                 logging.info(' Remove: %s from queue.', waiting_queue.queue.pop(i))
 
-        waiting_queue.get_next_leaving_time()
+        waiting_queue.determine_next_leaving_time()
 
 
-def update_charging_points(free_connection_points, busy_connection_points,
-                           waiting_queue, current_time_step, by_time):
+def update_connection_points(free_connection_points, busy_connection_points,
+                             waiting_queue, current_time_step, by_time):
     """Removes cars due to their parking time or their SOC limit and updates the connection points
     respectively.
 
@@ -114,7 +110,7 @@ def update_charging_points(free_connection_points, busy_connection_points,
             of the infrastructure that are currently available.
         busy_connection_points: (set): Containing all :obj: `connection_points.ConnectionPoint`
             of the infrastructure that are currently busy.
-        waiting_queue: (:obj: `queue.Queue`): waiting vehicles/charging events.
+        waiting_queue: (:obj: `queue.WaitingQueue`): waiting vehicles/charging events.
         current_time_step: (:obj: `datetime.datetime`): current time step.
         by_time: (bool): Configuration class instance.
     """
@@ -123,10 +119,7 @@ def update_charging_points(free_connection_points, busy_connection_points,
         for connection_point in busy_connection_points.copy():
             connected_vehicle = connection_point.connected_vehicle
 
-            arrival_time = connected_vehicle['arrival_time']
-            parking_time = datetime.timedelta(hours=connected_vehicle['parking_time'])
-
-            if arrival_time + parking_time <= current_time_step:
+            if connected_vehicle['leaving_time'] <= current_time_step:
                 logging.info(' Disconnect: %s', connection_point)
                 connection_point.disconnect_vehicle()
                 # Put connection point from busy list to available list
@@ -169,6 +162,31 @@ def update_charging_points(free_connection_points, busy_connection_points,
                     free_connection_points.remove(connection_point)
 
 
+def charge_connected_vehicles(assign_power, busy_connection_points, resolution):
+    """Change SOC of connected vehicles based on power assigned by scheduling policy.
+
+    Args:
+        assign_power: (dict): keys=connection points, values=power to be assigned.
+        busy_connection_points: list of all connection points that currently have a connected
+            vehicle.
+        resolution: (:obj: `datetime.timedelta`): Time in between two adjacent time stamps.
+
+    Returns: None
+    """
+
+    for connection_point in busy_connection_points:
+        power = assign_power[connection_point]
+        vehicle = connection_point.connected_vehicle
+        soc_before = vehicle['soc']
+        if vehicle is None:
+            raise TypeError
+
+        connection_point.charge_vehicle(power, resolution)
+        logging.info('At connection point %s the vehicle SOC has been charged from %s to %s. '
+                     'The power assigned is: %s', connection_point, soc_before, vehicle['soc'],
+                     str(power))
+
+
 def simulate(config):
     """Main simulation loop.
     Iterates over simulation period and simulates the infrastructure.
@@ -176,6 +194,7 @@ def simulate(config):
     Args:
         config (:obj: `ElvisConfig`): User input.
     """
+    # ---------------------Initialisation---------------------------
     # empty log file
     with open('log.log', 'w'):
         pass
@@ -185,25 +204,21 @@ def simulate(config):
     # create arrival times as sorted list of datetime.datetime
     charging_events = create_charging_events(config, time_steps)
     # Initialize waiting queue for cars at the infrastructure
-    waiting_queue = queue.Queue(maxsize=config.queue_length)
-    # set up charging points and their connection points
-    charging_points = set_up_charging_points(config.charging_points)
-    # Put all connection points (all available in the beginning) to list
-    free_connection_points = set()
-    for charging_point in charging_points:
-        for connection_point in charging_point.connection_points:
-            free_connection_points.add(connection_point)
+    waiting_queue = WaitingQueue(maxsize=config.queue_length)
 
+    # set up infrastructure and get all connection points
+    free_connection_points = set(set_up_infrastructure(config.infrastructure))
     busy_connection_points = set()
 
+    # ---------------------  Main Loop  ---------------------------
     # loop over every time step
     for time_step in time_steps:
         logging.info(' %s', time_step)
         # check if cars must be disconnected, if yes immediately connect car from queue if possible
         update_queue(waiting_queue, time_step, config.disconnect_by_time)
 
-        update_charging_points(free_connection_points, busy_connection_points, waiting_queue,
-                               time_step, config.disconnect_by_time)
+        update_connection_points(free_connection_points, busy_connection_points, waiting_queue,
+                                 time_step, config.disconnect_by_time)
 
         # in case of multiple charging events in the same time step: handle one after the other
         while len(charging_events) > 0 and time_step == charging_events[0].arrival_time:
@@ -212,7 +227,11 @@ def simulate(config):
             # remove the arrival from the list
             charging_events = charging_events[1:]
 
-    # TODO: assign power to every component
+        # assign power
+        assign_power = config.scheduling_policy.schedule(config, free_connection_points,
+                                                         busy_connection_points)
+
+        charge_connected_vehicles(assign_power, busy_connection_points, config.resolution)
 
 
 class TestConfig:
@@ -228,8 +247,9 @@ class TestConfig:
         self.arrival_distribution[10] = 1
         self.charging_events = 2
         self.queue_length = 2
-        self.charging_points = [1, 1]
+        self.infrastructure = {'transformers': [{'id': 'transformer1', 'max_power': 100, 'min_power': 10, 'charging_points': [{'id': 'charging_point1', 'max_power': 10, 'min_power': 1, 'connection_points': [{'id': 'connection_point1', 'max_power': 5, 'min_power': 0.5}, {'id': 'connection_point2', 'max_power': 5, 'min_power': 0.5}]}, {'id': 'charging_point2', 'max_power': 10, 'min_power': 1, 'connection_points': [{'id': 'connection_point3', 'max_power': 5, 'min_power': 0.5}, {'id': 'connection_point4', 'max_power': 5, 'min_power': 0.5}]}]}]}
         self.disconnect_by_time = True
+        self.scheduling_policy = Uncontrolled()
 
 
 if __name__ == '__main__':
