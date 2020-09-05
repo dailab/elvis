@@ -8,7 +8,7 @@ import logging
 from elvis.charging_event_generator import create_charging_events
 from elvis.set_up_infrastructure import set_up_infrastructure
 from elvis.sched.schedulers import Uncontrolled
-from elvis.waitingqueue import WaitingQueue
+from elvis.waiting_queue import WaitingQueue
 
 
 def set_up_time_steps(config):
