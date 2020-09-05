@@ -1,4 +1,3 @@
-
 import sched
 
 
@@ -23,8 +22,6 @@ class ElvisConfig:
             queue_length: (int): Max length of waiting queue for vehicles.
             disconnect_by_time: (bool): True if cars are disconnected due to their parking time.
             False if cars are disconnected due to their SOC limit.
-
-
         """
 
         self.arrival_distribution = arrival_distribution
@@ -35,6 +32,7 @@ class ElvisConfig:
         self.scheduling_policy = scheduling_policy
         self.opening_hours = opening_hours
 
+        # TODO: Dependant of passing from interface make dates and timespans datetime objects
         self.start_date = time_params[0]
         self.end_date = time_params[1]
         self.resolution = time_params[2]

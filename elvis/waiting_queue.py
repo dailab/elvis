@@ -1,4 +1,4 @@
-"""Wrapper class to have a more simplistic object than queue.Queue.
+"""Wrapper class to have a more simplistic object than queue.WaitingQueue.
 
 TODO: Question: Is setting self.next_leave to year 9999 okay? Does the job but looks weird.
 -> used to not have to check if len==0 or next_leave==None. see simulate.py, line: 89"""
@@ -6,7 +6,7 @@ TODO: Question: Is setting self.next_leave to year 9999 okay? Does the job but l
 import datetime
 
 
-class Queue:
+class WaitingQueue:
     """Represents the waiting queue for vehicles."""
     def __init__(self, maxsize=0, arrivals=None):
 
@@ -46,7 +46,7 @@ class Queue:
                 parking_time = datetime.timedelta(hours=event.parking_time)
 
                 leaving_times.append(arrival_time + parking_time)
-            self.next_leave = leaving_times.sort()[0]
+            self.next_leave = sorted(leaving_times)[0]
         else:
             # if len = 0: Set next leave to be large enough date
             self.next_leave = datetime.datetime(9999, 1, 1)

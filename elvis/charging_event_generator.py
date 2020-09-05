@@ -58,7 +58,7 @@ def hours_to_time_stamps(hours, start):
     return time_stamps
 
 
-def allign_distribution(distr, first_time_stamp, last_time_stamp):
+def align_distribution(distr, first_time_stamp, last_time_stamp):
     """Receives weekly distribution in hourly resolution besides a starting and an
     ending time_stamp. Shifts and multiplies distribution to allign it to the
      period of the time_stamps.
@@ -99,7 +99,7 @@ def create_vehicle_arrivals(config, time_steps):
     num_charging_events = config.num_charging_events
 
     # Rearrange arrival distribution so it starts with first hour of simulation time
-    arrival_distribution = allign_distribution(arrival_distribution, time_steps[0], time_steps[-1])
+    arrival_distribution = align_distribution(arrival_distribution, time_steps[0], time_steps[-1])
 
     # Create distribution based on reordered arrival distribution
     dist = distribution.EquallySpacedInterpolatedDistribution.linear(

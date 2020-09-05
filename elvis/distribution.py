@@ -1,6 +1,7 @@
 
 import math
 
+
 class Distribution:
     """Represents a distribution of some x value to a y value."""
 
@@ -26,6 +27,7 @@ class Distribution:
     @property
     def max_y(self):
         return bounds["y"]["max"]
+
 
 class NormalDistribution(Distribution):
     """A normal distribution."""
@@ -56,6 +58,7 @@ class NormalDistribution(Distribution):
                 "max": 1,
             }
         }
+
 
 class InterpolatedDistribution(Distribution):
     """A distribution that generates new values using some form of interpolation of a set of given points."""
@@ -97,6 +100,7 @@ class InterpolatedDistribution(Distribution):
     @property
     def bounds(self):
         return self._bounds
+
 
 class EquallySpacedInterpolatedDistribution(Distribution):
     """A distribution that generates new values using some form of interpolation of a set of given points,
