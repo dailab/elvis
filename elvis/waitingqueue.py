@@ -11,6 +11,7 @@ class Queue:
     def __init__(self, maxsize=0, arrivals=None):
 
         self.queue = []
+        # initialise with large enough date
         self.next_leave = datetime.datetime(9999, 1, 1)
         if arrivals is not None:
             for arrival in arrivals:
@@ -18,7 +19,6 @@ class Queue:
 
             self.determine_next_leaving_time()
         self.maxsize = maxsize
-        # initialise with large enough date
 
     def enqueue(self, item):
         """Add item to queue if not already full."""
