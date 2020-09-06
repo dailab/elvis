@@ -7,8 +7,9 @@ import logging
 
 from elvis.charging_event_generator import create_charging_events
 from elvis.set_up_infrastructure import set_up_infrastructure
-from elvis.sched.schedulers import Uncontrolled
+from elvis.sched.schedulers import Uncontrolled, FCFS
 from elvis.waiting_queue import WaitingQueue
+from elvis.config import ElvisConfig, ElvisConfigBuilder
 
 
 def set_up_time_steps(config):
@@ -162,14 +163,14 @@ def update_connection_points(free_connection_points, busy_connection_points,
                     free_connection_points.remove(connection_point)
 
 
-def charge_connected_vehicles(assign_power, busy_connection_points, resolution):
+def charge_connected_vehicles(assign_power, busy_connection_points, res):
     """Change SOC of connected vehicles based on power assigned by scheduling policy.
 
     Args:
         assign_power: (dict): keys=connection points, values=power to be assigned.
         busy_connection_points: list of all connection points that currently have a connected
             vehicle.
-        resolution: (:obj: `datetime.timedelta`): Time in between two adjacent time stamps.
+        res: (:obj: `datetime.timedelta`): Time in between two adjacent time stamps.
 
     Returns: None
     """
@@ -181,7 +182,7 @@ def charge_connected_vehicles(assign_power, busy_connection_points, resolution):
         if vehicle is None:
             raise TypeError
 
-        connection_point.charge_vehicle(power, resolution)
+        connection_point.charge_vehicle(power, res)
         logging.info('At connection point %s the vehicle SOC has been charged from %s to %s. '
                      'The power assigned is: %s', connection_point, soc_before, vehicle['soc'],
                      str(power))
@@ -202,6 +203,8 @@ def simulate(config):
     # get list with all time_steps as datetime.datetime
     time_steps = set_up_time_steps(config)
     # create arrival times as sorted list of datetime.datetime
+    # TODO: Should charging events be initialised before simulate is called
+    #  and stored in ElvisConfig?
     charging_events = create_charging_events(config, time_steps)
     # Initialize waiting queue for cars at the infrastructure
     waiting_queue = WaitingQueue(maxsize=config.queue_length)
@@ -234,24 +237,44 @@ def simulate(config):
         charge_connected_vehicles(assign_power, busy_connection_points, config.resolution)
 
 
-class TestConfig:
-    def __init__(self):
-        self.start_date = datetime.datetime(2020, 1, 1)
-        self.end_date = datetime.datetime(2020, 1, 7, 23, 59)
-        self.resolution = datetime.timedelta(minutes=60)
-
-        self.num_charging_events = 5
-
-        self.arrival_distribution = [0 for x in range(168)] #[np.random.uniform(0, 1) for x in range(168)]
-        self.arrival_distribution[8] = 1
-        self.arrival_distribution[10] = 1
-        self.charging_events = 2
-        self.queue_length = 2
-        self.infrastructure = {'transformers': [{'id': 'transformer1', 'max_power': 100, 'min_power': 10, 'charging_points': [{'id': 'charging_point1', 'max_power': 10, 'min_power': 1, 'connection_points': [{'id': 'connection_point1', 'max_power': 5, 'min_power': 0.5}, {'id': 'connection_point2', 'max_power': 5, 'min_power': 0.5}]}, {'id': 'charging_point2', 'max_power': 10, 'min_power': 1, 'connection_points': [{'id': 'connection_point3', 'max_power': 5, 'min_power': 0.5}, {'id': 'connection_point4', 'max_power': 5, 'min_power': 0.5}]}]}]}
-        self.disconnect_by_time = True
-        self.scheduling_policy = Uncontrolled()
-
-
 if __name__ == '__main__':
-    conf = TestConfig()
-    simulate(conf)
+
+    start_date = '2020-01-01 20:00:00'  # datetime.datetime(2020, 1, 1)
+    end_date = datetime.datetime(2020, 1, 7, 19, 0)
+    resolution = '01:0:0'
+    time_params = (start_date, end_date, resolution)
+    # time_params = (start_date, end_date, resolution)
+    num_charging_events = 5
+    #
+    arrival_distribution = [0 for x in range(168)] #[np.random.uniform(0, 1) for x in range(168)]
+    arrival_distribution[8] = 1
+    arrival_distribution[10] = 1
+    #
+    queue_length = 2
+    infrastructure = {'transformers': [{'id': 'transformer1', 'max_power': 100, 'min_power': 10, 'infrastructure': [{'id': 'charging_point1', 'max_power': 10, 'min_power': 1, 'connection_points': [{'id': 'connection_point1', 'max_power': 5, 'min_power': 0.5}, {'id': 'connection_point2', 'max_power': 5, 'min_power': 0.5}]}, {'id': 'charging_point2', 'max_power': 10, 'min_power': 1, 'connection_points': [{'id': 'connection_point3', 'max_power': 5, 'min_power': 0.5}, {'id': 'connection_point4', 'max_power': 5, 'min_power': 0.5}]}]}]}
+    disconnect_by_time = True
+    # scheduling_policy = Uncontrolled()
+    #
+    # conf = ElvisConfig(arrival_distribution, None, None, infrastructure, None, scheduling_policy,
+    #                    None, time_params, num_charging_events, queue_length, disconnect_by_time)
+    # simulate(conf)
+
+    with open('log.log', 'w'):
+        pass
+    logging.basicConfig(filename='log.log', level=logging.INFO)
+
+    builder = ElvisConfigBuilder()
+    builder.with_time_params(time_params)
+    builder.with_scheduling_policy(Uncontrolled())
+    builder.with_infrastructure(infrastructure)
+    builder.with_arrival_distribution(arrival_distribution)
+    builder.with_disconnect_by_time(disconnect_by_time)
+    builder.with_queue_length(queue_length)
+    builder.with_num_charging_events(num_charging_events)
+    kwargs = {'brand': 'Aston Martin', 'model': 'V12 Vantage Roadster',
+              'capacity': 30, 'min_charge_power': 5, 'max_charge_power': 10, 'efficiency': 1}
+    builder.add_vehicle_type(**kwargs)
+
+    config = builder.build()
+
+    simulate(config)
