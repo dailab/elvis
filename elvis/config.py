@@ -1,4 +1,9 @@
-import sched
+import logging
+import datetime
+
+import elvis.sched.schedulers as schedulers
+from elvis.battery import EVBattery
+from elvis.vehicle import ElectricVehicle
 
 
 class ElvisConfig:
@@ -10,7 +15,7 @@ class ElvisConfig:
     """
 
     def __init__(self, arrival_distribution, emissions_scenario, renewables_scenario,
-                 charging_points, vehicle_types, scheduling_policy, opening_hours, time_params,
+                 infrastructure, vehicle_types, scheduling_policy, opening_hours, time_params,
                  num_charging_events, queue_length=0, disconnect_by_time=True):
         """Create an ElvisConfig given all parameters.
 
@@ -23,16 +28,16 @@ class ElvisConfig:
             disconnect_by_time: (bool): True if cars are disconnected due to their parking time.
             False if cars are disconnected due to their SOC limit.
         """
-
+        # not needed yet
         self.arrival_distribution = arrival_distribution
         self.emissions_scenario = emissions_scenario
         self.renewables_scenario = renewables_scenario
-        self.charging_points = charging_points
         self.vehicle_types = vehicle_types
-        self.scheduling_policy = scheduling_policy
         self.opening_hours = opening_hours
 
-        # TODO: Dependant of passing from interface make dates and timespans datetime objects
+        # already in use
+        self.infrastructure = infrastructure
+        self.scheduling_policy = scheduling_policy
         self.start_date = time_params[0]
         self.end_date = time_params[1]
         self.resolution = time_params[2]
@@ -80,7 +85,7 @@ class ElvisConfigBuilder:
         self.renewables_scenario = None
 
         # List of charging points available at this location
-        self.charging_points = []
+        self.infrastructure = []
 
         # List of supported vehicle types
         self.vehicle_types = []
@@ -112,8 +117,16 @@ class ElvisConfigBuilder:
         """Create the ElvisConfig with the passed parameters."""
 
         err_msg = self.validate_params()
-        if err_msg is not None:
-            raise InvalidConfigException(err_msg)
+        # TODO: None is not always an error
+        # if err_msg is not None:
+        #     raise InvalidConfigException(err_msg)
+
+        time_params = (self.start_date, self.end_date, self.resolution)
+        config = ElvisConfig(self.arrival_distribution, self.emissions_scenario,
+                             self.renewables_scenario, self.infrastructure, self.vehicle_types,
+                             self.scheduling_policy, self.opening_hours, time_params,
+                             self.num_charging_events, self.queue_length, self.disconnect_by_time)
+        return config
 
     def validate_params(self):
         # TODO: validate types + check for missing params
@@ -135,18 +148,20 @@ class ElvisConfigBuilder:
             return 'no time resolution specified'
         if self.num_charging_events is None:
             return 'no number of charging events per week specified'
-        if self.queue_length is None:
-            return 'no queue length specified'
+        # queue_length == None means no queue used
+        # if self.queue_length is None:
+        #     return 'no queue length specified'
         if self.disconnect_by_time is None:
             return 'no disconnect by time specified'
 
-        if not isinstance(self.scheduling_policy, sched.SchedulingPolicy):
+        if not isinstance(self.scheduling_policy, schedulers.SchedulingPolicy):
             return "scheduling policy must be a subclass of elvis.sched.SchedulingPolicy"
 
         return None
 
     def with_arrival_distribution(self, arrival_distribution):
-        """Update the arrival distribution to use."""
+        """Update the arrival distribution to use.
+        TODO: only type list with 168 values for now."""
 
         self.arrival_distribution = arrival_distribution
 
@@ -160,30 +175,135 @@ class ElvisConfigBuilder:
 
         self.renewables_scenario = renewables_scenario
 
-    def with_scheduling_policy(self, scheduling_policy):
-        """Update the scheduling policy to use."""
+    def with_scheduling_policy(self, scheduling_policy_input):
+        """Update the scheduling policy to use.
+        Default: :obj: `elvis.sched.schedulers.Uncontrolled`.
+        Use default if input not a str or str can not be matched.
+
+        Args:
+            scheduling_policy_input: Either str containing name of the scheduling policy to be used.
+                Or instance of :obj: `elvis.sched.schedulers.SchedulingPolicy`.
+        """
+        # set default
+        scheduling_policy = schedulers.Uncontrolled()
+
+        # if input is already instance of Scheduling Policy assign
+        if isinstance(scheduling_policy_input, schedulers.SchedulingPolicy):
+            self.scheduling_policy = scheduling_policy_input
+            return
+
+        # ensure input is str. If not return default
+        if type(scheduling_policy_input) is not str:
+            logging.error('Scheduling policy should be of type str or an instance of '
+                          'SchedulingPolicy. The uncontrolled strategy has been used as a default.')
+            self.scheduling_policy = scheduling_policy
+            return
+
+        # Match string
+        if scheduling_policy_input == 'Uncontrolled':
+            scheduling_policy = schedulers.Uncontrolled()
+
+        elif scheduling_policy_input == 'Discrimination Free':
+            scheduling_policy = schedulers.DiscriminationFree()
+
+        elif scheduling_policy_input == 'FCFS':
+            scheduling_policy = schedulers.FCFS()
+
+        elif scheduling_policy_input == 'With Storage':
+            scheduling_policy = schedulers.WithStorage()
+
+        elif scheduling_policy_input == 'Optimized':
+            scheduling_policy = schedulers.Optimized()
+
+        # invalid str use default: Uncontrolled
+        else:
+            logging.error('"%s" can not be matched to any existing scheduling policy.'
+                          'Please use: "Uncontrolled", "Discrimination Free", "FCFS", '
+                          '"With Storage" or "Optimized". '
+                          'Uncontrolled is the default value and has been used for the simulation.',
+                          str(scheduling_policy_input))
 
         self.scheduling_policy = scheduling_policy
 
-    def with_charging_points(self, charging_points):
+    def with_infrastructure(self, infrastructure):
         """Update the charging points to use."""
-
-        self.charging_points = charging_points
-
-    def add_charging_point(self, charging_point):
-        """Add a charging point to this configuration."""
-
-        self.charging_points.append(charging_point)
+        assert type(infrastructure) is dict
+        self.infrastructure = infrastructure
 
     def with_vehicle_types(self, vehicle_types):
         """Update the vehicle types to use."""
+        for vehicle_type in vehicle_types:
+            assert isinstance(vehicle_type, ElectricVehicle)
 
         self.vehicle_types = vehicle_types
 
-    def add_vehicle_type(self, vehicle_type):
-        """Add a supported vehicle type to this configuration."""
+    def add_vehicle_type(self, vehicle_type=None, **kwargs):
+        """Add a supported vehicle type to this configuration or a list of vehicle types.
+            If no instance of vehicle type is passed an instance of vehicle_type is created if
+            kwargs contains the necessary keys (see below).
+            If vehicle_type is passed:
+                - vehicle_type: (:obj: `vehicle.ElectricVehicle`
 
-        self.vehicle_types.append(vehicle_type)
+            If battery instance is passed kwargs has to to contain:
+                - brand: (str): Brand of the vehicle.
+                - model: (str): Model of the vehicle.
+                - battery: (:obj: `battery.EVBattery`): Battery instance
+            If no battery is passed and shall be initialized:
+                - brand: (str): Brand of the vehicle.
+                - model: (str): Model of the vehicle.
+                - capacity: (float): Capacity of the battery in kWh.
+                - max_charge_power: (float): Max power in kW.
+                - min_charge_power: (float): Min power in kW.
+                - efficiency: (float): [0, 1]
+
+            Raises:
+                AssertionError:
+                    - If vehicle_type is of type list and at least one of the entries is not of
+                        type :obj: `ElectricVehicle`.
+                    - If vehicle type is not a list and not of type :obj: `ElectricVehicle`.
+                    - If kwargs are passed and the keys do not contain the variable names listed
+                        above.
+        """
+        # if list with multiple vehicle_type instances is passed add multiple
+        if type(vehicle_type) is list:
+            for vehicle in vehicle_type:
+                assert isinstance(vehicle, ElectricVehicle)
+                self.vehicle_types.append(vehicle)
+                return
+        # if an instance of vehicle type is passed assign
+        elif vehicle_type is not None:
+            assert isinstance(vehicle_type, ElectricVehicle)
+            self.vehicle_types.append(vehicle_type)
+            return
+
+        assert 'brand' in kwargs.keys()
+        assert 'model' in kwargs.keys()
+        brand = str(kwargs['brand'])
+        model = str(kwargs['model'])
+
+        # if all fields of ElectricVehicle are passed and an instance of EVBattery is already made
+        if 'battery' in kwargs.keys():
+            assert isinstance(kwargs['battery'], EVBattery)
+            battery = kwargs['battery']
+            self.vehicle_types.append(ElectricVehicle(brand, model, battery))
+
+        # if no instance of EVBattery is already made check if all parameters are passed.
+        assert 'capacity' in kwargs.keys()
+        assert 'max_charge_power' in kwargs.keys()
+        assert 'min_charge_power' in kwargs.keys()
+        assert 'efficiency' in kwargs.keys()
+
+        capacity = kwargs['capacity']
+        max_charge_power = kwargs['max_charge_power']
+        min_charge_power = kwargs['min_charge_power']
+        efficiency = kwargs['efficiency']
+
+        # get instance of battery
+        battery = EVBattery(capacity=capacity, max_charge_power=max_charge_power,
+                            min_charge_power=min_charge_power, efficiency=efficiency)
+
+        # get instance of ElectricVehicle with initialized battery
+        self.vehicle_types.append(ElectricVehicle(brand, model, battery))
 
     def with_opening_hours(self, opening_hours):
         """Update the opening hours to use."""
@@ -191,20 +311,96 @@ class ElvisConfigBuilder:
         self.opening_hours = opening_hours
 
     def with_time_params(self, time_params):
-        """Update the start date to use
-        TODO: Check if start date <= end date - resolution"""
-        self.start_date = time_params[0]
-        self.end_date = time_params[1]
-        self.resolution = time_params[2]
+        """Update the start date to use.
+
+        Args:
+            time_params: (tuple): (Start date, end date, resolution). Start and end date can either
+                be of type :obj: `datetime.datetime` or str. Resolution can be of type
+                :obj: `datetime.timedelta` or of type str.
+
+        Format:
+            Date format for str:        %y-%m-%d %H:%M:%S
+            Resolution format for str:  %H:%M:%S
+
+        Raises:
+            TypeError: If the variables are neither of type str or datetime for start and end
+                date or timedelta for resolution.
+            ValueError: If any of the variables is of type str and does not conform to formatting.
+
+        TODO: Should time_params rather be split into its 3 components?
+            """
+
+        date_format = '%y-%m-%d %H:%M:%S'
+
+        # start date
+        if type(time_params[0]) is datetime.datetime:
+            self.start_date = time_params[0]
+        elif type(time_params[0]) is str:
+            try:
+                self.start_date = datetime.datetime.fromisoformat(time_params[0])
+            except ValueError:
+                logging.error('"%s" is of incorrect format. Please use %s',
+                              time_params[0], date_format)
+                raise ValueError
+        else:
+            logging.error('Start date must be of type datetime or of type str in following '
+                          'notation: %s', date_format)
+            raise TypeError
+
+        # end date
+        if type(time_params[1]) is datetime.datetime:
+            self.end_date = time_params[1]
+        elif type(time_params[1]) is str:
+            try:
+                self.end_date = datetime.datetime.fromisoformat(time_params[1])
+            except ValueError:
+                logging.error('"%s" is of incorrect format. Please use %s',
+                              time_params[1], date_format)
+                raise ValueError
+        else:
+            logging.error('End date must be of type datetime or of type str in following '
+                          'notation: %s', date_format)
+            raise TypeError
+
+        # Check if start date < end date
+
+        if self.start_date > self.end_date:
+            logging.error('Start date is after end date. The dates have been swapped for this '
+                          'simulation.')
+            start_date = self.start_date
+            self.start_date = self.end_date
+            self.end_date = start_date
+
+        # resolution
+        time_format = '%H:%M:%S'
+        if type(time_params[2]) is datetime.timedelta:
+            self.start_date = time_params[2]
+        elif type(time_params[0]) is str:
+            try:
+                date = datetime.datetime.strptime(time_params[2], time_format)
+                self.resolution = datetime.timedelta(hours=date.hour, minutes=date.minute,
+                                                     seconds=date.second)
+            except ValueError:
+                logging.error('%s is of incorrect format. Please use %s',
+                              time_params[2], time_format)
+                raise ValueError
+        else:
+            logging.error('Resolution must be of type timedelta or of type str in following '
+                          'notation: %s', date_format)
+            raise TypeError
 
     def with_num_charging_events(self, num_charging_events):
         """Update the number of charging events to use."""
+        # TODO: Can be float?
+        assert type(num_charging_events) is int
         self.num_charging_events = num_charging_events
 
     def with_queue_length(self, queue_length):
         """Update maximal length of queue."""
+        assert type(queue_length) is int
         self.queue_length = queue_length
 
     def with_disconnect_by_time(self, disconnect_by_time):
         """Update decision variable on how to disconnect cars."""
+        assert type(disconnect_by_time) is bool
         self.disconnect_by_time = disconnect_by_time
