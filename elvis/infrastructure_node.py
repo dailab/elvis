@@ -1,4 +1,5 @@
-"""Super class for every node in the infrastructure network."""
+"""Super class for every node in the infrastructure network.
+TODO: Add node busbar."""
 
 import networkx as nx
 import matplotlib.pyplot as plt
@@ -19,11 +20,21 @@ class InfrastructureNode:
                 transformer      -> child = None
                 charging point   -> child = :obj: `infrastructure_node.Transformer`
                 connection point -> child = :obj: `connection_point.ConnectionPoint`
+        Raises:
+            AssertionError:
+                - If min_power and max_power are not numerical (int or float).
+                - If parent is not an instance of :obj: `infrastructure_node.InfrastructureNode.
+
         """
-        self.id = identification
+
+        assert type(min_power) is int or type(min_power) is float
+        assert type(max_power) is int or type(min_power) is float
+
+        self.id = str(identification)
         self.min_power = min_power
         self.max_power = max_power
 
+        assert parent is None or isinstance(parent, InfrastructureNode)
         self.parent = parent
         self.children = []
 
@@ -40,10 +51,10 @@ class InfrastructureNode:
         parent = self
         go_on = True
         while go_on:
-            if parent.parent is not None:
+            if isinstance(parent.parent, InfrastructureNode):
                 parent = parent.parent
                 go_on = True
-            else:
+            else:  # type(parent.parent) is None -> root found
                 go_on = False
         transformer = parent
 
