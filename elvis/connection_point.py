@@ -36,7 +36,7 @@ class ConnectionPoint(InfrastructureNode):
         self.connected_vehicle = None
 
     def __str__(self):
-        printout = str(self.id) + ' ' + str(self.connected_vehicle)
+        printout = str(self.id)
         return printout
 
     def connect_vehicle(self, event):
@@ -65,7 +65,8 @@ class ConnectionPoint(InfrastructureNode):
         """Calculate dependent on currently connected car the maximum power possible. Solely based
             on the connection point and battery boundaries no charging point boundaries considered.
             A further check whether this power exceeds the charging point boundaries has to be done
-            separately. At the same time it is not checked whether the soc_target is met."""
+            separately. At the same time it is not checked whether the soc_target is met.
+            TODO: Go up the tree."""
 
         if self.connected_vehicle is not None:
             vehicle = self.connected_vehicle
@@ -79,7 +80,8 @@ class ConnectionPoint(InfrastructureNode):
 
     def min_hardware_power(self):
         """Calculate dependent on currently connected car the minimum power if not 0 needed
-            to start charging."""
+            to start charging.
+            #TODO: Go up the tree."""
 
         if self.connected_vehicle is not None:
             vehicle = self.connected_vehicle
