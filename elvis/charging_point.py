@@ -18,15 +18,11 @@ TODO:
     lower limit or zero.
 """
 
-#from elvis.connection_point import ConnectionPoint
 from elvis.infrastructure_node import InfrastructureNode
 
 
 class ChargingPoint(InfrastructureNode):
     """Models a charging point of the charging ingrastructure.
-
-    TODO:
-        - Get values from config.
     """
 
     counter = 1
@@ -51,21 +47,3 @@ class ChargingPoint(InfrastructureNode):
 
     def __str__(self):
         return str(self.id)
-
-    # def set_connection_points_static(self, n):
-    #     """Create n connection points.
-    #     With static values for power limits
-    #
-    #     Args:
-    #         n: (int): Number of connection points to be created.
-    #
-    #     Returns:
-    #         connection_points: (list): Containing the connection points as instances from
-    #         :obj: `ConnectionPoint`.
-    #     """
-    #     connection_points = []
-    #
-    #     while n > 0:
-    #         n -= 1
-    #         connection_points.append(ConnectionPoint((2, 5), self))
-    #     return connection_points
