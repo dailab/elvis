@@ -39,11 +39,17 @@ class ConnectionPoint(InfrastructureNode):
         printout = str(self.id)
         return printout
 
+    def get_leaving_time(self):
+        """Make sure a vehicle is connected and return its leaving_time."""
+        assert self.connected_vehicle is not None
+
+        return self.connected_vehicle['leaving_time']
+
     def connect_vehicle(self, event):
         """Assign dict of charging event as connected vehicle.
 
         Args:
-            event: (:obj: `charging_event.ChargingEvent): Event of car arrival."""
+            event: (:obj: `charging_event.ChargingEvent`): Event of car arrival."""
         self.connected_vehicle = event.to_dict()
 
     def disconnect_vehicle(self):
@@ -76,7 +82,7 @@ class ConnectionPoint(InfrastructureNode):
 
             max_power = min(self.max_power, battery.max_power_possible(soc))
             return max_power
-        return None
+        return 0
 
     def min_hardware_power(self):
         """Calculate dependent on currently connected car the minimum power if not 0 needed
@@ -91,7 +97,7 @@ class ConnectionPoint(InfrastructureNode):
 
             min_power = max(self.min_power, battery.min_power_possible(soc))
             return min_power
-        return None
+        return 0
 
     def power_to_charge_target(self, timedelta, soc_target):
         """Calculate the average power needed in a time period to charge the battery of the
@@ -132,3 +138,47 @@ class ConnectionPoint(InfrastructureNode):
         if 0 <= soc <= 1.0:
             return True
         return False
+
+
+# __eq__ and __lt__ can't be used if connection points shall be stored in sets
+#     def __eq__(self, other):
+#         """Enable sorting of ConnectionPoint. Value to sort by: arrival time of connected
+#                     vehicle.
+#                     If one connection point has no vehicle connected it is automatically bigger.
+#                     If both connection points are empty they are equal.
+#                     """
+#         # both cars have connected vehicles
+#         if self.connected_vehicle is not None and other.connected_vehicle is not None:
+#             self_arrival = self.connected_vehicle['leaving_time']
+#             other_arrival = other.connected_vehicle['leaving_time']
+#             return self_arrival == other_arrival
+#         # self is connected other is not
+#         elif self.connected_vehicle is not None:
+#             return False
+#         # self is not connected other is
+#         elif other.connected_vehicle is not None:
+#             return False
+#         # both connection points have no car connected
+#         else:
+#             return True
+#
+#     def __lt__(self, other):
+#         """Enable sorting of ConnectionPoint. Value to sort by: arrival time of connected
+#             vehicle.
+#             If one connection point has no vehicle connected it is automatically bigger.
+#             If both connection points are empty they are equal.
+#             """
+#         # both cars have connected vehicle
+#         if self.connected_vehicle is not None and other.connected_vehicle is not None:
+#             self_arrival = self.connected_vehicle['leaving_time']
+#             other_arrival = other.connected_vehicle['leaving_time']
+#             return self_arrival < other_arrival
+#         # self is connected other is not
+#         elif self.connected_vehicle is not None:
+#             return True
+#         # self is not connected other is
+#         elif other.connected_vehicle is not None:
+#             return False
+#         # both connection points have no car connected -> self == other (True)
+#         else:
+#             return False
