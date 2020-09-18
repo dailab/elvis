@@ -37,6 +37,7 @@ class InfrastructureNode:
         assert parent is None or isinstance(parent, InfrastructureNode)
         self.parent = parent
         self.children = []
+        self.leafs = None
 
     def add_child(self, child):
         """Add child to list of all children."""
@@ -73,6 +74,29 @@ class InfrastructureNode:
         nx.draw(graph, with_labels=True)
         plt.show()
 
+    def get_leaf_nodes(self):
+        leafs = []
+
+        def _get_leaf_nodes(node):
+            if len(node.children) == 0:
+                leafs.append(node)
+            for n in node.children:
+                _get_leaf_nodes(n)
+
+        _get_leaf_nodes(self)
+        return leafs
+
+    def set_up_leafs(self):
+        self.leafs = self.get_leaf_nodes()
+
+        def _set_up_leafs(node):
+            if len(node.children) == 0:
+                return
+            for n in node.children:
+                n.leafs = n.get_leaf_nodes()
+                _set_up_leafs(n)
+        _set_up_leafs(self)
+
 
 class Transformer(InfrastructureNode):
     """Represents a transformer. No usability besides having a max and min power.
@@ -88,3 +112,19 @@ class Transformer(InfrastructureNode):
 
     def __str__(self):
         return str(self.id)
+
+    def max_hardware_power(self, power_assigned):
+        """Calculate max power assignable to the transformer considering ints limits and already
+            assigned power.
+
+           Args:
+               power_assigned: (dict): Containing all :obj: `connection_points.ConnectionPoint`
+                in the infrastructure and their currently assigned power.
+               """
+        power_already_assigned = 0
+        for leaf in self.leafs:
+            power_already_assigned += power_assigned[leaf]
+
+        max_power = self.max_power - power_already_assigned
+
+        return max_power
