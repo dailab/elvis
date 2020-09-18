@@ -29,9 +29,9 @@ def time_stamp_to_hours(time_stamps):
     hours_passed = []
     for time_stamp in time_stamps:
         delta = time_stamp - start
-        hour = delta.days * 24 + delta.seconds / 3600 + delta.microseconds / 3600 / 1000
+        hour = delta.days * 24 + delta.seconds / 3600 + delta.microseconds / 3600 / 1000 / 1000
         # add offset
-        hour += start.minute / 60 + start.second / 3600 + start.microsecond / 3600 / 1000
+        hour += start.minute / 60 + start.second / 3600 + start.microsecond / 3600 / 1000 / 1000
         hours_passed.append(hour)
     return hours_passed
 
