@@ -47,3 +47,24 @@ class ChargingPoint(InfrastructureNode):
 
     def __str__(self):
         return str(self.id)
+
+    def max_hardware_power(self, power_assigned):
+        """Determine max power possible to be assigned dependent on charging point limits and
+            power already assigned to connection points connected to the charging point.
+            Current simplification: Connection_points always are directly connected to charging
+            point.
+
+            Args:
+                power_assigned: (dict): Contains all :obj: `connection_point.ConnectionPoint` and
+                    their currently already assigned power.
+        """
+
+        power_connection_points = 0
+        for leaf in self.leafs:
+            power_connection_points += power_assigned[leaf]
+
+        max_power = self.max_power - power_connection_points
+
+        return max_power
+
+
