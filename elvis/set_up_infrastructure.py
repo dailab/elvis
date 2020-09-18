@@ -18,9 +18,9 @@ def set_up_infrastructure(infrastructure):
         infrastructure: (dict): Contains more nested dicts with the values to initialise the
             infrastructure nodes.
             Dict design:
-                transformer: {min_power(float), max_power(float), charging_points(list)}
+                transformer: {min_power(float), max_power(float), infrastructure(list)}
 
-            For each instance of charging_point in charging_points:
+            For each instance of charging_point in infrastructure:
                 charging_point: {min_power(float), max_power(float), connection_points(list)}
 
             For each instance of connection_point in connection_points:
@@ -35,7 +35,7 @@ def set_up_infrastructure(infrastructure):
     for __transformer in infrastructure['transformers']:
         transformer = Transformer(__transformer['min_power'], __transformer['max_power'])
         # Add all charging points and their conneciton points
-        for __charging_point in __transformer['charging_points']:
+        for __charging_point in __transformer['infrastructure']:
             charging_point = ChargingPoint(__charging_point['min_power'],
                                            __charging_point['max_power'],
                                            transformer)
@@ -47,5 +47,8 @@ def set_up_infrastructure(infrastructure):
                                                      charging_point)
                 charging_point.add_child(__connection_point)
                 connection_points.append(__connection_point)
+
+    transformer.set_up_leafs()
+    transformer.draw_infrastructure()
 
     return connection_points
