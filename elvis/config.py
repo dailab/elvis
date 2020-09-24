@@ -2,8 +2,10 @@ import logging
 import datetime
 
 import elvis.sched.schedulers as schedulers
+from elvis.charging_event_generator import create_charging_events_from_distribution as create_events
 from elvis.battery import EVBattery
 from elvis.vehicle import ElectricVehicle
+from elvis.charging_event import ChargingEvent
 
 
 class ElvisConfig:
@@ -14,12 +16,15 @@ class ElvisConfig:
     configurations.
     """
 
-    def __init__(self, arrival_distribution, emissions_scenario, renewables_scenario,
+    def __init__(self, charging_events, emissions_scenario, renewables_scenario,
                  infrastructure, vehicle_types, scheduling_policy, opening_hours, time_params,
                  num_charging_events, queue_length=0, disconnect_by_time=True):
         """Create an ElvisConfig given all parameters.
 
         Args:
+            charging_events: (list): Instances of type :obj: `charging_event.ChargingEvent`.
+                Describing a charging event with its arrival time, arrival and target SOC as well
+                as the vehicle type containing important information about the battery.
             time_params: (tuple): start date as :obj: `datetime.datetime`,
                 end date as :obj: `datetime.datetime`,
                 step size as :obj: `datetime.timedelta`.
@@ -29,7 +34,7 @@ class ElvisConfig:
             False if cars are disconnected due to their SOC limit.
         """
         # not needed yet
-        self.arrival_distribution = arrival_distribution
+        self.charging_events = charging_events
         self.emissions_scenario = emissions_scenario
         self.renewables_scenario = renewables_scenario
         self.vehicle_types = vehicle_types
@@ -72,11 +77,12 @@ class InvalidConfigException(Exception):
 
 
 class ElvisConfigBuilder:
-    """Helper class to simplify the creation of ElvisConfig objects."""
+    """Helper class to simplify the creation of ElvisConfig objects.
+    For further information about the variables please refer to :obj: `config.ElvisConfig`"""
 
     def __init__(self):
         # The distribution of vehicle arrivals (TODO: how is this represented? what are the options?)
-        self.arrival_distribution = None
+        self.charging_events = None
 
         # The CO2 emissions scenario (TODO: how is this represented? what are the options?)
         self.emissions_scenario = None
@@ -122,7 +128,7 @@ class ElvisConfigBuilder:
         #     raise InvalidConfigException(err_msg)
 
         time_params = (self.start_date, self.end_date, self.resolution)
-        config = ElvisConfig(self.arrival_distribution, self.emissions_scenario,
+        config = ElvisConfig(self.charging_events, self.emissions_scenario,
                              self.renewables_scenario, self.infrastructure, self.vehicle_types,
                              self.scheduling_policy, self.opening_hours, time_params,
                              self.num_charging_events, self.queue_length, self.disconnect_by_time)
@@ -130,7 +136,7 @@ class ElvisConfigBuilder:
 
     def validate_params(self):
         # TODO: validate types + check for missing params
-        if self.arrival_distribution is None:
+        if self.charging_events is None:
             return "no arrival distribution specified"
         if self.emissions_scenario is None:
             return "no emissions scenario specified"
@@ -159,11 +165,33 @@ class ElvisConfigBuilder:
 
         return None
 
-    def with_arrival_distribution(self, arrival_distribution):
+    def with_charging_events(self, charging_events):
         """Update the arrival distribution to use.
-        TODO: only type list with 168 values for now."""
+        TODO: Should setting up charging_events with an arrival distribution as list should be
+        a different method?
+        TODO: only type list with 168 values for now if setting events up with arrival distribution.
+        """
 
-        self.arrival_distribution = arrival_distribution
+        if isinstance(charging_events[0], ChargingEvent):
+            self.charging_events = charging_events
+
+        elif type(charging_events[0]) is float or type(charging_events[0]) is int:
+            msg_params_missing = 'Please assign builder.num_charging_events and ' \
+                                 'builder.time_params before using ' \
+                                 'builder.with_charging_events with an arrival distribution.'
+
+            assert type(self.num_charging_events) is int, \
+                'Builder.num_charging_events not initialised. ' + msg_params_missing
+            assert type(self.start_date) is not None, \
+                'Builder.start_date not initialised. ' + msg_params_missing
+            assert type(self.end_date) is not None, \
+                'Builder.end_date not initialised. ' + msg_params_missing
+            assert type(self.resolution) is not None, \
+                'Builder.resolution not initialised. ' + msg_params_missing
+
+            # call elvis.charging_event_generator.create_charging_events_from_distribution
+            self.charging_events = create_events(self, charging_events)
+
         return self
 
     def with_emissions_scenario(self, emissions_scenario):

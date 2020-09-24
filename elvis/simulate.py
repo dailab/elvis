@@ -5,36 +5,12 @@
 import datetime
 import logging
 
-from elvis.charging_event_generator import create_charging_events
+from elvis.charging_event_generator import create_time_steps
 from elvis.set_up_infrastructure import set_up_infrastructure
 from elvis.sched.schedulers import Uncontrolled, FCFS
 from elvis.waiting_queue import WaitingQueue
 from elvis.config import ElvisConfig, ElvisConfigBuilder
-
-
-def set_up_time_steps(config):
-    """Create list from start, end date and resolution of the simulation period with all individual
-    time steps.
-
-    Args:
-        config: (:obj: `config`): Configuration class containing the time/date parameters
-
-    Returns:
-        time_steps: (list): Contains time_steps in `datetime.datetime` format
-
-    """
-    start_date = config.start_date
-    end_date = config.end_date
-    resolution = config.resolution
-
-    # Create list containing all time steps as datetime.datetime object
-    time_step = start_date
-    time_steps = []
-    while time_step <= end_date:
-        time_steps.append(time_step)
-        time_step += resolution
-
-    return time_steps
+from elvis.result import ElvisResult
 
 
 def handle_car_arrival(free_connection_points, busy_connection_points, event, waiting_queue):
@@ -201,17 +177,18 @@ def simulate(config):
         pass
     logging.basicConfig(filename='log.log', level=logging.INFO)
     # get list with all time_steps as datetime.datetime
-    time_steps = set_up_time_steps(config)
-    # create arrival times as sorted list of datetime.datetime
-    # TODO: Should charging events be initialised before simulate is called
-    #  and stored in ElvisConfig?
-    charging_events = create_charging_events(config, time_steps)
+    time_steps = create_time_steps(config)
     # Initialize waiting queue for cars at the infrastructure
     waiting_queue = WaitingQueue(maxsize=config.queue_length)
+    # copy charging_events from config
+    charging_events = config.charging_events
 
     # set up infrastructure and get all connection points
     free_connection_points = set(set_up_infrastructure(config.infrastructure))
     busy_connection_points = set()
+
+    # set up connection points in result to store assigned powers
+    results = ElvisResult()
 
     # ---------------------  Main Loop  ---------------------------
     # loop over every time step
@@ -235,6 +212,8 @@ def simulate(config):
                                                          busy_connection_points)
 
         charge_connected_vehicles(assign_power, busy_connection_points, config.resolution)
+        results.store_power_connection_points(assign_power)
+    return results
 
 
 if __name__ == '__main__':
@@ -265,16 +244,17 @@ if __name__ == '__main__':
 
     builder = ElvisConfigBuilder()
     builder.with_time_params(time_params)
-    builder.with_scheduling_policy(Uncontrolled())
+    builder.with_scheduling_policy(FCFS())
     builder.with_infrastructure(infrastructure)
-    builder.with_arrival_distribution(arrival_distribution)
     builder.with_disconnect_by_time(disconnect_by_time)
     builder.with_queue_length(queue_length)
     builder.with_num_charging_events(num_charging_events)
+    builder.with_charging_events(arrival_distribution)
     kwargs = {'brand': 'Aston Martin', 'model': 'V12 Vantage Roadster',
               'capacity': 30, 'min_charge_power': 5, 'max_charge_power': 10, 'efficiency': 1}
     builder.add_vehicle_type(**kwargs)
 
     config = builder.build()
 
-    simulate(config)
+    result = simulate(config)
+    print(result.power_connection_points)

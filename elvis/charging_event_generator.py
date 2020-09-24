@@ -81,11 +81,12 @@ def align_distribution(distr, first_time_stamp, last_time_stamp):
     return alligned_distribution
 
 
-def create_vehicle_arrivals(config, time_steps):
+def create_vehicle_arrivals(arrival_distribution, num_charging_events, time_steps):
     """Creates vehicle arrival times.
 
     Args:
-        config (:obj: `distribution`): Represents the arrival distribution.
+        arrival_distribution (list): Containing hourly arrival probabilities for one week.
+        num_charging_events: (int): Number of charging events per week.
         time_steps (list): List containing all time steps as :obj: `datetime.datetime` object.
 
     Returns:
@@ -95,8 +96,6 @@ def create_vehicle_arrivals(config, time_steps):
         seeding seems to not work properly. With fixed seed small changes are still there,
         changing the seed has a huge impact though.
     """
-    arrival_distribution = config.arrival_distribution
-    num_charging_events = config.num_charging_events
 
     # Rearrange arrival distribution so it starts with first hour of simulation time
     arrival_distribution = align_distribution(arrival_distribution, time_steps[0], time_steps[-1])
@@ -128,18 +127,47 @@ def create_vehicle_arrivals(config, time_steps):
     return sorted(arrivals)
 
 
-def create_charging_events(config, time_steps):
+def create_time_steps(config):
+    """Create list from start, end date and resolution of the simulation period with all individual
+    time steps.
+
+    Args:
+        config: (:obj: `config`): Configuration class containing the time/date parameters
+
+    Returns:
+        time_steps: (list): Contains time_steps in `datetime.datetime` format
+
+    """
+    start_date = config.start_date
+    end_date = config.end_date
+    resolution = config.resolution
+
+    # Create list containing all time steps as datetime.datetime object
+    time_step = start_date
+    time_steps = []
+    while time_step <= end_date:
+        time_steps.append(time_step)
+        time_step += resolution
+
+    return time_steps
+
+
+def create_charging_events_from_distribution(config, arrival_distribution):
     """Create all charging events for the simulation period.
 
     Args:
-        config (:obj: `distribution`): Represents the arrival distribution.
-        time_steps (list): List containing all time steps as :obj: `datetime.datetime` object.
+        config (:obj: `config.ElvisConfig` or :obj: 'config.EvlisConfigBuilder): Configuration class
+        contains all information to describe a simulation.
+        arrival_distribution: (list): Containing hourly data for the arrival probabilities for one
+        week.
 
     Returns:
         (list): containing instances of `ChargingEvent`.
 
     """
-    arrivals = create_vehicle_arrivals(config, time_steps)
+    time_steps = create_time_steps(config)
+
+    arrivals = create_vehicle_arrivals(arrival_distribution, config.num_charging_events, time_steps)
 
     charging_events = []
     for arrival in arrivals:
