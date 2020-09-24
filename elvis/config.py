@@ -164,16 +164,19 @@ class ElvisConfigBuilder:
         TODO: only type list with 168 values for now."""
 
         self.arrival_distribution = arrival_distribution
+        return self
 
     def with_emissions_scenario(self, emissions_scenario):
         """Update the emissions scenario to use."""
 
         self.emissions_scenario = emissions_scenario
+        return self
 
     def with_renewables_scenario(self, renewables_scenario):
         """Update the renewable energy scenario to use."""
 
         self.renewables_scenario = renewables_scenario
+        return self
 
     def with_scheduling_policy(self, scheduling_policy_input):
         """Update the scheduling policy to use.
@@ -224,11 +227,13 @@ class ElvisConfigBuilder:
                           str(scheduling_policy_input))
 
         self.scheduling_policy = scheduling_policy
+        return self
 
     def with_infrastructure(self, infrastructure):
         """Update the charging points to use."""
         assert type(infrastructure) is dict
         self.infrastructure = infrastructure
+        return self
 
     def with_vehicle_types(self, vehicle_types):
         """Update the vehicle types to use."""
@@ -236,6 +241,7 @@ class ElvisConfigBuilder:
             assert isinstance(vehicle_type, ElectricVehicle)
 
         self.vehicle_types = vehicle_types
+        return self
 
     def add_vehicle_type(self, vehicle_type=None, **kwargs):
         """Add a supported vehicle type to this configuration or a list of vehicle types.
@@ -304,11 +310,13 @@ class ElvisConfigBuilder:
 
         # get instance of ElectricVehicle with initialized battery
         self.vehicle_types.append(ElectricVehicle(brand, model, battery))
+        return self
 
     def with_opening_hours(self, opening_hours):
         """Update the opening hours to use."""
 
         self.opening_hours = opening_hours
+        return self
 
     def with_time_params(self, time_params):
         """Update the start date to use.
@@ -388,19 +396,23 @@ class ElvisConfigBuilder:
             logging.error('Resolution must be of type timedelta or of type str in following '
                           'notation: %s', date_format)
             raise TypeError
+        return self
 
     def with_num_charging_events(self, num_charging_events):
         """Update the number of charging events to use."""
         # TODO: Can be float?
         assert type(num_charging_events) is int
         self.num_charging_events = num_charging_events
+        return self
 
     def with_queue_length(self, queue_length):
         """Update maximal length of queue."""
         assert type(queue_length) is int
         self.queue_length = queue_length
+        return self
 
     def with_disconnect_by_time(self, disconnect_by_time):
         """Update decision variable on how to disconnect cars."""
         assert type(disconnect_by_time) is bool
         self.disconnect_by_time = disconnect_by_time
+        return self
