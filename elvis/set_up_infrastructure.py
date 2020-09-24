@@ -34,8 +34,8 @@ def set_up_infrastructure(infrastructure):
     # Add transformer
     for __transformer in infrastructure['transformers']:
         transformer = Transformer(__transformer['min_power'], __transformer['max_power'])
-        # Add all charging points and their conneciton points
-        for __charging_point in __transformer['infrastructure']:
+        # Add all charging points and their connection points
+        for __charging_point in __transformer['charging_points']:
             charging_point = ChargingPoint(__charging_point['min_power'],
                                            __charging_point['max_power'],
                                            transformer)
@@ -49,6 +49,6 @@ def set_up_infrastructure(infrastructure):
                 connection_points.append(__connection_point)
 
     transformer.set_up_leafs()
-    transformer.draw_infrastructure()
+    # transformer.draw_infrastructure()
 
     return connection_points

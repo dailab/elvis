@@ -230,7 +230,7 @@ if __name__ == '__main__':
     arrival_distribution[10] = 1
     #
     queue_length = 2
-    infrastructure = {'transformers': [{'id': 'transformer1', 'max_power': 100, 'min_power': 10, 'infrastructure': [{'id': 'charging_point1', 'max_power': 10, 'min_power': 1, 'connection_points': [{'id': 'connection_point1', 'max_power': 5, 'min_power': 0.5}, {'id': 'connection_point2', 'max_power': 5, 'min_power': 0.5}]}, {'id': 'charging_point2', 'max_power': 10, 'min_power': 1, 'connection_points': [{'id': 'connection_point3', 'max_power': 5, 'min_power': 0.5}, {'id': 'connection_point4', 'max_power': 5, 'min_power': 0.5}]}]}]}
+    infrastructure = {'transformers': [{'id': 'transformer1', 'max_power': 100, 'min_power': 10, 'charging_points': [{'id': 'charging_point1', 'max_power': 10, 'min_power': 1, 'connection_points': [{'id': 'connection_point1', 'max_power': 5, 'min_power': 0.5}, {'id': 'connection_point2', 'max_power': 5, 'min_power': 0.5}]}, {'id': 'charging_point2', 'max_power': 10, 'min_power': 1, 'connection_points': [{'id': 'connection_point3', 'max_power': 5, 'min_power': 0.5}, {'id': 'connection_point4', 'max_power': 5, 'min_power': 0.5}]}]}]}
     disconnect_by_time = True
     # scheduling_policy = Uncontrolled()
     #
