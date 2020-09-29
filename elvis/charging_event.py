@@ -29,7 +29,7 @@ class ChargingEvent:
         print_out = self.id + ', '
         print_out += 'Arrival time: ' + str(self.arrival_time) + ', '
         print_out += 'Parking_time: ' + str(self.parking_time) + ', '
-        print_out += 'Leaving_time: ' + str(self.parking_time) + ', '
+        print_out += 'Leaving_time: ' + str(self.leaving_time) + ', '
         print_out += 'SOC: ' + str(self.soc) + ', '
         print_out += 'SOC target: ' + str(self.soc_target) + ', '
         print_out += 'Connected car: ' + str(self.vehicle_type)

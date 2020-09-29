@@ -12,8 +12,8 @@ import math
 import datetime
 import numpy as np
 
-import distribution
-import charging_event
+import elvis.distribution as distribution
+import elvis.charging_event as charging_event
 
 
 def time_stamp_to_hours(time_stamps):
@@ -127,21 +127,19 @@ def create_vehicle_arrivals(arrival_distribution, num_charging_events, time_step
     return sorted(arrivals)
 
 
-def create_time_steps(config):
+def create_time_steps(start_date, end_date, resolution):
     """Create list from start, end date and resolution of the simulation period with all individual
     time steps.
 
     Args:
-        config: (:obj: `config`): Configuration class containing the time/date parameters
+        start_date: (:obj: `datetime.datetime`): First time stamp.
+        end_date: (:obj: `datetime.datetime`): Upper bound for time stamps.
+        resolution: (:obj: `datetime.timedelta`): Time in between two adjacent time stamps.
 
     Returns:
         time_steps: (list): Contains time_steps in `datetime.datetime` format
 
     """
-    start_date = config.start_date
-    end_date = config.end_date
-    resolution = config.resolution
-
     # Create list containing all time steps as datetime.datetime object
     time_step = start_date
     time_steps = []
@@ -152,22 +150,21 @@ def create_time_steps(config):
     return time_steps
 
 
-def create_charging_events_from_distribution(config, arrival_distribution):
+def create_charging_events_from_distribution(arrival_distribution, time_steps, num_charging_events):
     """Create all charging events for the simulation period.
 
     Args:
-        config (:obj: `config.ElvisConfig` or :obj: 'config.EvlisConfigBuilder): Configuration class
-        contains all information to describe a simulation.
         arrival_distribution: (list): Containing hourly data for the arrival probabilities for one
         week.
+        time_steps: (list): Contains time_steps in `datetime.datetime` format
+        num_charging_events: (int): Number of charging events to be generated.
 
     Returns:
-        (list): containing instances of `ChargingEvent`.
+        (list): containing num_charging_events instances of `ChargingEvent`.
 
     """
-    time_steps = create_time_steps(config)
 
-    arrivals = create_vehicle_arrivals(arrival_distribution, config.num_charging_events, time_steps)
+    arrivals = create_vehicle_arrivals(arrival_distribution, num_charging_events, time_steps)
 
     charging_events = []
     for arrival in arrivals:
