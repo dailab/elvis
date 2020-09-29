@@ -9,3 +9,7 @@ class ElectricVehicle:
         self.brand = brand
         self.model = model
         self.battery = battery
+
+    def __str__(self):
+        printout = 'Brand: ' + str(self.brand) + ', model: ' + str(self.model)
+        return printout
