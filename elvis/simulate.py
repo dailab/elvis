@@ -177,12 +177,11 @@ def simulate(config):
         pass
     logging.basicConfig(filename='log.log', level=logging.INFO)
     # get list with all time_steps as datetime.datetime
-    time_steps = create_time_steps(config)
+    time_steps = create_time_steps(config.start_date, config.end_date, config.resolution)
     # Initialize waiting queue for cars at the infrastructure
     waiting_queue = WaitingQueue(maxsize=config.queue_length)
     # copy charging_events from config
     charging_events = config.charging_events
-
     # set up infrastructure and get all connection points
     free_connection_points = set(set_up_infrastructure(config.infrastructure))
     busy_connection_points = set()
@@ -192,7 +191,8 @@ def simulate(config):
 
     # ---------------------  Main Loop  ---------------------------
     # loop over every time step
-    for time_step in time_steps:
+    for time_step_pos in range(len(time_steps)):
+        time_step = time_steps[time_step_pos]
         logging.info(' %s', time_step)
         # check if cars must be disconnected, if yes immediately connect car from queue if possible
         update_queue(waiting_queue, time_step, config.disconnect_by_time)
@@ -209,21 +209,21 @@ def simulate(config):
 
         # assign power
         assign_power = config.scheduling_policy.schedule(config, free_connection_points,
-                                                         busy_connection_points)
+                                                         busy_connection_points, time_step_pos)
 
         charge_connected_vehicles(assign_power, busy_connection_points, config.resolution)
-        results.store_power_connection_points(assign_power)
+        results.store_power_connection_points(assign_power, time_step_pos)
     return results
 
 
 if __name__ == '__main__':
 
-    start_date = '2020-01-01 20:00:00'  # datetime.datetime(2020, 1, 1)
-    end_date = datetime.datetime(2020, 1, 7, 19, 0)
+    start_date = '2020-01-01 00:00:00'  # datetime.datetime(2020, 1, 1)
+    end_date = datetime.datetime(2020, 1, 7, 23, 59)
     resolution = '01:0:0'
     time_params = (start_date, end_date, resolution)
     # time_params = (start_date, end_date, resolution)
-    num_charging_events = 5
+    num_charging_events = 500
     #
     arrival_distribution = [0 for x in range(168)] #[np.random.uniform(0, 1) for x in range(168)]
     arrival_distribution[8] = 1
@@ -243,8 +243,8 @@ if __name__ == '__main__':
     logging.basicConfig(filename='log.log', level=logging.INFO)
 
     builder = ElvisConfigBuilder()
-    builder.with_time_params(time_params)
-    builder.with_scheduling_policy(FCFS())
+    builder.with_time_params(time_params).with_scheduling_policy(FCFS())
+    #builder.with_scheduling_policy(FCFS())
     builder.with_infrastructure(infrastructure)
     builder.with_disconnect_by_time(disconnect_by_time)
     builder.with_queue_length(queue_length)
@@ -253,7 +253,8 @@ if __name__ == '__main__':
     kwargs = {'brand': 'Aston Martin', 'model': 'V12 Vantage Roadster',
               'capacity': 30, 'min_charge_power': 5, 'max_charge_power': 10, 'efficiency': 1}
     builder.add_vehicle_type(**kwargs)
-
+    import random
+    builder.with_transformer_preload([1000] * 1000)
     config = builder.build()
 
     result = simulate(config)

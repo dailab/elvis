@@ -3,6 +3,7 @@ import datetime
 
 import elvis.sched.schedulers as schedulers
 from elvis.charging_event_generator import create_charging_events_from_distribution as create_events
+from elvis.charging_event_generator import create_time_steps
 from elvis.battery import EVBattery
 from elvis.vehicle import ElectricVehicle
 from elvis.charging_event import ChargingEvent
@@ -18,7 +19,7 @@ class ElvisConfig:
 
     def __init__(self, charging_events, emissions_scenario, renewables_scenario,
                  infrastructure, vehicle_types, scheduling_policy, opening_hours, time_params,
-                 num_charging_events, queue_length=0, disconnect_by_time=True):
+                 num_charging_events, transformer_preload, queue_length=0, disconnect_by_time=True):
         """Create an ElvisConfig given all parameters.
 
         Args:
@@ -29,18 +30,23 @@ class ElvisConfig:
                 end date as :obj: `datetime.datetime`,
                 step size as :obj: `datetime.timedelta`.
             num_charging_events: (int): Total amount of charging events per week.
+            transformer_preload: (list): Contains floats representing the preload at the
+                transformer. Must have the same length as there are time steps in the simulation.
             queue_length: (int): Max length of waiting queue for vehicles.
             disconnect_by_time: (bool): True if cars are disconnected due to their parking time.
-            False if cars are disconnected due to their SOC limit.
+                False if cars are disconnected due to their SOC limit.
         """
         # not needed yet
-        self.charging_events = charging_events
         self.emissions_scenario = emissions_scenario
         self.renewables_scenario = renewables_scenario
         self.vehicle_types = vehicle_types
+
         self.opening_hours = opening_hours
+        # TODO: Check that the preload and the time steps have same length
+        self.transformer_preload = transformer_preload
 
         # already in use
+        self.charging_events = charging_events
         self.infrastructure = infrastructure
         self.scheduling_policy = scheduling_policy
         self.start_date = time_params[0]
@@ -50,9 +56,6 @@ class ElvisConfig:
         self.num_charging_events = num_charging_events
         self.queue_length = queue_length
         self.disconnect_by_time = disconnect_by_time
-
-        # The cached results
-        self._result = None
 
     def to_yaml(self):
         """Serialize this ElvisConfig to a yaml string."""
@@ -119,6 +122,9 @@ class ElvisConfigBuilder:
         # time or energy or?
         self.disconnect_by_time = None
 
+        # Transformer preload as a list. Is supposed to have the same length as the time steps.
+        self.transformer_preload = None
+
     def build(self):
         """Create the ElvisConfig with the passed parameters."""
 
@@ -131,7 +137,8 @@ class ElvisConfigBuilder:
         config = ElvisConfig(self.charging_events, self.emissions_scenario,
                              self.renewables_scenario, self.infrastructure, self.vehicle_types,
                              self.scheduling_policy, self.opening_hours, time_params,
-                             self.num_charging_events, self.queue_length, self.disconnect_by_time)
+                             self.num_charging_events, self.transformer_preload, self.queue_length,
+                             self.disconnect_by_time)
         return config
 
     def validate_params(self):
@@ -189,8 +196,11 @@ class ElvisConfigBuilder:
             assert type(self.resolution) is not None, \
                 'Builder.resolution not initialised. ' + msg_params_missing
 
+            time_steps = create_time_steps(self.start_date, self.end_date, self.resolution)
+
             # call elvis.charging_event_generator.create_charging_events_from_distribution
-            self.charging_events = create_events(self, charging_events)
+            self.charging_events = create_events(charging_events, time_steps,
+                                                 self.num_charging_events)
 
         return self
 
@@ -204,6 +214,13 @@ class ElvisConfigBuilder:
         """Update the renewable energy scenario to use."""
 
         self.renewables_scenario = renewables_scenario
+        return self
+
+    def with_transformer_preload(self, transformer_preload):
+        """Update the renewable energy scenario to use."""
+        # TODO: if trafo preload has another resolution than simulation or an offset a correct list
+        # must be created
+        self.transformer_preload = transformer_preload
         return self
 
     def with_scheduling_policy(self, scheduling_policy_input):

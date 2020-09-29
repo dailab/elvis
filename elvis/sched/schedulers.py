@@ -1,5 +1,5 @@
 """ """
-
+from elvis.infrastructure_node import Transformer
 
 class SchedulingPolicy:
     def schedule(self, config, free_connection_points, busy_connection_points):
@@ -20,7 +20,7 @@ class Uncontrolled(SchedulingPolicy):
         for connection_point in free_connection_points:
             assign_power[connection_point] = 0
 
-        # For ll connection points with a connected vehicle assign max possible power
+        # For all connection points with a connected vehicle assign max possible power
         for connection_point in busy_connection_points:
             connected_vehicle = connection_point.connected_vehicle
             soc = connected_vehicle['soc']
@@ -39,21 +39,50 @@ class Uncontrolled(SchedulingPolicy):
 class FCFS(SchedulingPolicy):
     """Implements the 'First Come First Serve' scheduling policy."""
 
-    def schedule(self, config, free_connection_points, busy_connection_points):
+    def schedule(self, config, free_connection_points, busy_connection_points, time_step_pos=0):
         """Assign power to all connected vehicles. Vehicle boundaries as well as infrastructure
-            boundaries have to be met. The power is distributed in order of arrival time."""
+            boundaries have to be met. The power is distributed in order of arrival time.
+            """
 
-        assign_power = {}
-        # All connection points without vehicle get 0 power.
-        for connection_point in free_connection_points:
-            assign_power[connection_point] = 0
+        assign_power = {cp: 0 for cp in set.union(free_connection_points, busy_connection_points)}
+        resolution = config.resolution
+        preload = config.transformer_preload[time_step_pos]
 
-        # order all
+        # All connection points with a connected vehicle assign max possible power
+        sorted_busy_connection_points = list(busy_connection_points)
+        # TODO: Does only work if there is a connected vehicle (do we need an error handling here?)
+        sorted_busy_connection_points.sort(key=lambda x: x.connected_vehicle['leaving_time'])
+        for connection_point in sorted_busy_connection_points:
+            # check what the max power possible from vehicle to grid is based on hardware
+            # and the already assigned power of every component (node)
+            max_hardware_power = connection_point.max_hardware_power()
+            parent = connection_point
+            go_on = True
+            while go_on is True:
+                if parent.parent is not None:
+                    parent = parent.parent
+                    # If the parent is the Transformer: Also pass preload
+                    if isinstance(parent, Transformer):
+                        max_hardware_power = min(max_hardware_power,
+                                                 parent.max_hardware_power(assign_power, preload))
+                    else:
+                        max_hardware_power = min(max_hardware_power,
+                                                 parent.max_hardware_power(assign_power))
+                else:
+                    go_on = False
+
+            power_to_charge_full = connection_point.power_to_charge_target(resolution, 1.0)
+            power = min(power_to_charge_full, max_hardware_power)
+
+            assign_power[connection_point] = power
+
+
+
 
         """go one after the other and assign max_power_possible:
         soc_target_max, hardware_max (from connection point to transformer)"""
 
-        pass
+        return assign_power
 
 
 class WithStorage(SchedulingPolicy):
@@ -75,51 +104,3 @@ class Optimized(SchedulingPolicy):
 
     def schedule(self, config):
         pass
-
-
-
-
-# all free connection point: power = 0
-# all busy connection points:
-#     get power with that soc = 1 can be reached -> Done
-#     get power with that soc_target can be reached, if soc_target != 1 -> Done
-#     get power max of hardware
-#     get power minimum of hardware
-#
-#     assign min(maxes) to all connection points
-#     check if charging point boundaries are met
-
-
-
-        # for connection_point in busy_connection_points:
-        #     soc_target = connection_point.connected_cars['soc_target']
-        #     power_to_soc_target = connection_point.power_to_charge_target(time_step_size,
-        #                                                                   soc_target)
-        #     max_hardware_power = connection_point.max_hardware_power()
-        #     min_hardware_power = connection_point.min_hardware_power()
-        #
-        #     # Assign max power possible based on connection point
-        #     # proceed only if feasible range exists
-        #     if max_hardware_power >= min_hardware_power:
-        #         # if soc_target can be met this time_step assign power to do so
-        #         if power_to_soc_target < max_hardware_power:
-        #             assign_power[connection_point] = power_to_soc_target
-        #         else:
-        #             assign_power[connection_point] = max_hardware_power
-        #     # if no feasible range exists: assign 0
-        #     else:
-        #         assign_power[connection_point] = 0
-        #
-        # # Check if charging point boundaries will be exceeded
-        # for charging_point in charging_points:
-        #     connection_points = charging_point.connection_points
-        #
-        #     # Add all power drawn from charging point
-        #     power_sum = 0
-        #     for connection_point in connection_points:
-        #         power_sum += assign_power[connection_point]
-        #     # if max power possible is lower than minimum power no solution can be found: assign 0
-        #     if power_sum <= charging_point.min_power:
-        #         for connection_point in connection_points:
-        #             assign_power[connection_point] = 0
-        #     elif

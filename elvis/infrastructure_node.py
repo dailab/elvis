@@ -113,18 +113,22 @@ class Transformer(InfrastructureNode):
     def __str__(self):
         return str(self.id)
 
-    def max_hardware_power(self, power_assigned):
+    def max_hardware_power(self, power_assigned, preload):
         """Calculate max power assignable to the transformer considering ints limits and already
             assigned power.
 
-           Args:
-               power_assigned: (dict): Containing all :obj: `connection_points.ConnectionPoint`
-                in the infrastructure and their currently assigned power.
-               """
-        power_already_assigned = 0
+            Args:
+                power_assigned: (dict): Containing all :obj: `connection_points.ConnectionPoint`
+                    in the infrastructure and their currently assigned power.
+                preload: (float): Preload at the transformer in kWh.
+
+            Returns:
+                max_power: (float): Max power that can be assigned to the transformer.
+        """
+        power_already_assigned = preload
         for leaf in self.leafs:
             power_already_assigned += power_assigned[leaf]
 
-        max_power = self.max_power - power_already_assigned
+        max_power = max(self.max_power - power_already_assigned, 0)
 
         return max_power
