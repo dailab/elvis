@@ -69,16 +69,32 @@ def align_distribution(distr, first_time_stamp, last_time_stamp):
         last_time_stamp (:obj: `datetime.datetime`): End of period.
 
     Returns:
-        list: Containing the probabilities alligned to period.
+        aligned_distribution: (list): Containing the probabilities alligned to period.
+        difference: Difference between first used 'time stamp' of the distribution and first
+            time stamp of the simulation in hours.
     """
-    starting_hour = first_time_stamp.weekday() * 24 + first_time_stamp.hour
+    hours = first_time_stamp.weekday() * 24 + first_time_stamp.hour
+    minutes = first_time_stamp.minute
+    seconds = first_time_stamp.second
+    microseconds = first_time_stamp.microsecond
+
+    offset = datetime.timedelta(hours=hours, minutes=minutes, seconds=seconds,
+                                microseconds=microseconds)
+
+    seconds_per_week = 7 * 24 * 3600
+    num_values = len(distr)
+    seconds_per_value = seconds_per_week/num_values
+
+    starting_pos = math.floor(offset.total_seconds()/seconds_per_value)
+    difference = (offset.total_seconds()/seconds_per_value - starting_pos) / 3600
+
+
     period = last_time_stamp - first_time_stamp
     # Upward estimate of the needed length of the distribution
-    total_hours = period.total_seconds() / 3600
-    total_weeks = math.ceil(total_hours / 168)
+    total_weeks = math.ceil(period.total_seconds() / seconds_per_week)
 
-    alligned_distribution = distr[starting_hour:] + distr * total_weeks
-    return alligned_distribution
+    aligned_distribution = distr[starting_pos:] + distr * total_weeks
+    return aligned_distribution, difference
 
 
 def create_vehicle_arrivals(arrival_distribution, num_charging_events, time_steps):
@@ -97,12 +113,17 @@ def create_vehicle_arrivals(arrival_distribution, num_charging_events, time_step
         changing the seed has a huge impact though.
     """
 
-    # Rearrange arrival distribution so it starts with first hour of simulation time
-    arrival_distribution = align_distribution(arrival_distribution, time_steps[0], time_steps[-1])
+    coefficient = 168 / len(arrival_distribution)
 
+    # Rearrange arrival distribution so it starts with first hour of simulation time
+    arrival_distribution, difference = align_distribution(arrival_distribution, time_steps[0],
+                                                          time_steps[-1])
+
+    # generate x-values (hours away from first time step) of the distribution
+    hour_stamps = [x * coefficient - difference for x in range(len(arrival_distribution))]
     # Create distribution based on reordered arrival distribution
     dist = distribution.EquallySpacedInterpolatedDistribution.linear(
-        list(zip(list(range(len(arrival_distribution))), arrival_distribution)), None)
+        list(zip(hour_stamps, arrival_distribution)), None)
 
     # Calculate position of each time step at arrival distribution
     corr_position = time_stamp_to_hours(time_steps)

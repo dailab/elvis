@@ -223,11 +223,11 @@ if __name__ == '__main__':
     resolution = '01:0:0'
     time_params = (start_date, end_date, resolution)
     # time_params = (start_date, end_date, resolution)
-    num_charging_events = 500
+    num_charging_events = 5
     #
-    arrival_distribution = [0 for x in range(168)] #[np.random.uniform(0, 1) for x in range(168)]
-    arrival_distribution[8] = 1
-    arrival_distribution[10] = 1
+    arrival_distribution = [0 for x in range(84)] #[np.random.uniform(0, 1) for x in range(168)]
+    arrival_distribution[4] = 1
+    arrival_distribution[5] = 1
     #
     queue_length = 2
     infrastructure = {'transformers': [{'id': 'transformer1', 'max_power': 100, 'min_power': 10, 'charging_points': [{'id': 'charging_point1', 'max_power': 10, 'min_power': 1, 'connection_points': [{'id': 'connection_point1', 'max_power': 5, 'min_power': 0.5}, {'id': 'connection_point2', 'max_power': 5, 'min_power': 0.5}]}, {'id': 'charging_point2', 'max_power': 10, 'min_power': 1, 'connection_points': [{'id': 'connection_point3', 'max_power': 5, 'min_power': 0.5}, {'id': 'connection_point4', 'max_power': 5, 'min_power': 0.5}]}]}]}
@@ -254,7 +254,7 @@ if __name__ == '__main__':
               'capacity': 30, 'min_charge_power': 5, 'max_charge_power': 10, 'efficiency': 1}
     builder.add_vehicle_type(**kwargs)
     import random
-    builder.with_transformer_preload([1000] * 1000)
+    builder.with_transformer_preload([0] * 1000)
     config = builder.build()
 
     result = simulate(config)
