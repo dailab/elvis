@@ -223,7 +223,7 @@ if __name__ == '__main__':
     resolution = '01:0:0'
     time_params = (start_date, end_date, resolution)
     # time_params = (start_date, end_date, resolution)
-    num_charging_events = 5
+    num_charging_events = 500
     #
     arrival_distribution = [0 for x in range(84)] #[np.random.uniform(0, 1) for x in range(168)]
     arrival_distribution[4] = 1
@@ -249,13 +249,23 @@ if __name__ == '__main__':
     builder.with_disconnect_by_time(disconnect_by_time)
     builder.with_queue_length(queue_length)
     builder.with_num_charging_events(num_charging_events)
+    builder.with_mean_park(4)
+    builder.with_std_deviation_park(1)
+    kwargs = {'brand': 'VW', 'model': 'e-Golf', 'probability': 1, 'battery': {'capacity': 35.8,
+              'min_charge_power': 0, 'max_charge_power': 150, 'efficiency': 1}}
+    builder.with_vehicle_types(**kwargs)
+    kwargs = {'brand': 'VW', 'model': 'Up', 'probability': 1, 'battery': {'capacity': 35.8,
+                                                                              'min_charge_power': 0,
+                                                                              'max_charge_power': 150,
+                                                                              'efficiency': 1}}
+    builder.with_vehicle_types(**kwargs)
     builder.with_charging_events(arrival_distribution)
-    kwargs = {'brand': 'Aston Martin', 'model': 'V12 Vantage Roadster',
-              'capacity': 30, 'min_charge_power': 5, 'max_charge_power': 10, 'efficiency': 1}
-    builder.add_vehicle_type(**kwargs)
     import random
-    builder.with_transformer_preload([0] * 1000)
+    builder.with_transformer_preload([0] * 10000)
     config = builder.build()
 
     result = simulate(config)
     print(result.power_connection_points)
+    load_profile = result.aggregate_load_profile(config.num_simulation_steps())
+    print(list(zip(load_profile, create_time_steps(config.start_date, config.end_date, config.resolution))))
+
