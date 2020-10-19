@@ -1,5 +1,8 @@
 import logging
 import datetime
+import pandas as pd
+import math
+import yaml
 
 import elvis.sched.schedulers as schedulers
 from elvis.charging_event_generator import create_charging_events_from_distribution as create_events
@@ -7,6 +10,7 @@ from elvis.charging_event_generator import create_time_steps
 from elvis.battery import EVBattery
 from elvis.vehicle import ElectricVehicle
 from elvis.charging_event import ChargingEvent
+from elvis.distribution import EquallySpacedInterpolatedDistribution
 
 
 class ElvisConfig:
@@ -19,7 +23,8 @@ class ElvisConfig:
 
     def __init__(self, charging_events, emissions_scenario, renewables_scenario,
                  infrastructure, vehicle_types, scheduling_policy, opening_hours, time_params,
-                 num_charging_events, transformer_preload, queue_length=0, disconnect_by_time=True):
+                 num_charging_events, transformer_preload, mean_park, std_deviation_park,
+                 queue_length=0, disconnect_by_time=True):
         """Create an ElvisConfig given all parameters.
 
         Args:
@@ -35,6 +40,10 @@ class ElvisConfig:
             queue_length: (int): Max length of waiting queue for vehicles.
             disconnect_by_time: (bool): True if cars are disconnected due to their parking time.
                 False if cars are disconnected due to their SOC limit.
+            mean_park: (float): Mean of the gaussian distribution the parking time is generated
+                from.
+            std_deviation_park: (float): Standard deviation of the gaussian distribution the parking
+                time is generated from.
         """
         # not needed yet
         self.emissions_scenario = emissions_scenario
@@ -53,9 +62,16 @@ class ElvisConfig:
         self.end_date = time_params[1]
         self.resolution = time_params[2]
 
+        self.mean_park = mean_park
+        self.std_deviation_park = std_deviation_park
+
         self.num_charging_events = num_charging_events
         self.queue_length = queue_length
         self.disconnect_by_time = disconnect_by_time
+
+    def num_simulation_steps(self):
+        """Returns the number of simulation steps based on currently assigned time parameters."""
+        return int((self.end_date - self.start_date) / self.resolution) + 1
 
     def to_yaml(self):
         """Serialize this ElvisConfig to a yaml string."""
@@ -125,6 +141,11 @@ class ElvisConfigBuilder:
         # Transformer preload as a list. Is supposed to have the same length as the time steps.
         self.transformer_preload = None
 
+        # Std deviation and mean of the gaussian distribution the parking time of car is generated
+        # from
+        self.mean_park = None
+        self.std_deviation_park = None
+
     def build(self):
         """Create the ElvisConfig with the passed parameters."""
 
@@ -172,6 +193,63 @@ class ElvisConfigBuilder:
 
         return None
 
+    def to_dict(self):
+        dictionary = dict()
+        dictionary['charging_events'] = [ce.to_dict() for ce in self.charging_events]
+        dictionary['infrastructure'] = self.infrastructure
+        dictionary['scheduling_policy'] = str(self.scheduling_policy)
+        dictionary['time_params'] = (str(self.start_date.isoformat()),
+                                     str(self.end_date.isoformat()),
+                                     str(self.resolution))
+        dictionary['mean_park'] = self.mean_park
+        dictionary['std_deviation_park'] = self.std_deviation_park
+        dictionary['num_charging_events'] = self.num_charging_events
+        dictionary['queue_length'] = self.queue_length
+        dictionary['disconnect_by_time'] = self.disconnect_by_time
+        dictionary['transformer_preload'] = self.transformer_preload
+        dictionary['vehicle_types'] = [vehicle.to_dict() for vehicle in self.vehicle_types]
+
+        return dictionary
+
+    def to_yaml(self, yaml_file):
+        """Serialize this ElvisConfig to a yaml string."""
+        data_to_store = self.to_dict()
+
+        with open(yaml_file, 'w') as file:
+            yaml.dump(data_to_store, file)
+
+        return
+
+    def from_yaml(self, yaml_str):
+        """Create an ElvisConfig from a yaml string."""
+
+        self.infrastructure = yaml_str['infrastructure']
+        self.with_scheduling_policy(yaml_str['scheduling_policy'])
+        self.with_time_params(yaml_str['time_params'])
+        self.with_mean_park(yaml_str['mean_park'])
+        self.with_std_deviation_park(yaml_str['std_deviation_park'])
+        self.with_num_charging_events(yaml_str['num_charging_events'])
+        self.with_queue_length(yaml_str['queue_length'])
+        self.with_disconnect_by_time(yaml_str['disconnect_by_time'])
+        if 'resolution_preload' in yaml_str.keys():
+            if 'repeat_preload' in yaml_str.keys():
+                self.with_transformer_preload(yaml_str['transformer_preload'],
+                                              res_data=yaml_str['resolution_preload'],
+                                              repeat=yaml_str['repeat_preload'])
+            else:
+                self.with_transformer_preload(yaml_str['transformer_preload'],
+                                              res_data=yaml_str['resolution_preload'])
+        elif 'repeat_preload' in yaml_str.keys():
+            self.with_transformer_preload(yaml_str['transformer_preload'],
+                                          repeat=yaml_str['repeat_preload'])
+        else:
+            self.with_transformer_preload(yaml_str['transformer_preload'])
+        vehicle_types = yaml_str['vehicle_types']
+        self.with_vehicle_types(vehicle_types=yaml_str['vehicle_types'])
+        self.with_charging_events(yaml_str['charging_events'])
+
+        return self
+
     def with_charging_events(self, charging_events):
         """Update the arrival distribution to use.
         TODO: Should setting up charging_events with an arrival distribution as list should be
@@ -184,8 +262,9 @@ class ElvisConfigBuilder:
 
         elif type(charging_events[0]) is float or type(charging_events[0]) is int:
             msg_params_missing = 'Please assign builder.num_charging_events and ' \
-                                 'builder.time_params before using ' \
-                                 'builder.with_charging_events with an arrival distribution.'
+                                 'builder.time_params, builder.mean_park, builder.std_deviation_' \
+                                 'park before using builder.with_charging_events with an ' \
+                                 'arrival distribution.'
 
             assert type(self.num_charging_events) is int, \
                 'Builder.num_charging_events not initialised. ' + msg_params_missing
@@ -195,12 +274,17 @@ class ElvisConfigBuilder:
                 'Builder.end_date not initialised. ' + msg_params_missing
             assert type(self.resolution) is not None, \
                 'Builder.resolution not initialised. ' + msg_params_missing
+            assert type(self.mean_park) is not None, \
+                'Builder.resolution not initialised. ' + msg_params_missing
+            assert type(self.std_deviation_park) is not None, \
+                'Builder.resolution not initialised. ' + msg_params_missing
 
             time_steps = create_time_steps(self.start_date, self.end_date, self.resolution)
 
             # call elvis.charging_event_generator.create_charging_events_from_distribution
             self.charging_events = create_events(charging_events, time_steps,
-                                                 self.num_charging_events)
+                                                 self.num_charging_events, self.mean_park,
+                                                 self.std_deviation_park, self.vehicle_types)
 
         return self
 
@@ -216,11 +300,154 @@ class ElvisConfigBuilder:
         self.renewables_scenario = renewables_scenario
         return self
 
-    def with_transformer_preload(self, transformer_preload):
-        """Update the renewable energy scenario to use."""
-        # TODO: if trafo preload has another resolution than simulation or an offset a correct list
+    def with_transformer_preload(self, transformer_preload, res_data=None, repeat=False):
+        """Update the renewable energy scenario to use.
+        Simulation time parameter must be set before transformer preload can be initialised."""
+        # TODO: if trafo preload has another res_data than simulation or an offset a correct list
         # must be created
+
+        """List possible cases:
+        Case 1:
+            List has n=simulationSteps entries.
+            Meta info: None
+            To Do: Nothing just pass.
+        Case 2:
+            List has n=simulationSteps entries.
+            Meta info: Resolution. Repeat.
+        Case 3:
+            List has n!=simulation step entries.
+            Meta info: None.
+            To Do: Raise error
+        Case 4:
+            List has n!=simulationSteps entries.
+            Meta info: Resolution.
+            To Do: Adjust res_data as stated. Check if there are enough values. If not raise error
+            
+        Case 5:
+            List has n!=simulationSteps entries.
+            Meta info: Resolution. Repeat.
+            To Do: Adjust Resolution. Repeat until n equals simulaiton steps.
+            
+        Case 7:
+            DF has n=simulationSteps rows.
+            Index of DF aligns with simulationSteps.
+            To Do: Nothing just pass.
+        Case 8:
+            DF has n=simulationSteps rows.
+            Index of DF does not align with simulationSteps."""
+
+        def adjust_resolution(preload, res_data, res_simulation):
+            """Adjusts res_data of the transformer preload to the simulation res_data.
+
+            Args:
+                preload: (list): Containing the transformer preload in "wrong"
+                    res_data.
+                res_data: (datetime.timedelta): Time in between two adjacent data points of
+                    transformer preload with "wrong" res_data.
+                res_simulation: (datetime.timedelta): Time in between two adjacent time steps in
+                    the simulation.
+
+            Returns:
+                transformer_preload_new_res: (list): Transformer preload with linearly interpolated data
+                    points having the res_data of the simulation.
+                """
+
+            x_values = list(range(len(preload)))
+            distribution = EquallySpacedInterpolatedDistribution.linear(
+                list(zip(x_values, preload)), None)
+
+            coefficient = res_simulation / res_data
+            x_values_new_res = list(range(math.ceil(len(preload) * 1 / coefficient)))
+            x_values_new_res = [x * coefficient for x in x_values_new_res]
+
+            transformer_preload_new_res = []
+            for x in x_values_new_res:
+                transformer_preload_new_res.append(distribution[x])
+
+            return transformer_preload_new_res
+
+        def repeat_data(preload, num_simulation_steps):
+            """Repeats the transformer preload data until there are as many values as there are
+            simulation steps.
+
+            Args:
+                preload: (list): Containing the data (floats) to be repeated.
+                num_simulation_steps: (int): Number of simulation steps and expected length of
+                    the transformer preload after it is repeated.
+
+            Returns:
+                transformer_preload_repeated: (list): Repeated values. len() = num_simulation_steps.
+                """
+
+            n = math.floor(num_simulation_steps / len(preload))
+
+            transformer_preload_repeated = preload * n
+
+            values_to_add = num_simulation_steps - len(transformer_preload_repeated)
+
+            transformer_preload_repeated += preload[:values_to_add]
+
+            return transformer_preload_repeated
+
+        # Error messages
+        msg_wrong_resolution_type = "If the transformer preload is passed as list and the" \
+                                    "resolution is supposed to be of adjusted please" \
+                                    "use type datetime.timedelta."
+        msg_wrong_transformer_preload_type = "Transformer preload should be of type: " \
+                                             "pandas DataFrame, list containing float or int," \
+                                             " int, float."
+        msg_alignement_unsuccessful = "Transformer preload could not be aligned to simulation" \
+                                      "steps."
+        msg_invalid_value_type = "Transformer preload should be of type: pandas DataFrame, " \
+                                 "list containing float or int, int, float."
+        msg_not_enough_data_points = "There are less values for the transformer preload than " \
+                                     "simulation steps. Please adjust the data."
+
+        # Check whether passed value is a DataFrame or a list
+        if isinstance(transformer_preload, pd.DataFrame):  # DataFrame
+            # Make sure length is aligned to simulation period and resolution
+            num_values = len(transformer_preload)
+        else:  # list or numeric
+            num_simulation_steps = int((self.end_date - self.start_date) / self.resolution) + 1
+
+            if isinstance(transformer_preload, (int, float)):
+               transformer_preload = [transformer_preload]
+
+            assert type(transformer_preload) is list, msg_wrong_transformer_preload_type
+
+            # Check if all values in list are either float or int
+            assert all(isinstance(x, (float, int)) for x in transformer_preload), \
+                msg_invalid_value_type
+
+            # Check whether the length of the list alignes with the simulation period and resolution
+            # If num_values don't fit simulation period and no action is wanted return error
+            num_values = len(transformer_preload)
+
+            assert num_simulation_steps <= num_values or res_data is not None or repeat, \
+                msg_not_enough_data_points
+
+            if res_data is not None:
+                if type(res_data) is str:
+                    try:
+                        date = datetime.datetime.strptime(res_data, '%H:%M:%S')
+                        res_data = datetime.timedelta(hours=date.hour, minutes=date.minute,
+                                                      seconds=date.second)
+                    except ValueError:
+                        logging.error('%s is of incorrect format. Please use %s',
+                                      res_data, '%H:%M:%S')
+                        raise ValueError
+                assert isinstance(res_data, datetime.timedelta), msg_wrong_resolution_type
+
+                transformer_preload = adjust_resolution(transformer_preload, res_data, self.resolution)
+
+            if repeat is True:
+                transformer_preload = repeat_data(transformer_preload, num_simulation_steps)
+
+            # Should it be ==?
+            assert len(transformer_preload) >= num_simulation_steps, msg_alignement_unsuccessful
+
         self.transformer_preload = transformer_preload
+
         return self
 
     def with_scheduling_policy(self, scheduling_policy_input):
@@ -248,19 +475,19 @@ class ElvisConfigBuilder:
             return
 
         # Match string
-        if scheduling_policy_input == 'Uncontrolled':
+        if scheduling_policy_input in ('Uncontrolled', 'UC', 'Uc', 'uc'):
             scheduling_policy = schedulers.Uncontrolled()
 
-        elif scheduling_policy_input == 'Discrimination Free':
+        elif scheduling_policy_input in ('Discrimination Free', 'DF', 'df'):
             scheduling_policy = schedulers.DiscriminationFree()
 
         elif scheduling_policy_input == 'FCFS':
             scheduling_policy = schedulers.FCFS()
 
-        elif scheduling_policy_input == 'With Storage':
+        elif scheduling_policy_input in ('With Storage', 'ws', 'WS'):
             scheduling_policy = schedulers.WithStorage()
 
-        elif scheduling_policy_input == 'Optimized':
+        elif scheduling_policy_input in ('Optimized', 'opt', 'OPT'):
             scheduling_policy = schedulers.Optimized()
 
         # invalid str use default: Uncontrolled
@@ -280,13 +507,25 @@ class ElvisConfigBuilder:
         self.infrastructure = infrastructure
         return self
 
-    def with_vehicle_types(self, vehicle_types):
+    def with_vehicle_types(self, vehicle_types=None, **kwargs):
         """Update the vehicle types to use."""
-        for vehicle_type in vehicle_types:
-            assert isinstance(vehicle_type, ElectricVehicle)
 
-        self.vehicle_types = vehicle_types
-        return self
+        if vehicle_types is not None:
+            for vehicle_type in vehicle_types:
+                if isinstance(vehicle_type, ElectricVehicle):
+                    self.add_vehicle_type(vehicle_type=vehicle_type)
+                elif isinstance(vehicle_type, dict):
+                    self.add_vehicle_type(**vehicle_type)
+                else:
+                    # TODO: List relevant information.
+                    raise TypeError('Using with_vehicle_types with a list: All list entries '
+                                    'must either be of type ElectricVehicle or dict, containing'
+                                    'all relevant information.')
+
+            return self
+        else:
+            self.add_vehicle_type(**kwargs)
+            return self
 
     def add_vehicle_type(self, vehicle_type=None, **kwargs):
         """Add a supported vehicle type to this configuration or a list of vehicle types.
@@ -329,32 +568,36 @@ class ElvisConfigBuilder:
 
         assert 'brand' in kwargs.keys()
         assert 'model' in kwargs.keys()
+        assert 'probability' in kwargs.keys()
+        assert 'battery' in kwargs.keys()
+
         brand = str(kwargs['brand'])
         model = str(kwargs['model'])
+        probability = kwargs['probability']
 
         # if all fields of ElectricVehicle are passed and an instance of EVBattery is already made
-        if 'battery' in kwargs.keys():
-            assert isinstance(kwargs['battery'], EVBattery)
+        if isinstance(kwargs['battery'], EVBattery):
             battery = kwargs['battery']
             self.vehicle_types.append(ElectricVehicle(brand, model, battery))
+            return
 
-        # if no instance of EVBattery is already made check if all parameters are passed.
-        assert 'capacity' in kwargs.keys()
-        assert 'max_charge_power' in kwargs.keys()
-        assert 'min_charge_power' in kwargs.keys()
-        assert 'efficiency' in kwargs.keys()
+        # if there is no instance of EVBattery check if all parameters are passed.
+        assert 'capacity' in kwargs['battery'].keys()
+        assert 'max_charge_power' in kwargs['battery'].keys()
+        assert 'min_charge_power' in kwargs['battery'].keys()
+        assert 'efficiency' in kwargs['battery'].keys()
 
-        capacity = kwargs['capacity']
-        max_charge_power = kwargs['max_charge_power']
-        min_charge_power = kwargs['min_charge_power']
-        efficiency = kwargs['efficiency']
+        capacity = kwargs['battery']['capacity']
+        max_charge_power = kwargs['battery']['max_charge_power']
+        min_charge_power = kwargs['battery']['min_charge_power']
+        efficiency = kwargs['battery']['efficiency']
 
         # get instance of battery
         battery = EVBattery(capacity=capacity, max_charge_power=max_charge_power,
-                            min_charge_power=min_charge_power, efficiency=efficiency)
+                            min_charge_power=min_charge_power, efficiency=efficiency,)
 
         # get instance of ElectricVehicle with initialized battery
-        self.vehicle_types.append(ElectricVehicle(brand, model, battery))
+        self.vehicle_types.append(ElectricVehicle(brand, model, battery, probability))
         return self
 
     def with_opening_hours(self, opening_hours):
@@ -460,4 +703,17 @@ class ElvisConfigBuilder:
         """Update decision variable on how to disconnect cars."""
         assert type(disconnect_by_time) is bool
         self.disconnect_by_time = disconnect_by_time
+        return self
+
+    def with_mean_park(self, mean_park):
+        """Update decision variable on how to disconnect cars."""
+        assert isinstance(mean_park, (int, float))
+        assert 0 < mean_park < 24, "The mean parking time should be in between 0 and 24 hours."
+        self.mean_park = mean_park
+        return self
+
+    def with_std_deviation_park(self, std_deviation_park):
+        """Update decision variable on how to disconnect cars."""
+        assert isinstance(std_deviation_park, (int, float))
+        self.std_deviation_park = std_deviation_park
         return self
