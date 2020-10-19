@@ -1,6 +1,7 @@
 """ """
 from elvis.infrastructure_node import Transformer
 
+
 class SchedulingPolicy:
     def schedule(self, config, free_connection_points, busy_connection_points):
         """Subclasses should override this with their scheduling implementation."""
@@ -10,7 +11,10 @@ class SchedulingPolicy:
 class Uncontrolled(SchedulingPolicy):
     """Implements the 'Uncontrolled' scheduling policy."""
 
-    def schedule(self, config, free_connection_points, busy_connection_points):
+    def __str__(self):
+        return 'Uncontrolled'
+
+    def schedule(self, config, free_connection_points, busy_connection_points, time_steps_pos=0):
         """Assign maximum power to all vehicles possible in disregard of available power from
         grid. Infrastructure limits will be disregarded."""
 
@@ -38,6 +42,9 @@ class Uncontrolled(SchedulingPolicy):
 
 class FCFS(SchedulingPolicy):
     """Implements the 'First Come First Serve' scheduling policy."""
+
+    def __str__(self):
+        return 'FCFS'
 
     def schedule(self, config, free_connection_points, busy_connection_points, time_step_pos=0):
         """Assign power to all connected vehicles. Vehicle boundaries as well as infrastructure
@@ -88,6 +95,9 @@ class FCFS(SchedulingPolicy):
 class WithStorage(SchedulingPolicy):
     """Implements the 'Storage' scheduling policy."""
 
+    def __str__(self):
+        return 'With Storage'
+
     def schedule(self, config):
         pass
 
@@ -95,12 +105,18 @@ class WithStorage(SchedulingPolicy):
 class DiscriminationFree(SchedulingPolicy):
     """Implements the 'Discrimination Free' scheduling policy."""
 
+    def __str__(self):
+        return 'Discrimination Free'
+
     def schedule(self, config):
         pass
 
 
 class Optimized(SchedulingPolicy):
     """Implements the 'Optimized' scheduling policy."""
+
+    def __str__(self):
+        return 'Optimized'
 
     def schedule(self, config):
         pass
