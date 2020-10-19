@@ -15,6 +15,8 @@ import numpy as np
 import elvis.distribution as distribution
 import elvis.charging_event as charging_event
 
+from utility.walker import WalkerRandomSampling
+
 
 def time_stamp_to_hours(time_stamps):
     """Calculates for each time stamp in a list the amount of hours passed
@@ -171,7 +173,8 @@ def create_time_steps(start_date, end_date, resolution):
     return time_steps
 
 
-def create_charging_events_from_distribution(arrival_distribution, time_steps, num_charging_events):
+def create_charging_events_from_distribution(arrival_distribution, time_steps, num_charging_events,
+                                             mean_park, std_deviation_park, vehicle_types):
     """Create all charging events for the simulation period.
 
     Args:
@@ -179,16 +182,27 @@ def create_charging_events_from_distribution(arrival_distribution, time_steps, n
         week.
         time_steps: (list): Contains time_steps in `datetime.datetime` format
         num_charging_events: (int): Number of charging events to be generated.
+        mean_park: (float): Mean of the gaussian distribution the parking time is generated from.
+        std_deviation_park: (float): Standard deviation of the gaussian distribution the parking
+            time is generated from.
+        vehicle_types: (list): Containing all instances of :obj: `elvis.vehicle.ElectricVehicle`
 
     Returns:
         (list): containing num_charging_events instances of `ChargingEvent`.
 
     """
+    msg_no_vehicles = 'At least one vehicle type is necessary to generate charging events.'
+    assert len(vehicle_types) > 0, msg_no_vehicles
 
     arrivals = create_vehicle_arrivals(arrival_distribution, num_charging_events, time_steps)
+    weights = [vehicle_type.probability for vehicle_type in vehicle_types]
+
+    walker = WalkerRandomSampling(weights, keys=vehicle_types)
 
     charging_events = []
     for arrival in arrivals:
-        charging_events.append(charging_event.ChargingEvent(arrival))
+        parking_time = min(max(0, np.random.normal(mean_park, std_deviation_park)), 24)
+        vehicle_type = walker.random(count=1)[0]
+        charging_events.append(charging_event.ChargingEvent(arrival, parking_time, vehicle_type))
 
     return charging_events
