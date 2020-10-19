@@ -1,0 +1,274 @@
+charging_events:
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.16
+- 0.4
+- 0.56
+- 0.6
+- 0.48
+- 0.44
+- 0.48
+- 0.44
+- 0.4
+- 0.28
+- 0.16
+- 0.12
+- 0.16
+- 0.24
+- 0.28
+- 0.28
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.44
+- 0.32
+- 0.24
+- 0.36
+- 0.44
+- 0.44
+- 0.36
+- 0.32
+- 0.28
+- 0.32
+- 0.32
+- 0.36
+- 0.36
+- 0.32
+- 0.28
+- 0.2
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.24
+- 0.48
+- 0.48
+- 0.32
+- 0.24
+- 0.32
+- 0.36
+- 0.44
+- 0.44
+- 0.44
+- 0.4
+- 0.36
+- 0.28
+- 0.2
+- 0.12
+- 0.08
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.12
+- 0.44
+- 0.24
+- 0.32
+- 0.32
+- 0.32
+- 0.28
+- 0.28
+- 0.32
+- 0.32
+- 0.36
+- 0.36
+- 0.32
+- 0.28
+- 0.2
+- 0.16
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.2
+- 0.32
+- 0.4
+- 0.48
+- 0.48
+- 0.48
+- 0.4
+- 0.32
+- 0.28
+- 0.24
+- 0.24
+- 0.28
+- 0.28
+- 0.32
+- 0.28
+- 0.2
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.28
+- 0.4
+- 0.48
+- 0.44
+- 0.32
+- 0.2
+- 0.16
+- 0.52
+- 0.32
+- 0.08
+- 0.12
+- 0.2
+- 0.24
+- 0.24
+- 0.2
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.16
+- 0.28
+- 0.4
+- 0.56
+- 0.64
+- 0.72
+- 0.72
+- 0.72
+- 0.76
+- 0.92
+- 1.0
+- 0.96
+- 0.72
+- 0.4
+- 0.2
+- 0.0
+- 0.0
+disconnect_by_time: False
+infrastructure:
+  transformers:
+  - charging_points:
+    - connection_points:
+      - id: connection_point1
+        max_power: 150
+        min_power: 0
+      id: connection_point10
+      max_power: 150
+      min_power: 0
+    - connection_points:
+      - id: connection_point1
+        max_power: 150
+        min_power: 0
+      id: connection_point10
+      max_power: 150
+      min_power: 0
+    - connection_points:
+      - id: connection_point1
+        max_power: 150
+        min_power: 0
+      id: connection_point10
+      max_power: 150
+      min_power: 0
+    - connection_points:
+      - id: connection_point1
+        max_power: 150
+        min_power: 0
+      id: connection_point10
+      max_power: 150
+      min_power: 0
+    - connection_points:
+      - id: connection_point1
+        max_power: 150
+        min_power: 0
+      id: connection_point10
+      max_power: 150
+      min_power: 0
+    - connection_points:
+      - id: connection_point1
+        max_power: 150
+        min_power: 0
+      id: connection_point10
+      max_power: 150
+      min_power: 0
+    - connection_points:
+      - id: connection_point1
+        max_power: 150
+        min_power: 0
+      id: connection_point10
+      max_power: 150
+      min_power: 0
+    - connection_points:
+      - id: connection_point1
+        max_power: 150
+        min_power: 0
+      id: connection_point10
+      max_power: 150
+      min_power: 0
+    - connection_points:
+      - id: connection_point1
+        max_power: 150
+        min_power: 0
+      id: connection_point10
+      max_power: 150
+      min_power: 0
+    - connection_points:
+      - id: connection_point1
+        max_power: 150
+        min_power: 0
+      id: connection_point10
+      max_power: 150
+      min_power: 0
+    id: transformer1
+    max_power: 1000
+    min_power: 0
+vehicle_types:
+- battery:
+    capacity: 35.8
+    efficiency: 1
+    max_charge_power: 150
+    min_charge_power: 0
+  brand: VW
+  model: e-Golf
+  probability: 5743
+- battery:
+    capacity: 18.7
+    efficiency: 1
+    max_charge_power: 150
+    min_charge_power: 0
+  brand: VW
+  model: e-up
+  probability: 1019
+mean_park: 0.167
+num_charging_events: 5000
+queue_length: 10
+scheduling_policy: UC
+std_deviation_park: 0.033
+time_params: !!python/tuple
+- '2020-01-01T00:00:00'
+- '2020-01-07T23:59:00'
+- '1:00:00'
+transformer_preload: 0
+repeat_preload: True
