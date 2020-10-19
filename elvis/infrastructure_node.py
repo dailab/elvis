@@ -28,7 +28,7 @@ class InfrastructureNode:
         """
 
         assert type(min_power) is int or type(min_power) is float
-        assert type(max_power) is int or type(min_power) is float
+        assert type(max_power) is int or type(max_power) is float
 
         self.id = str(identification)
         self.min_power = min_power
