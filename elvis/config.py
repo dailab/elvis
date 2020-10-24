@@ -158,8 +158,8 @@ class ElvisConfigBuilder:
         config = ElvisConfig(self.charging_events, self.emissions_scenario,
                              self.renewables_scenario, self.infrastructure, self.vehicle_types,
                              self.scheduling_policy, self.opening_hours, time_params,
-                             self.num_charging_events, self.transformer_preload, self.queue_length,
-                             self.disconnect_by_time)
+                             self.num_charging_events, self.transformer_preload, self.mean_park,
+                             self.std_deviation_park, self.queue_length, self.disconnect_by_time)
         return config
 
     def validate_params(self):

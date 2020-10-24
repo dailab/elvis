@@ -118,8 +118,8 @@ def update_connection_points(free_connection_points, busy_connection_points,
         for connection_point in busy_connection_points.copy():
             connected_vehicle = connection_point.connected_vehicle
 
-            soc = connected_vehicle.soc
-            soc_target = connected_vehicle.soc_target
+            soc = connected_vehicle['soc']
+            soc_target = connected_vehicle['soc_target']
 
             if soc >= soc_target:
                 logging.info(' Disconnect: %s', connection_point)
