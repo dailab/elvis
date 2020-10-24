@@ -24,7 +24,7 @@ class ElvisConfig:
     def __init__(self, charging_events, emissions_scenario, renewables_scenario,
                  infrastructure, vehicle_types, scheduling_policy, opening_hours, time_params,
                  num_charging_events, transformer_preload, mean_park, std_deviation_park,
-                 queue_length=0, disconnect_by_time=True):
+                 mean_soc, std_deviation_soc, queue_length=0, disconnect_by_time=True):
         """Create an ElvisConfig given all parameters.
 
         Args:
@@ -64,6 +64,9 @@ class ElvisConfig:
 
         self.mean_park = mean_park
         self.std_deviation_park = std_deviation_park
+
+        self.mean_soc = mean_soc
+        self.std_deviation_soc = std_deviation_soc
 
         self.num_charging_events = num_charging_events
         self.queue_length = queue_length
@@ -145,6 +148,9 @@ class ElvisConfigBuilder:
         # from
         self.mean_park = None
         self.std_deviation_park = None
+        # Std deviation and mean of the gaussian distribution the soc of the car is generated from
+        self.mean_soc = None
+        self.std_deviation_soc = None
 
     def build(self):
         """Create the ElvisConfig with the passed parameters."""
@@ -159,7 +165,8 @@ class ElvisConfigBuilder:
                              self.renewables_scenario, self.infrastructure, self.vehicle_types,
                              self.scheduling_policy, self.opening_hours, time_params,
                              self.num_charging_events, self.transformer_preload, self.mean_park,
-                             self.std_deviation_park, self.queue_length, self.disconnect_by_time)
+                             self.std_deviation_park, self.mean_soc, self.std_deviation_soc,
+                             self.queue_length, self.disconnect_by_time)
         return config
 
     def validate_params(self):
@@ -203,6 +210,8 @@ class ElvisConfigBuilder:
                                      str(self.resolution))
         dictionary['mean_park'] = self.mean_park
         dictionary['std_deviation_park'] = self.std_deviation_park
+        dictionary['mean_soc'] = self.mean_soc
+        dictionary['std_deviation_soc'] = self.std_deviation_soc
         dictionary['num_charging_events'] = self.num_charging_events
         dictionary['queue_length'] = self.queue_length
         dictionary['disconnect_by_time'] = self.disconnect_by_time
@@ -228,6 +237,8 @@ class ElvisConfigBuilder:
         self.with_time_params(yaml_str['time_params'])
         self.with_mean_park(yaml_str['mean_park'])
         self.with_std_deviation_park(yaml_str['std_deviation_park'])
+        self.with_mean_soc(yaml_str['mean_soc'])
+        self.with_std_deviation_soc(yaml_str['std_deviation_soc'])
         self.with_num_charging_events(yaml_str['num_charging_events'])
         self.with_queue_length(yaml_str['queue_length'])
         self.with_disconnect_by_time(yaml_str['disconnect_by_time'])
@@ -263,7 +274,8 @@ class ElvisConfigBuilder:
         elif type(charging_events[0]) is float or type(charging_events[0]) is int:
             msg_params_missing = 'Please assign builder.num_charging_events and ' \
                                  'builder.time_params, builder.mean_park, builder.std_deviation_' \
-                                 'park before using builder.with_charging_events with an ' \
+                                 'park, builder.mean_soc, builder.std_deviatoin_soc, '\
+                                 'before using builder.with_charging_events with an ' \
                                  'arrival distribution.'
 
             assert type(self.num_charging_events) is int, \
@@ -275,16 +287,21 @@ class ElvisConfigBuilder:
             assert type(self.resolution) is not None, \
                 'Builder.resolution not initialised. ' + msg_params_missing
             assert type(self.mean_park) is not None, \
-                'Builder.resolution not initialised. ' + msg_params_missing
+                'Builder.mean_park not initialised. ' + msg_params_missing
             assert type(self.std_deviation_park) is not None, \
-                'Builder.resolution not initialised. ' + msg_params_missing
+                'Builder.std_deviation not initialised. ' + msg_params_missing
+            assert type(self.mean_soc) is not None, \
+                'Builder.mean_soc not initialised. ' + msg_params_missing
+            assert type(self.std_deviation_soc) is not None, \
+                'Builder.std_deviation_soc not initialised. ' + msg_params_missing
 
             time_steps = create_time_steps(self.start_date, self.end_date, self.resolution)
 
             # call elvis.charging_event_generator.create_charging_events_from_distribution
             self.charging_events = create_events(charging_events, time_steps,
                                                  self.num_charging_events, self.mean_park,
-                                                 self.std_deviation_park, self.vehicle_types)
+                                                 self.std_deviation_park, self.mean_soc,
+                                                 self.std_deviation_soc, self.vehicle_types)
 
         return self
 
@@ -714,6 +731,25 @@ class ElvisConfigBuilder:
 
     def with_std_deviation_park(self, std_deviation_park):
         """Update decision variable on how to disconnect cars."""
-        assert isinstance(std_deviation_park, (int, float))
+        assert isinstance(std_deviation_park, (int, float)), 'The mean of the std deviation of ' \
+                                                             'the parking time must be of type ' \
+                                                             'float.'
+
+        assert 0 <= std_deviation_park
         self.std_deviation_park = std_deviation_park
+        return self
+
+    def with_mean_soc(self, mean_soc):
+        """Update decision variable on how to disconnect cars."""
+        assert isinstance(mean_soc, (int, float)), 'The mean of the SOC must be of type float.'
+        assert 0 < mean_soc < 1, "The mean parking time should be in between 0 and 24 hours."
+        self.mean_soc = mean_soc
+        return self
+
+    def with_std_deviation_soc(self, std_deviation_soc):
+        """Update decision variable on how to disconnect cars."""
+        assert isinstance(std_deviation_soc, (int, float)), 'The std deviation of the SOC must' \
+                                                            'be of type int or float.'
+        assert 0 <= std_deviation_soc, 'The std deviation of the SOC must be bigger than 0.'
+        self.std_deviation_soc = std_deviation_soc
         return self

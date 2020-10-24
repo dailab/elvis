@@ -244,6 +244,8 @@ if __name__ == '__main__':
 
     builder = ElvisConfigBuilder()
     builder.with_time_params(time_params).with_scheduling_policy(FCFS())
+    builder.with_std_deviation_soc(0.3)
+    builder.with_mean_soc(0.4)
     #builder.with_scheduling_policy(FCFS())
     builder.with_infrastructure(infrastructure)
     builder.with_disconnect_by_time(disconnect_by_time)
