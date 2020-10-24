@@ -261,6 +261,8 @@ vehicle_types:
   brand: VW
   model: e-up
   probability: 1019
+mean_soc: 0.6
+std_deviation_soc: 0.2
 mean_park: 0.167
 num_charging_events: 5000
 queue_length: 10

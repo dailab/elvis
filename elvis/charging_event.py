@@ -14,7 +14,7 @@ class ChargingEvent:
     counter = 1
     """This class contains relevant parameters to describe a charging event.
     """
-    def __init__(self, arrival_time, parking_time, vehicle_type):
+    def __init__(self, arrival_time, parking_time, soc, vehicle_type):
         """
 
         Args:
@@ -34,7 +34,7 @@ class ChargingEvent:
         self.arrival_time = arrival_time
         self.parking_time = parking_time
         self.leaving_time = self.arrival_time + datetime.timedelta(hours=self.parking_time)
-        self.soc = 0.8
+        self.soc = soc
         self.soc_target = 1.0
         self.vehicle_type = vehicle_type
 

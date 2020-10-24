@@ -26,6 +26,7 @@ class Uncontrolled(SchedulingPolicy):
 
         # For all connection points with a connected vehicle assign max possible power
         for connection_point in busy_connection_points:
+            power_connection_point = connection_point.max_power
             connected_vehicle = connection_point.connected_vehicle
             soc = connected_vehicle['soc']
             battery = connected_vehicle['vehicle_type'].battery
@@ -34,7 +35,7 @@ class Uncontrolled(SchedulingPolicy):
             # Power needed to fully charge battery
             power_to_charge_full = connection_point.power_to_charge_target(resolution, 1.0)
             # Get the stricter constraint
-            power = (min(max_power_battery, power_to_charge_full))
+            power = (min(max_power_battery, power_to_charge_full, power_connection_point))
             assign_power[connection_point] = power
 
         return assign_power

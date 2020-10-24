@@ -174,7 +174,8 @@ def create_time_steps(start_date, end_date, resolution):
 
 
 def create_charging_events_from_distribution(arrival_distribution, time_steps, num_charging_events,
-                                             mean_park, std_deviation_park, vehicle_types):
+                                             mean_park, std_deviation_park, mean_soc,
+                                             std_deviation_soc, vehicle_types):
     """Create all charging events for the simulation period.
 
     Args:
@@ -185,6 +186,9 @@ def create_charging_events_from_distribution(arrival_distribution, time_steps, n
         mean_park: (float): Mean of the gaussian distribution the parking time is generated from.
         std_deviation_park: (float): Standard deviation of the gaussian distribution the parking
             time is generated from.
+        mean_park: (float): Mean of the gaussian distribution the SOC is generated from.
+        std_deviation_park: (float): Standard deviation of the gaussian distribution the SOC
+            is generated from.
         vehicle_types: (list): Containing all instances of :obj: `elvis.vehicle.ElectricVehicle`
 
     Returns:
@@ -202,7 +206,9 @@ def create_charging_events_from_distribution(arrival_distribution, time_steps, n
     charging_events = []
     for arrival in arrivals:
         parking_time = min(max(0, np.random.normal(mean_park, std_deviation_park)), 24)
+        soc = min(max(0, np.random.normal(mean_soc, std_deviation_soc)), 1)
         vehicle_type = walker.random(count=1)[0]
-        charging_events.append(charging_event.ChargingEvent(arrival, parking_time, vehicle_type))
+        charging_events.append(charging_event.ChargingEvent(arrival, parking_time, soc,
+                                                            vehicle_type))
 
     return charging_events
