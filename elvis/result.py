@@ -60,6 +60,13 @@ class ElvisResult:
 
         return load_profile
 
+    def total_energy_charged(self):
+        power = 0
+        for cp in self.power_connection_points:
+            for time_step in self.power_connection_points[cp]:
+                power += self.power_connection_points[cp][time_step]
+        return float(power)
+
     def max_load(self):
         """Calculates the max load of an aggregated load profile:
 
