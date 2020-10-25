@@ -264,13 +264,13 @@ vehicle_types:
 mean_soc: 0.6
 std_deviation_soc: 0.2
 mean_park: 0.167
-num_charging_events: 5000
+num_charging_events: 2500
 queue_length: 10
 scheduling_policy: UC
 std_deviation_park: 0.033
 time_params: !!python/tuple
 - '2020-01-01T00:00:00'
 - '2020-01-07T23:59:00'
-- '1:00:00'
+- '00:15:00'
 transformer_preload: 0
 repeat_preload: True

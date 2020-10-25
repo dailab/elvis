@@ -180,7 +180,7 @@ std_deviation_park: 2
 time_params: !!python/tuple
 - '2020-01-01T00:00:00'
 - '2020-01-07T23:59:00'
-- '1:00:00'
+- '00:15:00'
 infrastructure:
   transformers:
   - charging_points:

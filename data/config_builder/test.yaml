@@ -1,8 +1,8 @@
 charging_events:
-- arrival_time: 2020-01-01 08:00:00
-  leaving_time: 2020-01-01 11:57:26.399498
-  parking_time: 3.9573331937772545
-  soc: 0.3464185059333375
+- arrival_time: 2020-01-01 05:45:00
+  leaving_time: 2020-01-01 20:56:43.520860
+  parking_time: 15.195422461112715
+  soc: 0.6462095566663926
   soc_target: 1.0
   vehicle_type: &id001 !!python/object:elvis.vehicle.ElectricVehicle
     battery: !!python/object:elvis.battery.EVBattery
@@ -13,88 +13,58 @@ charging_events:
     brand: VW
     model: e-Golf
     probability: 5743
-- arrival_time: 2020-01-01 08:00:00
-  leaving_time: 2020-01-01 11:46:43.564895
-  parking_time: 3.778768026279918
-  soc: 0.6498011857135995
+- arrival_time: 2020-01-01 08:30:00
+  leaving_time: 2020-01-01 17:33:01.733079
+  parking_time: 9.050481410932907
+  soc: 0.589352396940169
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-01 08:00:00
-  leaving_time: 2020-01-01 11:48:23.319304
-  parking_time: 3.8064775844919745
-  soc: 0.728740089190828
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 08:00:00
-  leaving_time: 2020-01-01 11:45:20.678387
-  parking_time: 3.755743996494919
-  soc: 0.7333295084957545
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 08:00:00
-  leaving_time: 2020-01-01 11:35:01.725165
-  parking_time: 3.5838125458848564
-  soc: 0.6993847362274112
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 08:00:00
-  leaving_time: 2020-01-01 12:30:02.036699
-  parking_time: 4.500565749834206
-  soc: 0.9196238757816468
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 08:00:00
-  leaving_time: 2020-01-01 11:40:05.204276
-  parking_time: 3.6681122990143926
-  soc: 0.8521740217613074
+- arrival_time: 2020-01-01 08:30:00
+  leaving_time: 2020-01-01 20:12:07.348017
+  parking_time: 11.702041115928433
+  soc: 0.4722086750063797
   soc_target: 1.0
   vehicle_type: *id001
 - arrival_time: 2020-01-01 09:00:00
-  leaving_time: 2020-01-01 12:46:52.353215
-  parking_time: 3.7812092263053225
-  soc: 0.6688757570531433
+  leaving_time: 2020-01-01 22:42:20.526023
+  parking_time: 13.705701673089477
+  soc: 0.445520297899541
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-01 09:00:00
-  leaving_time: 2020-01-01 13:30:53.688997
-  parking_time: 4.514913610246153
-  soc: 0.5750488720445104
+- arrival_time: 2020-01-01 10:15:00
+  leaving_time: 2020-01-01 20:16:16.881738
+  parking_time: 10.021356038441898
+  soc: 0.5456932601039264
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-01 09:00:00
-  leaving_time: 2020-01-01 14:28:01.832454
-  parking_time: 5.467175681539274
-  soc: 0.26387486988738695
+- arrival_time: 2020-01-01 10:45:00
+  leaving_time: 2020-01-01 21:52:44.171614
+  parking_time: 11.128936559578477
+  soc: 0.4805003652224738
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-01 09:00:00
-  leaving_time: 2020-01-01 12:19:26.398746
-  parking_time: 3.323999651691664
-  soc: 0.7677157090604172
+- arrival_time: 2020-01-01 11:15:00
+  leaving_time: 2020-01-02 02:19:13.889236
+  parking_time: 15.070524787684944
+  soc: 0.47505172211697605
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-01 09:00:00
-  leaving_time: 2020-01-01 13:23:01.583588
-  parking_time: 4.383773218998648
-  soc: 0.35824328723439464
+- arrival_time: 2020-01-01 11:30:00
+  leaving_time: 2020-01-01 21:31:51.787371
+  parking_time: 10.031052047583232
+  soc: 0.40859826450043313
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-01 09:00:00
-  leaving_time: 2020-01-01 12:55:06.994113
-  parking_time: 3.9186094759250896
-  soc: 0.32856107939007323
+- arrival_time: 2020-01-01 11:30:00
+  leaving_time: 2020-01-01 22:18:51.537100
+  parking_time: 10.814315861056825
+  soc: 0.8476216317520816
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-01 09:00:00
-  leaving_time: 2020-01-01 12:26:28.566131
-  parking_time: 3.44126836973479
-  soc: 0.5809138894278285
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 09:00:00
-  leaving_time: 2020-01-01 13:31:44.878161
-  parking_time: 4.52913282247826
-  soc: 0.3866859232929212
+- arrival_time: 2020-01-01 13:00:00
+  leaving_time: 2020-01-02 02:11:16.846215
+  parking_time: 13.188012837617052
+  soc: 0.27788475659200357
   soc_target: 1.0
   vehicle_type: &id002 !!python/object:elvis.vehicle.ElectricVehicle
     battery: !!python/object:elvis.battery.EVBattery
@@ -105,2902 +75,1444 @@ charging_events:
     brand: VW
     model: e-up
     probability: 1019
-- arrival_time: 2020-01-01 09:00:00
-  leaving_time: 2020-01-01 12:46:38.204456
-  parking_time: 3.777279015627289
-  soc: 0.4362465229812015
+- arrival_time: 2020-01-01 13:00:00
+  leaving_time: 2020-01-02 02:53:08.132429
+  parking_time: 13.885592341428254
+  soc: 0.5891373693348662
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-01 09:00:00
-  leaving_time: 2020-01-01 12:36:28.577544
-  parking_time: 3.607938206570973
-  soc: 0.5487464989320866
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 09:00:00
-  leaving_time: 2020-01-01 12:12:22.007394
-  parking_time: 3.2061131648848713
-  soc: 0.5464235208826399
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 09:00:00
-  leaving_time: 2020-01-01 12:55:59.591047
-  parking_time: 3.933219735165469
-  soc: 0.6146645976486734
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 09:00:00
-  leaving_time: 2020-01-01 13:55:25.482406
-  parking_time: 4.923745112740076
-  soc: 0.7904218330747366
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 09:00:00
-  leaving_time: 2020-01-01 13:02:38.981363
-  parking_time: 4.044161489796973
-  soc: 0
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 09:00:00
-  leaving_time: 2020-01-01 13:41:42.971169
-  parking_time: 4.69526976906648
-  soc: 1
+- arrival_time: 2020-01-01 13:00:00
+  leaving_time: 2020-01-01 21:50:23.478935
+  parking_time: 8.839855259612863
+  soc: 0.5562496355983657
   soc_target: 1.0
   vehicle_type: *id002
-- arrival_time: 2020-01-01 09:00:00
-  leaving_time: 2020-01-01 13:00:27.265358
-  parking_time: 4.007573710424199
-  soc: 1
+- arrival_time: 2020-01-01 13:15:00
+  leaving_time: 2020-01-02 00:42:11.912351
+  parking_time: 11.453308986380055
+  soc: 0.2599143756549468
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-01 09:00:00
-  leaving_time: 2020-01-01 12:57:56.927811
-  parking_time: 3.965813280890917
-  soc: 0.5063092861924302
+- arrival_time: 2020-01-01 13:15:00
+  leaving_time: 2020-01-02 00:07:06.461124
+  parking_time: 10.868461423331988
+  soc: 0.7647967423897357
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-01 09:00:00
-  leaving_time: 2020-01-01 13:01:17.101327
-  parking_time: 4.02141703535072
-  soc: 0.856809086530552
+- arrival_time: 2020-01-01 13:30:00
+  leaving_time: 2020-01-02 00:53:16.916443
+  parking_time: 11.388032345376578
+  soc: 0.7838462475350828
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-01 09:00:00
-  leaving_time: 2020-01-01 13:11:27.413704
-  parking_time: 4.1909482510348095
-  soc: 0.5382650436838244
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 09:00:00
-  leaving_time: 2020-01-01 13:28:04.559205
-  parking_time: 4.467933112631336
-  soc: 0.6642252006014014
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 09:00:00
-  leaving_time: 2020-01-01 12:26:32.193318
-  parking_time: 3.442275921575514
-  soc: 0.3824815572366994
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 09:00:00
-  leaving_time: 2020-01-01 13:44:36.657900
-  parking_time: 4.7435160834309835
-  soc: 0.5409036870798215
-  soc_target: 1.0
-  vehicle_type: *id002
-- arrival_time: 2020-01-01 09:00:00
-  leaving_time: 2020-01-01 13:17:32.273697
-  parking_time: 4.292298249131721
-  soc: 0.8523542667055011
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 09:00:00
-  leaving_time: 2020-01-01 12:24:52.192410
-  parking_time: 3.4144978915419983
-  soc: 0.7879302498631006
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 09:00:00
-  leaving_time: 2020-01-01 13:01:18.145959
-  parking_time: 4.021707210720004
-  soc: 0.6995610030692887
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 10:00:00
-  leaving_time: 2020-01-01 14:24:23.048191
-  parking_time: 4.40640227523888
-  soc: 0.5254726461135217
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 10:00:00
-  leaving_time: 2020-01-01 12:49:06.762328
-  parking_time: 2.8185450910144287
-  soc: 0.3304901911604151
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 10:00:00
-  leaving_time: 2020-01-01 12:44:20.023170
-  parking_time: 2.738895325093651
-  soc: 0.33549009696775983
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 10:00:00
-  leaving_time: 2020-01-01 13:41:12.925107
-  parking_time: 3.6869236408898654
-  soc: 0.6986573784994865
-  soc_target: 1.0
-  vehicle_type: *id002
-- arrival_time: 2020-01-01 10:00:00
-  leaving_time: 2020-01-01 13:45:49.003698
-  parking_time: 3.7636121383262546
-  soc: 0.8079696895548258
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 10:00:00
-  leaving_time: 2020-01-01 13:52:24.941235
-  parking_time: 3.873594787599951
-  soc: 0.9106189144553014
-  soc_target: 1.0
-  vehicle_type: *id002
-- arrival_time: 2020-01-01 10:00:00
-  leaving_time: 2020-01-01 13:26:22.280137
-  parking_time: 3.439522260188162
-  soc: 0.3855828634484699
-  soc_target: 1.0
-  vehicle_type: *id002
-- arrival_time: 2020-01-01 10:00:00
-  leaving_time: 2020-01-01 14:16:34.082047
-  parking_time: 4.2761339019282465
-  soc: 0.681994272947428
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 10:00:00
-  leaving_time: 2020-01-01 12:57:06.831035
-  parking_time: 2.951897509715387
-  soc: 0.5824437390875983
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 10:00:00
-  leaving_time: 2020-01-01 13:52:39.646893
-  parking_time: 3.8776796926378134
-  soc: 0.6704308186304914
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 10:00:00
-  leaving_time: 2020-01-01 13:18:55.711131
-  parking_time: 3.3154753142443356
-  soc: 0.7618953578835901
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 10:00:00
-  leaving_time: 2020-01-01 13:31:41.804759
-  parking_time: 3.5282790996552795
-  soc: 0.1301973226551113
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 10:00:00
-  leaving_time: 2020-01-01 13:16:24.390037
-  parking_time: 3.2734416768161245
-  soc: 0.7807204276236839
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 10:00:00
-  leaving_time: 2020-01-01 13:23:57.290475
-  parking_time: 3.399247354171528
-  soc: 0.7729604616090092
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 10:00:00
-  leaving_time: 2020-01-01 14:00:34.214484
-  parking_time: 4.0095040232436086
-  soc: 0.5084029349407266
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 10:00:00
-  leaving_time: 2020-01-01 14:20:13.178938
-  parking_time: 4.336994149425497
-  soc: 0.4647313638659917
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 10:00:00
-  leaving_time: 2020-01-01 13:24:12.377302
-  parking_time: 3.4034381394231468
-  soc: 0.5324158673567381
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 11:00:00
-  leaving_time: 2020-01-01 15:57:00.561218
-  parking_time: 4.95015589382745
-  soc: 0.7854688329211981
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 11:00:00
-  leaving_time: 2020-01-01 15:57:16.285000
-  parking_time: 4.954523611027081
-  soc: 0.45844575737808385
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 11:00:00
-  leaving_time: 2020-01-01 15:32:29.807258
-  parking_time: 4.541613127199178
-  soc: 0.48623547630489805
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 11:00:00
-  leaving_time: 2020-01-01 15:01:21.888323
-  parking_time: 4.022746756519352
-  soc: 0.5123427088808046
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 11:00:00
-  leaving_time: 2020-01-01 15:04:55.062864
-  parking_time: 4.081961906693434
-  soc: 0.1867337191377959
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 11:00:00
-  leaving_time: 2020-01-01 16:08:58.078049
-  parking_time: 5.149466124695774
-  soc: 0.8113506800383958
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 11:00:00
-  leaving_time: 2020-01-01 15:15:19.936129
-  parking_time: 4.255537813729307
-  soc: 0.3975225974567639
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 11:00:00
-  leaving_time: 2020-01-01 14:52:32.733799
-  parking_time: 3.875759388555135
-  soc: 0.3049099243402606
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 11:00:00
-  leaving_time: 2020-01-01 15:30:17.959023
-  parking_time: 4.504988617398224
-  soc: 0.5931090807917927
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 11:00:00
-  leaving_time: 2020-01-01 15:46:30.481511
-  parking_time: 4.775133753086509
-  soc: 0.5496109406025456
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 11:00:00
-  leaving_time: 2020-01-01 15:32:55.043099
-  parking_time: 4.548623083090924
-  soc: 0.40605812451150114
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 11:00:00
-  leaving_time: 2020-01-01 14:56:07.382723
-  parking_time: 3.935384089692453
-  soc: 0.8862365744441902
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 11:00:00
-  leaving_time: 2020-01-01 14:47:32.024089
-  parking_time: 3.7922289136851695
-  soc: 0.7320829778136961
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 11:00:00
-  leaving_time: 2020-01-01 15:02:57.240369
-  parking_time: 4.049233435871912
-  soc: 0.40412302868103656
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 11:00:00
-  leaving_time: 2020-01-01 15:17:10.715040
-  parking_time: 4.286309733348487
-  soc: 0.7652660670218555
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 11:00:00
-  leaving_time: 2020-01-01 14:10:25.199706
-  parking_time: 3.1736665851379278
-  soc: 1
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 11:00:00
-  leaving_time: 2020-01-01 15:11:50.353040
-  parking_time: 4.197320288764828
-  soc: 0.6297149316416398
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 11:00:00
-  leaving_time: 2020-01-01 14:35:05.326367
-  parking_time: 3.584812879647812
-  soc: 0.8229823842212344
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 12:00:00
-  leaving_time: 2020-01-01 15:38:50.287928
-  parking_time: 3.6473022022319337
-  soc: 0.24386918659314538
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 12:00:00
-  leaving_time: 2020-01-01 16:40:27.546901
-  parking_time: 4.67431858371758
-  soc: 0.5111154833992845
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 12:00:00
-  leaving_time: 2020-01-01 16:10:50.215768
-  parking_time: 4.180615490978827
-  soc: 0.7256616882215537
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 12:00:00
-  leaving_time: 2020-01-01 15:58:09.890889
-  parking_time: 3.969414135881035
-  soc: 0.219305612596021
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 12:00:00
-  leaving_time: 2020-01-01 15:31:29.967110
-  parking_time: 3.524990863920435
-  soc: 0.4723453694475853
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 12:00:00
-  leaving_time: 2020-01-01 15:59:50.761486
-  parking_time: 3.99743374607471
-  soc: 0.3791216360583354
-  soc_target: 1.0
-  vehicle_type: *id002
-- arrival_time: 2020-01-01 12:00:00
-  leaving_time: 2020-01-01 15:30:40.582181
-  parking_time: 3.511272827929368
-  soc: 0.47041791061184673
-  soc_target: 1.0
-  vehicle_type: *id002
-- arrival_time: 2020-01-01 12:00:00
-  leaving_time: 2020-01-01 15:29:30.737967
-  parking_time: 3.491871657626292
-  soc: 0.587094011282217
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 12:00:00
-  leaving_time: 2020-01-01 15:47:19.869243
-  parking_time: 3.788852567387271
-  soc: 0.6585589802857386
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 12:00:00
-  leaving_time: 2020-01-01 15:04:23.846393
-  parking_time: 3.0732906646621205
-  soc: 0.5429161232074254
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 12:00:00
-  leaving_time: 2020-01-01 16:00:12.179632
-  parking_time: 4.003383231218383
-  soc: 0.23098995047024118
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 12:00:00
-  leaving_time: 2020-01-01 15:45:40.705318
-  parking_time: 3.761307032895954
-  soc: 0.3480502471575915
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 12:00:00
-  leaving_time: 2020-01-01 15:20:13.517110
-  parking_time: 3.3370880861187104
-  soc: 0.6981847538094035
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 12:00:00
-  leaving_time: 2020-01-01 16:24:32.233424
-  parking_time: 4.408953728925146
-  soc: 0.48820523500646307
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 12:00:00
-  leaving_time: 2020-01-01 16:53:19.823061
-  parking_time: 4.8888397390419405
-  soc: 0.7315433948467382
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 12:00:00
-  leaving_time: 2020-01-01 15:32:37.136126
-  parking_time: 3.543648924020711
-  soc: 0.8473678161261373
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 12:00:00
-  leaving_time: 2020-01-01 16:05:28.579993
-  parking_time: 4.091272220288896
-  soc: 0.5688722488943303
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 13:00:00
-  leaving_time: 2020-01-01 17:08:46.481725
-  parking_time: 4.146244923614155
-  soc: 0.5890681990677448
-  soc_target: 1.0
-  vehicle_type: *id002
-- arrival_time: 2020-01-01 13:00:00
-  leaving_time: 2020-01-01 16:29:29.728258
-  parking_time: 3.491591182843134
-  soc: 0.8935843424580316
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 13:00:00
-  leaving_time: 2020-01-01 17:07:34.822245
-  parking_time: 4.126339512371859
-  soc: 0.5960375818593182
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 13:00:00
-  leaving_time: 2020-01-01 16:23:20.506273
-  parking_time: 3.3890295203394953
-  soc: 0.5624204283928517
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 13:00:00
-  leaving_time: 2020-01-01 16:47:33.955822
-  parking_time: 3.7927655060500456
-  soc: 0.44224057922492643
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 13:00:00
-  leaving_time: 2020-01-01 16:05:05.169220
-  parking_time: 3.08476922771377
-  soc: 0.5422009039771668
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 13:00:00
-  leaving_time: 2020-01-01 17:00:44.807478
-  parking_time: 4.012446521781726
-  soc: 0.5597140749014506
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 13:00:00
-  leaving_time: 2020-01-01 16:59:28.093226
-  parking_time: 3.991137007113008
-  soc: 0.5435944589677939
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 13:00:00
-  leaving_time: 2020-01-01 16:32:34.157915
-  parking_time: 3.5428216431152366
-  soc: 0.696342346592356
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 13:00:00
-  leaving_time: 2020-01-01 16:26:21.504986
-  parking_time: 3.439306940638505
-  soc: 0.7065499322409791
-  soc_target: 1.0
-  vehicle_type: *id002
-- arrival_time: 2020-01-01 13:00:00
-  leaving_time: 2020-01-01 17:05:43.306783
-  parking_time: 4.095362995236957
-  soc: 0.5760149057348811
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 13:00:00
-  leaving_time: 2020-01-01 16:29:28.705373
-  parking_time: 3.4913070481362016
-  soc: 1
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 13:00:00
-  leaving_time: 2020-01-01 16:57:51.228742
-  parking_time: 3.964230206057983
-  soc: 0.41883931930900586
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 13:00:00
-  leaving_time: 2020-01-01 16:45:09.099127
-  parking_time: 3.7525275353756915
-  soc: 0.2989287439822307
-  soc_target: 1.0
-  vehicle_type: *id002
-- arrival_time: 2020-01-01 13:00:00
-  leaving_time: 2020-01-01 16:22:24.468249
-  parking_time: 3.3734634024828445
-  soc: 0.5648917099865529
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 13:00:00
-  leaving_time: 2020-01-01 16:30:29.098040
-  parking_time: 3.508082789005929
-  soc: 0.5925147663860186
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 13:00:00
-  leaving_time: 2020-01-01 16:49:19.471148
-  parking_time: 3.8220753188844605
-  soc: 0.5036155222073585
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 13:00:00
-  leaving_time: 2020-01-01 17:24:37.211777
-  parking_time: 4.410336604840315
-  soc: 0.9261921419731133
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 13:00:00
-  leaving_time: 2020-01-01 17:19:35.254625
-  parking_time: 4.326459617941625
-  soc: 0.5705501912441568
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 13:00:00
-  leaving_time: 2020-01-01 17:36:36.788127
-  parking_time: 4.610218924076871
-  soc: 0.38901877994218614
-  soc_target: 1.0
-  vehicle_type: *id002
-- arrival_time: 2020-01-01 14:00:00
-  leaving_time: 2020-01-01 18:34:03.749098
-  parking_time: 4.5677080827502525
-  soc: 0.5942160286569017
+- arrival_time: 2020-01-01 13:45:00
+  leaving_time: 2020-01-02 01:52:36.870202
+  parking_time: 12.126908389498384
+  soc: 0.8787662962521294
   soc_target: 1.0
   vehicle_type: *id001
 - arrival_time: 2020-01-01 14:00:00
-  leaving_time: 2020-01-01 17:46:06.809804
-  parking_time: 3.768558278951352
-  soc: 0.598413594188999
+  leaving_time: 2020-01-02 01:23:19.419128
+  parking_time: 11.38872753561189
+  soc: 0.6233990217191268
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-01 14:00:00
-  leaving_time: 2020-01-01 17:00:20.454538
-  parking_time: 3.00568181615991
-  soc: 0.8522344003411574
+- arrival_time: 2020-01-01 14:30:00
+  leaving_time: 2020-01-02 01:44:46.711149
+  parking_time: 11.246308652585219
+  soc: 0.6607422707537425
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-01 14:00:00
-  leaving_time: 2020-01-01 17:58:32.272336
-  parking_time: 3.975631204339091
-  soc: 0.9315194585006111
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 14:00:00
-  leaving_time: 2020-01-01 17:13:00.034137
-  parking_time: 3.216676149262856
-  soc: 0.7081008683974267
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 14:00:00
-  leaving_time: 2020-01-01 18:09:16.484470
-  parking_time: 4.154579019545013
-  soc: 0.16683936403540484
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 14:00:00
-  leaving_time: 2020-01-01 18:36:54.513756
-  parking_time: 4.615142710073531
-  soc: 1
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 14:00:00
-  leaving_time: 2020-01-01 18:00:21.553201
-  parking_time: 4.005987000230264
-  soc: 0.4023659541778073
-  soc_target: 1.0
-  vehicle_type: *id002
-- arrival_time: 2020-01-01 14:00:00
-  leaving_time: 2020-01-01 17:54:04.497794
-  parking_time: 3.901249387107179
-  soc: 0.38518385362899316
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 14:00:00
-  leaving_time: 2020-01-01 17:39:39.062527
-  parking_time: 3.660850701881995
-  soc: 0.5050016108842356
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 14:00:00
-  leaving_time: 2020-01-01 18:28:20.642912
-  parking_time: 4.472400808934918
-  soc: 0.8597094854240905
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 14:00:00
-  leaving_time: 2020-01-01 17:10:28.808144
-  parking_time: 3.174668929011204
-  soc: 0.4677925588058378
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 15:00:00
-  leaving_time: 2020-01-01 18:34:15.520379
-  parking_time: 3.5709778831512495
-  soc: 0.43753964719707084
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 15:00:00
-  leaving_time: 2020-01-01 19:17:57.181112
-  parking_time: 4.299216975455218
-  soc: 0.5167997137472455
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 15:00:00
-  leaving_time: 2020-01-01 18:51:12.459302
-  parking_time: 3.853460917329836
-  soc: 0.41214954237834706
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 15:00:00
-  leaving_time: 2020-01-01 19:01:04.484584
-  parking_time: 4.017912384391685
-  soc: 0.41597299171767455
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 15:00:00
-  leaving_time: 2020-01-01 17:58:20.850312
-  parking_time: 2.97245842000127
-  soc: 0.4588179938947352
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 15:00:00
-  leaving_time: 2020-01-01 19:05:38.530815
-  parking_time: 4.094036337476473
-  soc: 0.4923445350173366
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 15:00:00
-  leaving_time: 2020-01-01 17:55:49.421694
-  parking_time: 2.930394915107662
-  soc: 0.5423487292115999
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 15:00:00
-  leaving_time: 2020-01-01 18:48:51.155406
-  parking_time: 3.8142098349300717
-  soc: 0.6047647720015639
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 15:00:00
-  leaving_time: 2020-01-01 19:02:43.181546
-  parking_time: 4.045328207341238
-  soc: 0.4916428427304362
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 15:00:00
-  leaving_time: 2020-01-01 18:27:58.557046
-  parking_time: 3.4662658462084783
-  soc: 0.29399732415067265
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 15:00:00
-  leaving_time: 2020-01-01 19:18:19.315135
-  parking_time: 4.3053653152990705
-  soc: 0.7483519228379257
+- arrival_time: 2020-01-01 14:30:00
+  leaving_time: 2020-01-02 04:04:06.870766
+  parking_time: 13.568575212816059
+  soc: 0.7371414290824433
   soc_target: 1.0
   vehicle_type: *id002
 - arrival_time: 2020-01-01 15:00:00
-  leaving_time: 2020-01-01 18:37:20.879571
-  parking_time: 3.6224665476280133
-  soc: 0.6740545271036282
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 15:00:00
-  leaving_time: 2020-01-01 18:28:57.658130
-  parking_time: 3.4826828138042805
-  soc: 0.4238435350900064
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-01 16:00:00
-  leaving_time: 2020-01-01 20:20:27.161005
-  parking_time: 4.340878057006591
-  soc: 0.7163786714696682
+  leaving_time: 2020-01-02 00:16:11.283978
+  parking_time: 9.269801104929863
+  soc: 0.18868364987227432
   soc_target: 1.0
   vehicle_type: *id002
-- arrival_time: 2020-01-01 16:00:00
-  leaving_time: 2020-01-01 19:54:12.575157
-  parking_time: 3.9034930992174304
-  soc: 0.49110098963965526
-  soc_target: 1.0
-  vehicle_type: *id002
-- arrival_time: 2020-01-01 16:00:00
-  leaving_time: 2020-01-01 19:45:04.470182
-  parking_time: 3.7512417173184414
-  soc: 0.3306271132077531
-  soc_target: 1.0
-  vehicle_type: *id002
-- arrival_time: 2020-01-01 16:00:00
-  leaving_time: 2020-01-01 20:22:36.033080
-  parking_time: 4.376675855667177
-  soc: 0.7848598007113389
+- arrival_time: 2020-01-01 15:15:00
+  leaving_time: 2020-01-02 02:25:53.573311
+  parking_time: 11.181548142030877
+  soc: 0.3316476474035774
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-01 16:00:00
-  leaving_time: 2020-01-01 19:45:04.256328
-  parking_time: 3.751182313397756
-  soc: 0.7689515591634006
-  soc_target: 1.0
-  vehicle_type: *id002
-- arrival_time: 2020-01-01 16:00:00
-  leaving_time: 2020-01-01 20:11:17.666954
-  parking_time: 4.1882408204968025
-  soc: 0.7392826164285314
+- arrival_time: 2020-01-01 15:30:00
+  leaving_time: 2020-01-02 08:10:07.457128
+  parking_time: 16.6687380910927
+  soc: 0.5641013303881438
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-01 16:00:00
-  leaving_time: 2020-01-01 21:07:29.896064
-  parking_time: 5.12497112886785
-  soc: 0.9546692121727798
+- arrival_time: 2020-01-01 15:45:00
+  leaving_time: 2020-01-01 23:35:31.867005
+  parking_time: 7.842185279272912
+  soc: 0.6316390832406101
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-01 16:00:00
-  leaving_time: 2020-01-01 20:23:03.868788
-  parking_time: 4.384407996721757
-  soc: 0.30844801755152523
-  soc_target: 1.0
-  vehicle_type: *id002
-- arrival_time: 2020-01-01 16:00:00
-  leaving_time: 2020-01-01 19:38:51.367063
-  parking_time: 3.6476019618170556
-  soc: 0.5444868795701787
+- arrival_time: 2020-01-01 16:30:00
+  leaving_time: 2020-01-02 05:07:49.844560
+  parking_time: 12.630512377641889
+  soc: 0.638455984274536
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-01 16:00:00
-  leaving_time: 2020-01-01 20:18:39.364064
-  parking_time: 4.310934462155339
-  soc: 0.5738828490833738
+- arrival_time: 2020-01-01 16:45:00
+  leaving_time: 2020-01-02 03:22:01.374491
+  parking_time: 10.617048469606607
+  soc: 0.7287155488671693
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-01 16:00:00
-  leaving_time: 2020-01-01 19:33:57.648015
-  parking_time: 3.5660133373766625
-  soc: 0.5373041604573678
+- arrival_time: 2020-01-01 16:45:00
+  leaving_time: 2020-01-02 02:24:13.254412
+  parking_time: 9.653681781229693
+  soc: 0.5796224228277019
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-01 16:00:00
-  leaving_time: 2020-01-01 19:38:08.882866
-  parking_time: 3.6358007961288856
-  soc: 0.874553550816045
+- arrival_time: 2020-01-01 16:45:00
+  leaving_time: 2020-01-02 04:39:51.436230
+  parking_time: 11.914287841613595
+  soc: 0.4695069716189717
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-01 16:00:00
-  leaving_time: 2020-01-01 20:18:52.490853
-  parking_time: 4.3145807925658675
-  soc: 0.658838336061145
+- arrival_time: 2020-01-01 17:45:00
+  leaving_time: 2020-01-02 04:45:30.181854
+  parking_time: 11.008383848321285
+  soc: 0.21814492414622305
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-01 16:00:00
-  leaving_time: 2020-01-01 19:52:43.328719
-  parking_time: 3.8787024220729642
-  soc: 0.9950972847073751
+- arrival_time: 2020-01-01 20:15:00
+  leaving_time: 2020-01-02 06:51:17.641117
+  parking_time: 10.604900310399781
+  soc: 0.4055660755834345
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-01 16:00:00
-  leaving_time: 2020-01-01 20:10:32.838865
-  parking_time: 4.175788573746627
-  soc: 0.7821507085094371
+- arrival_time: 2020-01-01 20:15:00
+  leaving_time: 2020-01-02 08:37:08.562985
+  parking_time: 12.36904527351633
+  soc: 0.42851226232296846
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-01 16:00:00
-  leaving_time: 2020-01-01 20:51:20.968963
-  parking_time: 4.8558247118564255
-  soc: 0.8741821691740066
+- arrival_time: 2020-01-01 20:30:00
+  leaving_time: 2020-01-02 11:20:47.406103
+  parking_time: 14.8465016952411
+  soc: 0.8341239515089766
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-01 16:00:00
-  leaving_time: 2020-01-01 20:14:51.897481
-  parking_time: 4.247749300371736
-  soc: 0.5346363539788292
+- arrival_time: 2020-01-01 20:30:00
+  leaving_time: 2020-01-02 08:21:53.625591
+  parking_time: 11.864895997513337
+  soc: 0.6649046952072972
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-02 08:00:00
-  leaving_time: 2020-01-02 11:50:09.150009
-  parking_time: 3.835875002512302
-  soc: 0.570670126253527
+- arrival_time: 2020-01-01 21:00:00
+  leaving_time: 2020-01-02 07:56:08.067974
+  parking_time: 10.935574437327674
+  soc: 0.3349279328551474
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-02 08:00:00
-  leaving_time: 2020-01-02 12:38:08.531150
-  parking_time: 4.635703097253099
-  soc: 0.5844589944034421
+- arrival_time: 2020-01-02 05:45:00
+  leaving_time: 2020-01-02 18:08:38.198661
+  parking_time: 12.393944072415923
+  soc: 0.751453432550719
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-02 08:00:00
-  leaving_time: 2020-01-02 12:19:39.485744
-  parking_time: 4.3276349288045175
-  soc: 0.8822723801869727
+- arrival_time: 2020-01-02 07:45:00
+  leaving_time: 2020-01-02 16:58:49.456418
+  parking_time: 9.230404560590987
+  soc: 0.6597858296995825
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-02 08:00:00
-  leaving_time: 2020-01-02 12:32:14.257428
-  parking_time: 4.537293730104551
-  soc: 0.12712735938571834
+- arrival_time: 2020-01-02 08:45:00
+  leaving_time: 2020-01-02 22:57:00.528928
+  parking_time: 14.20014692435235
+  soc: 0.5466400038855479
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-02 08:00:00
-  leaving_time: 2020-01-02 11:33:56.730758
-  parking_time: 3.565758543913516
-  soc: 0.4854791090485787
+- arrival_time: 2020-01-02 09:45:00
+  leaving_time: 2020-01-02 22:39:17.202127
+  parking_time: 12.9047783686225
+  soc: 0.6569613752551032
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-02 09:00:00
-  leaving_time: 2020-01-02 13:09:52.884377
-  parking_time: 4.164690104825702
-  soc: 0.8751260761660549
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-02 09:00:00
-  leaving_time: 2020-01-02 12:35:13.155279
-  parking_time: 3.5869875774648667
-  soc: 0.4554899765824866
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-02 09:00:00
-  leaving_time: 2020-01-02 13:21:31.226978
-  parking_time: 4.358674160532814
-  soc: 0.6647028682494395
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-02 09:00:00
-  leaving_time: 2020-01-02 13:47:01.180328
-  parking_time: 4.783661202088186
-  soc: 0.6375307934747667
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-02 09:00:00
-  leaving_time: 2020-01-02 12:41:37.580113
-  parking_time: 3.6937722535908732
-  soc: 0.7213070490016215
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-02 09:00:00
-  leaving_time: 2020-01-02 12:55:02.676173
-  parking_time: 3.9174100479632914
-  soc: 1
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-02 09:00:00
-  leaving_time: 2020-01-02 11:58:06.162457
-  parking_time: 2.9683784601638346
-  soc: 0.7420536706997106
-  soc_target: 1.0
-  vehicle_type: *id002
-- arrival_time: 2020-01-02 09:00:00
-  leaving_time: 2020-01-02 13:10:00.331883
-  parking_time: 4.166758856362224
-  soc: 0.5703102404693864
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-02 09:00:00
-  leaving_time: 2020-01-02 13:09:02.814022
-  parking_time: 4.150781672783398
-  soc: 0.17735907803990691
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-02 09:00:00
-  leaving_time: 2020-01-02 12:47:23.068010
-  parking_time: 3.789741113845949
-  soc: 0.5459833959984943
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-02 10:00:00
-  leaving_time: 2020-01-02 14:03:09.592311
-  parking_time: 4.05266453081454
-  soc: 0.6105193599291551
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-02 10:00:00
-  leaving_time: 2020-01-02 12:52:04.529565
-  parking_time: 2.867924879226172
-  soc: 0.8970310970111934
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-02 10:00:00
-  leaving_time: 2020-01-02 13:52:24.395225
-  parking_time: 3.8734431179384083
-  soc: 0.6151339171324371
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-02 10:00:00
-  leaving_time: 2020-01-02 13:38:49.413199
-  parking_time: 3.647059221858762
-  soc: 0.5905590503485414
-  soc_target: 1.0
-  vehicle_type: *id002
-- arrival_time: 2020-01-02 10:00:00
-  leaving_time: 2020-01-02 13:57:51.021067
-  parking_time: 3.9641725185048737
-  soc: 0.506932503469225
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-02 10:00:00
-  leaving_time: 2020-01-02 13:56:51.402043
-  parking_time: 3.9476116786537436
-  soc: 0.7190061345625374
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-02 10:00:00
-  leaving_time: 2020-01-02 14:23:57.547788
-  parking_time: 4.399318830000673
-  soc: 0.3715038870551798
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-02 10:00:00
-  leaving_time: 2020-01-02 15:02:01.890115
-  parking_time: 5.033858365170786
-  soc: 0.5525340885196394
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-02 10:00:00
-  leaving_time: 2020-01-02 13:37:02.804317
-  parking_time: 3.6174456436647624
-  soc: 0.3844273584184897
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-02 10:00:00
-  leaving_time: 2020-01-02 14:01:45.579106
-  parking_time: 4.029327529495964
-  soc: 0.7129226312784231
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-02 10:00:00
-  leaving_time: 2020-01-02 14:27:56.235768
-  parking_time: 4.465621046577713
-  soc: 0.27653226580505413
-  soc_target: 1.0
-  vehicle_type: *id002
-- arrival_time: 2020-01-02 10:00:00
-  leaving_time: 2020-01-02 14:16:13.272784
-  parking_time: 4.27035355102633
-  soc: 0.5063599740945491
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-02 10:00:00
-  leaving_time: 2020-01-02 14:00:00.649731
-  parking_time: 4.000180480810986
-  soc: 0.568541716711647
-  soc_target: 1.0
-  vehicle_type: *id002
-- arrival_time: 2020-01-02 11:00:00
-  leaving_time: 2020-01-02 15:12:50.842180
-  parking_time: 4.214122827685782
-  soc: 0.5553072308534995
-  soc_target: 1.0
-  vehicle_type: *id002
-- arrival_time: 2020-01-02 11:00:00
-  leaving_time: 2020-01-02 15:04:20.747357
-  parking_time: 4.072429821422788
-  soc: 0.4735931051592038
-  soc_target: 1.0
-  vehicle_type: *id002
-- arrival_time: 2020-01-02 11:00:00
-  leaving_time: 2020-01-02 14:27:19.081475
-  parking_time: 3.455300409848093
-  soc: 0.8056494895491313
+- arrival_time: 2020-01-02 09:45:00
+  leaving_time: 2020-01-02 22:33:38.703155
+  parking_time: 12.810750876433456
+  soc: 0.6063302615403959
   soc_target: 1.0
   vehicle_type: *id001
 - arrival_time: 2020-01-02 11:00:00
-  leaving_time: 2020-01-02 14:41:23.750605
-  parking_time: 3.6899307235815844
-  soc: 0.7679916155576418
-  soc_target: 1.0
-  vehicle_type: *id002
-- arrival_time: 2020-01-02 11:00:00
-  leaving_time: 2020-01-02 15:20:01.212911
-  parking_time: 4.3336702531539935
-  soc: 0.9786506508014691
+  leaving_time: 2020-01-02 18:41:28.250498
+  parking_time: 7.6911806939820675
+  soc: 0.7255588530917157
   soc_target: 1.0
   vehicle_type: *id001
 - arrival_time: 2020-01-02 11:00:00
-  leaving_time: 2020-01-02 14:57:38.515379
-  parking_time: 3.9606987162622023
-  soc: 0.6941865065118183
+  leaving_time: 2020-01-02 22:41:11.085666
+  parking_time: 11.686412684942308
+  soc: 0.17111841416951967
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-02 11:00:00
-  leaving_time: 2020-01-02 14:35:38.287992
-  parking_time: 3.593968886569013
-  soc: 0.4392786983176257
+- arrival_time: 2020-01-02 11:15:00
+  leaving_time: 2020-01-02 20:55:24.030183
+  parking_time: 9.673341717460296
+  soc: 0.6642114519609637
+  soc_target: 1.0
+  vehicle_type: *id002
+- arrival_time: 2020-01-02 11:30:00
+  leaving_time: 2020-01-03 00:23:15.994448
+  parking_time: 12.88777623565995
+  soc: 0.7800814857701761
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-02 11:00:00
-  leaving_time: 2020-01-02 14:19:50.984604
-  parking_time: 3.330829056632518
-  soc: 0.6173363301003443
+- arrival_time: 2020-01-02 11:45:00
+  leaving_time: 2020-01-02 22:43:38.748628
+  parking_time: 10.977430174477412
+  soc: 0.7004431030924329
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-02 11:00:00
-  leaving_time: 2020-01-02 14:35:02.982629
-  parking_time: 3.5841618413378207
-  soc: 0.6976828340846314
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-02 11:00:00
-  leaving_time: 2020-01-02 14:14:19.359777
-  parking_time: 3.238711049287477
-  soc: 0.40370175489860866
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-02 12:00:00
-  leaving_time: 2020-01-02 15:48:08.603858
-  parking_time: 3.802389960586844
-  soc: 0.6033181943236934
+- arrival_time: 2020-01-02 11:45:00
+  leaving_time: 2020-01-02 22:07:14.276737
+  parking_time: 10.37063242680643
+  soc: 0.5109000624222433
   soc_target: 1.0
   vehicle_type: *id001
 - arrival_time: 2020-01-02 12:00:00
-  leaving_time: 2020-01-02 15:27:27.046994
-  parking_time: 3.4575130538561885
-  soc: 0.7883538954735768
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-02 12:00:00
-  leaving_time: 2020-01-02 16:16:40.548703
-  parking_time: 4.277930195388592
-  soc: 0.5873053091312609
+  leaving_time: 2020-01-02 20:45:58.761433
+  parking_time: 8.76632262029736
+  soc: 0.9247866284694657
   soc_target: 1.0
   vehicle_type: *id002
 - arrival_time: 2020-01-02 12:00:00
-  leaving_time: 2020-01-02 16:16:10.278364
-  parking_time: 4.269521767677432
-  soc: 0.604600441807371
+  leaving_time: 2020-01-03 03:01:20.680596
+  parking_time: 15.022411276776495
+  soc: 0.8706383806147306
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-02 12:00:00
-  leaving_time: 2020-01-02 15:24:41.755084
-  parking_time: 3.411598634391558
-  soc: 1
+- arrival_time: 2020-01-02 12:15:00
+  leaving_time: 2020-01-03 00:29:41.892652
+  parking_time: 12.244970181058836
+  soc: 0.6568173110101632
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-02 12:00:00
-  leaving_time: 2020-01-02 15:10:21.925600
-  parking_time: 3.172757111099992
-  soc: 0.7719521087457037
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-02 12:00:00
-  leaving_time: 2020-01-02 15:47:43.004812
-  parking_time: 3.7952791144677906
-  soc: 0.6046449218345622
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-02 12:00:00
-  leaving_time: 2020-01-02 16:02:14.085826
-  parking_time: 4.037246062874622
-  soc: 0.18428730511269642
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-02 12:00:00
-  leaving_time: 2020-01-02 15:45:41.608636
-  parking_time: 3.761557954439038
-  soc: 0.48616392403742525
+- arrival_time: 2020-01-02 13:15:00
+  leaving_time: 2020-01-03 01:24:20.757984
+  parking_time: 12.155766106547354
+  soc: 0.38289648753850747
   soc_target: 1.0
   vehicle_type: *id002
-- arrival_time: 2020-01-02 12:00:00
-  leaving_time: 2020-01-02 15:35:08.752602
-  parking_time: 3.585764611747364
-  soc: 0.28609792509131216
+- arrival_time: 2020-01-02 13:30:00
+  leaving_time: 2020-01-03 01:14:31.497115
+  parking_time: 11.742082532043566
+  soc: 0.8493708545268017
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-02 13:00:00
-  leaving_time: 2020-01-02 16:36:16.077491
-  parking_time: 3.6044659696304446
-  soc: 0.930447356302203
+- arrival_time: 2020-01-02 13:45:00
+  leaving_time: 2020-01-03 01:41:34.811834
+  parking_time: 11.943003287259653
+  soc: 0.4591551337703923
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-02 13:00:00
-  leaving_time: 2020-01-02 17:35:40.878158
-  parking_time: 4.5946883771624405
-  soc: 1
+- arrival_time: 2020-01-02 14:15:00
+  leaving_time: 2020-01-02 22:06:19.089362
+  parking_time: 7.8553026005394315
+  soc: 0.7963598072983151
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-02 13:00:00
-  leaving_time: 2020-01-02 17:05:48.603889
-  parking_time: 4.096834413595743
-  soc: 0.6512437006718974
+- arrival_time: 2020-01-02 14:30:00
+  leaving_time: 2020-01-03 00:52:03.027189
+  parking_time: 10.367507552538948
+  soc: 0.506296589150437
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-02 13:00:00
-  leaving_time: 2020-01-02 16:34:29.182133
-  parking_time: 3.5747728146755913
-  soc: 0.5005096356269169
+- arrival_time: 2020-01-02 14:45:00
+  leaving_time: 2020-01-03 02:54:13.718808
+  parking_time: 12.153810780003093
+  soc: 0.9604407215461808
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-02 13:00:00
-  leaving_time: 2020-01-02 17:02:21.997763
-  parking_time: 4.039443823187036
-  soc: 0.5028522742565801
+- arrival_time: 2020-01-02 14:45:00
+  leaving_time: 2020-01-03 04:33:37.380923
+  parking_time: 13.81038358971019
+  soc: 0.7567579519077544
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-02 13:00:00
-  leaving_time: 2020-01-02 17:29:44.093734
-  parking_time: 4.495581592883882
-  soc: 0.6949787739580962
-  soc_target: 1.0
-  vehicle_type: *id002
-- arrival_time: 2020-01-02 13:00:00
-  leaving_time: 2020-01-02 16:47:02.239021
-  parking_time: 3.7839552835064785
-  soc: 1
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-02 13:00:00
-  leaving_time: 2020-01-02 16:43:56.408286
-  parking_time: 3.732335635020051
-  soc: 0.45355838400403636
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-02 13:00:00
-  leaving_time: 2020-01-02 17:43:20.710117
-  parking_time: 4.722419477025378
-  soc: 0.8020012400971405
-  soc_target: 1.0
-  vehicle_type: *id002
-- arrival_time: 2020-01-02 14:00:00
-  leaving_time: 2020-01-02 18:04:40.533952
-  parking_time: 4.0779260978514085
-  soc: 0.4869078238339506
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-02 14:00:00
-  leaving_time: 2020-01-02 18:00:30.898777
-  parking_time: 4.008582993643565
-  soc: 0.5942204474040684
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-02 14:00:00
-  leaving_time: 2020-01-02 18:18:38.246325
-  parking_time: 4.31062397915752
-  soc: 0.6139258811235876
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-02 14:00:00
-  leaving_time: 2020-01-02 18:15:45.647117
-  parking_time: 4.262679754754534
-  soc: 0.5104787830584783
-  soc_target: 1.0
-  vehicle_type: *id002
-- arrival_time: 2020-01-02 14:00:00
-  leaving_time: 2020-01-02 17:01:36.674281
-  parking_time: 3.0268539668578756
-  soc: 0.8210125732620339
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-02 14:00:00
-  leaving_time: 2020-01-02 17:27:38.452073
-  parking_time: 3.4606811314809423
-  soc: 0.4771111997543116
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-02 14:00:00
-  leaving_time: 2020-01-02 18:45:47.074158
-  parking_time: 4.763076154950253
-  soc: 0.6398926479430803
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-02 14:00:00
-  leaving_time: 2020-01-02 17:38:29.737819
-  parking_time: 3.6415938386101563
-  soc: 0.9313193852034484
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-02 14:00:00
-  leaving_time: 2020-01-02 17:18:35.301184
-  parking_time: 3.3098058843923033
-  soc: 0.555029547216205
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-02 14:00:00
-  leaving_time: 2020-01-02 18:21:34.167456
-  parking_time: 4.359490960105858
-  soc: 0.9940187546510757
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-02 14:00:00
-  leaving_time: 2020-01-02 18:00:29.754619
-  parking_time: 4.008265171866069
-  soc: 0.5795467308697682
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-02 14:00:00
-  leaving_time: 2020-01-02 17:42:15.182875
-  parking_time: 3.704217465293011
-  soc: 0.6327655425627565
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-02 14:00:00
-  leaving_time: 2020-01-02 18:09:29.775898
-  parking_time: 4.158271082846396
-  soc: 0.45190306850878337
+- arrival_time: 2020-01-02 14:45:00
+  leaving_time: 2020-01-03 02:35:19.543548
+  parking_time: 11.838762096672822
+  soc: 0.43976734435964004
   soc_target: 1.0
   vehicle_type: *id001
 - arrival_time: 2020-01-02 15:00:00
-  leaving_time: 2020-01-02 19:13:41.503965
-  parking_time: 4.22819554595141
-  soc: 0.8080282570218055
-  soc_target: 1.0
-  vehicle_type: *id002
-- arrival_time: 2020-01-02 15:00:00
-  leaving_time: 2020-01-02 19:23:34.908585
-  parking_time: 4.3930301624994925
-  soc: 0.40695006730198513
+  leaving_time: 2020-01-03 05:41:53.834197
+  parking_time: 14.698287276887742
+  soc: 0.5916663242946579
   soc_target: 1.0
   vehicle_type: *id001
 - arrival_time: 2020-01-02 15:00:00
-  leaving_time: 2020-01-02 17:53:36.247455
-  parking_time: 2.8934020709718142
-  soc: 0.768656569914539
+  leaving_time: 2020-01-03 05:42:33.982639
+  parking_time: 14.709439621872276
+  soc: 0.4309923262632068
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-02 15:00:00
-  leaving_time: 2020-01-02 17:58:34.075661
-  parking_time: 2.976132128187606
-  soc: 0.8295030709403853
+- arrival_time: 2020-01-02 15:30:00
+  leaving_time: 2020-01-03 05:57:36.391182
+  parking_time: 14.460108661577808
+  soc: 0.4288828860201205
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-02 15:00:00
-  leaving_time: 2020-01-02 18:55:40.597802
-  parking_time: 3.927943833840654
-  soc: 0.48434477709495743
+- arrival_time: 2020-01-02 15:45:00
+  leaving_time: 2020-01-03 05:33:21.486912
+  parking_time: 13.805968586766406
+  soc: 0.7146224849946897
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-02 16:00:00
+  leaving_time: 2020-01-03 01:50:07.423601
+  parking_time: 9.835395444830695
+  soc: 0.8739417698280303
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-02 16:00:00
+  leaving_time: 2020-01-03 01:55:57.447447
+  parking_time: 9.932624290941073
+  soc: 0.46614098131758563
   soc_target: 1.0
   vehicle_type: *id002
-- arrival_time: 2020-01-02 15:00:00
-  leaving_time: 2020-01-02 19:05:46.874294
-  parking_time: 4.096353970496033
-  soc: 0.5914145635794236
+- arrival_time: 2020-01-02 16:15:00
+  leaving_time: 2020-01-03 03:34:57.680433
+  parking_time: 11.332689009050469
+  soc: 0.7183235455542358
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-02 15:00:00
-  leaving_time: 2020-01-02 19:03:20.097100
-  parking_time: 4.05558252783122
-  soc: 0.7240540905700228
+- arrival_time: 2020-01-02 16:15:00
+  leaving_time: 2020-01-03 05:24:36.180207
+  parking_time: 13.160050057452898
+  soc: 0.4975795788181743
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-02 16:45:00
+  leaving_time: 2020-01-03 03:16:03.076263
+  parking_time: 10.517521184286409
+  soc: 0.23912269860973023
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-02 18:45:00
+  leaving_time: 2020-01-03 03:26:06.662323
+  parking_time: 8.685183978518392
+  soc: 0.6011963430748619
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-02 18:45:00
+  leaving_time: 2020-01-03 04:28:06.893298
+  parking_time: 9.718581471599963
+  soc: 0.2879863163311628
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-02 19:00:00
+  leaving_time: 2020-01-03 08:49:48.958194
+  parking_time: 13.830266164886254
+  soc: 0.6238769717939173
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-02 20:30:00
+  leaving_time: 2020-01-03 05:24:51.171330
+  parking_time: 8.91421425835517
+  soc: 0.4379139766051044
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-02 21:00:00
+  leaving_time: 2020-01-03 08:36:21.834044
+  parking_time: 11.606065012249173
+  soc: 0.8234662656879383
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-03 02:00:00
+  leaving_time: 2020-01-03 16:22:37.693617
+  parking_time: 14.377137115701203
+  soc: 0.4694110827145433
   soc_target: 1.0
   vehicle_type: *id002
-- arrival_time: 2020-01-02 15:00:00
-  leaving_time: 2020-01-02 18:46:14.099847
-  parking_time: 3.7705832908513295
-  soc: 0.4193131752556515
+- arrival_time: 2020-01-03 07:30:00
+  leaving_time: 2020-01-03 19:55:17.623690
+  parking_time: 12.421562136162231
+  soc: 0.5205611389169564
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-02 15:00:00
-  leaving_time: 2020-01-02 18:53:46.521044
-  parking_time: 3.8962558456896708
-  soc: 0.5339915389526828
+- arrival_time: 2020-01-03 08:30:00
+  leaving_time: 2020-01-03 19:04:16.374979
+  parking_time: 10.571215271868361
+  soc: 0.6668352253261906
   soc_target: 1.0
   vehicle_type: *id002
-- arrival_time: 2020-01-02 16:00:00
-  leaving_time: 2020-01-02 20:28:03.534537
-  parking_time: 4.467648482487113
-  soc: 0.5669133561052095
+- arrival_time: 2020-01-03 10:00:00
+  leaving_time: 2020-01-03 20:57:13.752819
+  parking_time: 10.953820227529674
+  soc: 0.6762463448694485
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-03 10:45:00
+  leaving_time: 2020-01-03 23:02:50.246137
+  parking_time: 12.2972905934986
+  soc: 0.5588871315837229
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-03 10:45:00
+  leaving_time: 2020-01-03 21:24:17.007027
+  parking_time: 10.65472417428464
+  soc: 0.4194936365040246
   soc_target: 1.0
   vehicle_type: *id002
-- arrival_time: 2020-01-02 16:00:00
-  leaving_time: 2020-01-02 20:36:31.720468
-  parking_time: 4.608811241091626
-  soc: 0.6314449058360213
+- arrival_time: 2020-01-03 11:15:00
+  leaving_time: 2020-01-03 22:10:07.858171
+  parking_time: 10.918849492034397
+  soc: 0.899378433446772
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-02 16:00:00
-  leaving_time: 2020-01-02 20:34:25.019671
-  parking_time: 4.573616575409616
-  soc: 0.577811812689381
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-02 16:00:00
-  leaving_time: 2020-01-02 20:03:30.019531
-  parking_time: 4.058338758573065
-  soc: 0.7435367777921147
+- arrival_time: 2020-01-03 11:15:00
+  leaving_time: 2020-01-03 21:17:57.168688
+  parking_time: 10.049213524532293
+  soc: 0.7019902948160776
   soc_target: 1.0
   vehicle_type: *id002
-- arrival_time: 2020-01-02 16:00:00
-  leaving_time: 2020-01-02 20:17:23.371712
-  parking_time: 4.289825475622636
-  soc: 0.36404370635582134
+- arrival_time: 2020-01-03 11:15:00
+  leaving_time: 2020-01-03 22:40:37.974215
+  parking_time: 11.427215059712744
+  soc: 0.6603224269274649
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-02 16:00:00
-  leaving_time: 2020-01-02 20:00:23.232098
-  parking_time: 4.00645336061086
-  soc: 0.6771514105653573
+- arrival_time: 2020-01-03 11:30:00
+  leaving_time: 2020-01-03 19:49:17.024481
+  parking_time: 8.321395689244984
+  soc: 0.2302602617576408
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-02 16:00:00
-  leaving_time: 2020-01-02 19:56:48.475788
-  parking_time: 3.9467988299420114
-  soc: 0.20302396661172545
+- arrival_time: 2020-01-03 11:45:00
+  leaving_time: 2020-01-03 20:18:48.234320
+  parking_time: 8.563398422330334
+  soc: 0.4193216716501752
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-02 16:00:00
-  leaving_time: 2020-01-02 20:07:03.722798
-  parking_time: 4.117700777188492
-  soc: 0.3832643135650575
+- arrival_time: 2020-01-03 11:45:00
+  leaving_time: 2020-01-03 23:16:44.641065
+  parking_time: 11.529066962486516
+  soc: 0.5442365483073486
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-02 16:00:00
-  leaving_time: 2020-01-02 19:58:20.278307
-  parking_time: 3.972299529765
-  soc: 0.20940735247814513
+- arrival_time: 2020-01-03 11:45:00
+  leaving_time: 2020-01-03 22:46:08.377632
+  parking_time: 11.018993786758145
+  soc: 0.4108294863606665
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-03 08:00:00
-  leaving_time: 2020-01-03 11:37:51.523911
-  parking_time: 3.6309788642301677
-  soc: 0.8351723587129888
+- arrival_time: 2020-01-03 12:30:00
+  leaving_time: 2020-01-04 00:36:19.732322
+  parking_time: 12.10548120048905
+  soc: 0.6414590593014122
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-03 08:00:00
-  leaving_time: 2020-01-03 11:44:26.052606
-  parking_time: 3.7405701681962866
-  soc: 0.7227677259306418
+- arrival_time: 2020-01-03 12:30:00
+  leaving_time: 2020-01-04 00:29:15.915088
+  parking_time: 11.98775419109969
+  soc: 0.6227476455842815
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-03 08:00:00
-  leaving_time: 2020-01-03 12:14:21.170064
-  parking_time: 4.23921390657954
-  soc: 0.3250505071962055
+- arrival_time: 2020-01-03 12:30:00
+  leaving_time: 2020-01-04 00:49:13.493455
+  parking_time: 12.320414848592474
+  soc: 0.38365431315908805
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-03 08:00:00
-  leaving_time: 2020-01-03 11:11:13.541865
-  parking_time: 3.1870949625867526
-  soc: 0.495004087099171
+- arrival_time: 2020-01-03 12:30:00
+  leaving_time: 2020-01-04 01:14:58.465824
+  parking_time: 12.749573839995165
+  soc: 0.6411779967919888
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-03 09:00:00
-  leaving_time: 2020-01-03 13:16:23.744660
-  parking_time: 4.2732624056631145
-  soc: 0.6392081924357352
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-03 09:00:00
-  leaving_time: 2020-01-03 13:17:28.040539
-  parking_time: 4.2911223719936125
-  soc: 0.6390850281009107
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-03 09:00:00
-  leaving_time: 2020-01-03 13:46:48.392658
-  parking_time: 4.7801090715468995
-  soc: 0.4836761665658593
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-03 09:00:00
-  leaving_time: 2020-01-03 13:12:32.843942
-  parking_time: 4.209123317159713
-  soc: 0.967893472915567
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-03 10:00:00
-  leaving_time: 2020-01-03 13:01:48.921467
-  parking_time: 3.030255963022665
-  soc: 0.3476253444522067
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-03 10:00:00
-  leaving_time: 2020-01-03 14:56:06.684766
-  parking_time: 4.935190212704262
-  soc: 0.8035105707687171
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-03 10:00:00
-  leaving_time: 2020-01-03 14:45:40.607663
-  parking_time: 4.7612799065272915
-  soc: 0.504602522897553
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-03 10:00:00
-  leaving_time: 2020-01-03 13:30:49.746613
-  parking_time: 3.5138185036138085
-  soc: 0.5450646026935814
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-03 10:00:00
-  leaving_time: 2020-01-03 13:31:27.859847
-  parking_time: 3.524405513091222
-  soc: 0.6206717224567253
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-03 10:00:00
-  leaving_time: 2020-01-03 14:22:27.733121
-  parking_time: 4.374370311452881
-  soc: 0.65948301691921
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-03 10:00:00
-  leaving_time: 2020-01-03 13:50:35.329414
-  parking_time: 3.843147059361682
-  soc: 0.6955852679208951
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-03 10:00:00
-  leaving_time: 2020-01-03 14:47:09.373521
-  parking_time: 4.785937089132835
-  soc: 0.667099627845932
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-03 10:00:00
-  leaving_time: 2020-01-03 14:00:08.824770
-  parking_time: 4.002451324989487
-  soc: 0.6528678254541699
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-03 11:00:00
-  leaving_time: 2020-01-03 14:55:06.636787
-  parking_time: 3.918510218515694
-  soc: 0.643929101028965
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-03 11:00:00
-  leaving_time: 2020-01-03 14:52:26.591161
-  parking_time: 3.8740531003327026
-  soc: 0.8233709037909307
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-03 11:00:00
-  leaving_time: 2020-01-03 14:40:14.601620
-  parking_time: 3.6707226722262276
-  soc: 0.6265015238847379
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-03 11:00:00
-  leaving_time: 2020-01-03 14:27:37.077517
-  parking_time: 3.460299310318264
-  soc: 0.7957026569352251
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-03 11:00:00
-  leaving_time: 2020-01-03 15:06:06.609798
-  parking_time: 4.1018360549961885
-  soc: 0.6104110236833433
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-03 11:00:00
-  leaving_time: 2020-01-03 14:49:04.666592
-  parking_time: 3.8179629421115404
-  soc: 0.26307487819723924
+- arrival_time: 2020-01-03 13:00:00
+  leaving_time: 2020-01-04 00:26:25.118644
+  parking_time: 11.440310734366605
+  soc: 0.6306470029843052
   soc_target: 1.0
   vehicle_type: *id002
-- arrival_time: 2020-01-03 11:00:00
-  leaving_time: 2020-01-03 15:34:47.653562
-  parking_time: 4.579903767088192
-  soc: 0.6703946513763746
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-03 11:00:00
-  leaving_time: 2020-01-03 15:17:44.167789
-  parking_time: 4.295602163680494
-  soc: 0.4519974805886557
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-03 11:00:00
-  leaving_time: 2020-01-03 14:35:30.769560
-  parking_time: 3.5918804332209957
-  soc: 0.3899622801736816
+- arrival_time: 2020-01-03 13:15:00
+  leaving_time: 2020-01-04 00:03:25.272026
+  parking_time: 10.807020007116858
+  soc: 0.6131998438371433
   soc_target: 1.0
   vehicle_type: *id002
-- arrival_time: 2020-01-03 11:00:00
-  leaving_time: 2020-01-03 15:51:20.182471
-  parking_time: 4.855606241978707
-  soc: 0.7908463258690435
+- arrival_time: 2020-01-03 13:30:00
+  leaving_time: 2020-01-04 02:49:01.849921
+  parking_time: 13.317180533607994
+  soc: 0.5043091451592236
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-03 11:00:00
-  leaving_time: 2020-01-03 15:27:06.140832
-  parking_time: 4.451705786579937
-  soc: 0.9112067143614627
+- arrival_time: 2020-01-03 13:45:00
+  leaving_time: 2020-01-03 21:58:14.868906
+  parking_time: 8.220796918439488
+  soc: 0.41370617811130905
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-03 12:00:00
-  leaving_time: 2020-01-03 16:29:06.268972
-  parking_time: 4.485074714534488
-  soc: 0.805945139388192
+- arrival_time: 2020-01-03 14:30:00
+  leaving_time: 2020-01-04 03:42:14.315135
+  parking_time: 13.20397642629296
+  soc: 0.4556020315931997
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-03 12:00:00
-  leaving_time: 2020-01-03 15:16:00.132236
-  parking_time: 3.266703398916075
-  soc: 0.8259659699987473
+- arrival_time: 2020-01-03 15:00:00
+  leaving_time: 2020-01-04 04:50:31.230458
+  parking_time: 13.842008460536961
+  soc: 0.46450069745519557
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-03 12:00:00
-  leaving_time: 2020-01-03 15:59:58.320585
-  parking_time: 3.9995334959367317
-  soc: 0.5123792173159789
+- arrival_time: 2020-01-03 15:00:00
+  leaving_time: 2020-01-04 03:38:37.270676
+  parking_time: 12.64368629890507
+  soc: 0.624606324726687
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-03 12:00:00
-  leaving_time: 2020-01-03 16:44:05.276300
-  parking_time: 4.734798972178071
-  soc: 0.774528840120549
+- arrival_time: 2020-01-03 15:30:00
+  leaving_time: 2020-01-04 01:04:44.336110
+  parking_time: 9.578982252736685
+  soc: 0.2314537503372367
+  soc_target: 1.0
+  vehicle_type: *id002
+- arrival_time: 2020-01-03 16:15:00
+  leaving_time: 2020-01-04 06:39:37.877647
+  parking_time: 14.410521568694271
+  soc: 0.5663626915432887
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-03 12:00:00
-  leaving_time: 2020-01-03 15:45:56.398814
-  parking_time: 3.7656663373415284
-  soc: 0.5689750780351732
+- arrival_time: 2020-01-03 16:30:00
+  leaving_time: 2020-01-04 05:26:09.559949
+  parking_time: 12.935988874608153
+  soc: 0.6673640870692282
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-06 08:00:00
-  leaving_time: 2020-01-06 12:39:47.557827
-  parking_time: 4.66321050737837
-  soc: 0.2896130114457656
+- arrival_time: 2020-01-03 16:45:00
+  leaving_time: 2020-01-04 02:26:14.857833
+  parking_time: 9.687460509280644
+  soc: 0.6151583573054089
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-06 08:00:00
-  leaving_time: 2020-01-06 11:38:22.462425
-  parking_time: 3.6395728957961984
-  soc: 0.8486817431989552
+- arrival_time: 2020-01-03 16:45:00
+  leaving_time: 2020-01-04 10:06:10.602238
+  parking_time: 17.352945066145114
+  soc: 0.6550165021279561
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-06 08:00:00
-  leaving_time: 2020-01-06 12:29:44.613211
-  parking_time: 4.495725892017971
-  soc: 0.34932491880100147
+- arrival_time: 2020-01-03 16:45:00
+  leaving_time: 2020-01-04 06:39:11.549069
+  parking_time: 13.903208074601066
+  soc: 0.7346743466481859
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-06 08:00:00
-  leaving_time: 2020-01-06 11:59:56.028127
-  parking_time: 3.9988967018937247
-  soc: 0.47997949681783336
+- arrival_time: 2020-01-03 17:00:00
+  leaving_time: 2020-01-04 05:00:10.290955
+  parking_time: 12.002858598731107
+  soc: 0.5536720024541271
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-03 17:30:00
+  leaving_time: 2020-01-04 09:20:42.352876
+  parking_time: 15.845098021205139
+  soc: 0.9507664591386259
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-03 17:30:00
+  leaving_time: 2020-01-04 02:43:31.152612
+  parking_time: 9.225320170113818
+  soc: 0.48696959117498223
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-03 17:45:00
+  leaving_time: 2020-01-04 07:37:06.391524
+  parking_time: 13.868442090069832
+  soc: 0.4256289962265428
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-03 18:15:00
+  leaving_time: 2020-01-04 04:18:49.068072
+  parking_time: 10.0636300198736
+  soc: 0.46653079555006916
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-03 20:15:00
+  leaving_time: 2020-01-04 08:00:02.224877
+  parking_time: 11.750618021506426
+  soc: 0.4848628913678769
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-03 22:00:00
+  leaving_time: 2020-01-04 10:02:15.084004
+  parking_time: 12.037523334563316
+  soc: 0.5960385245274309
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-03 22:15:00
+  leaving_time: 2020-01-04 08:23:59.510915
+  parking_time: 10.14986414313823
+  soc: 0.17801884884564834
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-03 22:15:00
+  leaving_time: 2020-01-04 10:45:41.190635
+  parking_time: 12.511441843141903
+  soc: 0.5170126414382766
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-04 02:45:00
+  leaving_time: 2020-01-04 13:07:44.508311
+  parking_time: 10.379030086511142
+  soc: 0.501091077575703
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-04 04:15:00
+  leaving_time: 2020-01-04 14:21:53.244140
+  parking_time: 10.114790038899837
+  soc: 0.8155724481765304
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-04 04:45:00
+  leaving_time: 2020-01-04 12:46:48.077621
+  parking_time: 8.030021561407926
+  soc: 0.694190644079972
+  soc_target: 1.0
+  vehicle_type: *id002
+- arrival_time: 2020-01-04 05:30:00
+  leaving_time: 2020-01-04 17:02:55.886809
+  parking_time: 11.548857447055648
+  soc: 0.2698497187629568
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-04 06:15:00
+  leaving_time: 2020-01-04 16:41:18.312905
+  parking_time: 10.438420251406868
+  soc: 0.645234498889181
+  soc_target: 1.0
+  vehicle_type: *id002
+- arrival_time: 2020-01-04 06:45:00
+  leaving_time: 2020-01-04 18:59:15.308239
+  parking_time: 12.237585621929538
+  soc: 0.6378900741149907
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-04 06:45:00
+  leaving_time: 2020-01-04 15:43:22.924557
+  parking_time: 8.973034599239954
+  soc: 0.7547280411488364
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-04 08:00:00
+  leaving_time: 2020-01-04 17:11:46.256036
+  parking_time: 9.196182232199238
+  soc: 0.7057827268895913
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-04 08:15:00
+  leaving_time: 2020-01-04 19:14:52.451111
+  parking_time: 10.997903086353165
+  soc: 0.693487144916225
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-04 09:00:00
+  leaving_time: 2020-01-04 21:12:23.542353
+  parking_time: 12.20653954243876
+  soc: 0.40602789719852883
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-04 09:15:00
+  leaving_time: 2020-01-04 22:59:17.560096
+  parking_time: 13.738211137904772
+  soc: 0.7178852530395495
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-04 09:45:00
+  leaving_time: 2020-01-04 18:58:32.288992
+  parking_time: 9.225635831186702
+  soc: 0.27596187531832
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-04 10:15:00
+  leaving_time: 2020-01-04 21:29:43.093435
+  parking_time: 11.245303732002736
+  soc: 0.6611586112824254
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-04 10:15:00
+  leaving_time: 2020-01-04 18:14:56.433661
+  parking_time: 7.999009350248086
+  soc: 0.6509685380276102
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-04 10:15:00
+  leaving_time: 2020-01-04 19:17:01.536186
+  parking_time: 9.033760051782782
+  soc: 0.6152041424790305
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-04 10:30:00
+  leaving_time: 2020-01-04 18:47:57.670551
+  parking_time: 8.299352930810914
+  soc: 0.619269172729927
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-04 10:30:00
+  leaving_time: 2020-01-04 18:59:45.228498
+  parking_time: 8.495896805041776
+  soc: 0.43754313891972973
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-04 11:45:00
+  leaving_time: 2020-01-05 00:06:32.686176
+  parking_time: 12.359079493446155
+  soc: 0.5112253754540589
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-04 12:00:00
+  leaving_time: 2020-01-04 22:37:01.233311
+  parking_time: 10.617009253093997
+  soc: 0.3537405638237546
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-04 12:00:00
+  leaving_time: 2020-01-05 04:04:36.617699
+  parking_time: 16.076838249592587
+  soc: 0.5004557888310347
+  soc_target: 1.0
+  vehicle_type: *id002
+- arrival_time: 2020-01-04 12:15:00
+  leaving_time: 2020-01-04 23:32:41.573601
+  parking_time: 11.294881555855016
+  soc: 0.45558538210192273
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-04 12:45:00
+  leaving_time: 2020-01-05 00:12:09.624084
+  parking_time: 11.452673356603604
+  soc: 0.47559220473813657
+  soc_target: 1.0
+  vehicle_type: *id002
+- arrival_time: 2020-01-04 12:45:00
+  leaving_time: 2020-01-05 02:54:22.297646
+  parking_time: 14.156193790629297
+  soc: 0.6921357847526408
+  soc_target: 1.0
+  vehicle_type: *id002
+- arrival_time: 2020-01-04 13:00:00
+  leaving_time: 2020-01-05 03:15:53.546089
+  parking_time: 14.264873913580827
+  soc: 0.6729619833008054
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-04 13:15:00
+  leaving_time: 2020-01-04 23:22:14.403551
+  parking_time: 10.120667653074412
+  soc: 0.9131640799817693
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-04 13:30:00
+  leaving_time: 2020-01-05 01:52:56.308197
+  parking_time: 12.382307832548577
+  soc: 0.48105560300116634
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-04 13:45:00
+  leaving_time: 2020-01-05 03:39:34.376563
+  parking_time: 13.909549045292541
+  soc: 0.5019076508880169
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-04 13:45:00
+  leaving_time: 2020-01-05 01:31:44.094155
+  parking_time: 11.778915043117895
+  soc: 0.4971087772659776
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-04 14:00:00
+  leaving_time: 2020-01-05 02:33:41.361192
+  parking_time: 12.561489220113948
+  soc: 0.7762897627896949
+  soc_target: 1.0
+  vehicle_type: *id002
+- arrival_time: 2020-01-04 14:30:00
+  leaving_time: 2020-01-05 05:17:22.019801
+  parking_time: 14.789449944728998
+  soc: 0.703795973225097
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-04 14:30:00
+  leaving_time: 2020-01-05 01:04:25.690687
+  parking_time: 10.573802968491263
+  soc: 0.43826550023127336
+  soc_target: 1.0
+  vehicle_type: *id002
+- arrival_time: 2020-01-04 14:30:00
+  leaving_time: 2020-01-05 00:58:53.160714
+  parking_time: 10.481433531578247
+  soc: 0.6210056766069998
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-04 15:00:00
+  leaving_time: 2020-01-05 06:11:19.739593
+  parking_time: 15.188816553549852
+  soc: 0.4015675856041842
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-04 16:45:00
+  leaving_time: 2020-01-05 06:40:58.634228
+  parking_time: 13.932953952259977
+  soc: 0.661827569489572
+  soc_target: 1.0
+  vehicle_type: *id002
+- arrival_time: 2020-01-04 17:00:00
+  leaving_time: 2020-01-05 04:59:10.365507
+  parking_time: 11.986212640891557
+  soc: 0.5799317373181351
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-04 17:45:00
+  leaving_time: 2020-01-05 05:02:24.271619
+  parking_time: 11.290075449647263
+  soc: 0.47593967147255817
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-04 19:30:00
+  leaving_time: 2020-01-05 06:44:56.189649
+  parking_time: 11.248941569050574
+  soc: 0.5555825622369476
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-04 19:45:00
+  leaving_time: 2020-01-05 09:38:56.397015
+  parking_time: 13.898999170887542
+  soc: 0.7775460819308063
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-05 06:15:00
+  leaving_time: 2020-01-05 20:21:10.188375
+  parking_time: 14.102830104222246
+  soc: 0.9266464179883015
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-05 06:30:00
+  leaving_time: 2020-01-05 16:27:47.363464
+  parking_time: 9.963156517804036
+  soc: 0.6510816559122107
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-05 07:30:00
+  leaving_time: 2020-01-05 21:04:22.297063
+  parking_time: 13.57286029533764
+  soc: 0.6884889782744873
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-05 07:30:00
+  leaving_time: 2020-01-05 19:06:45.465586
+  parking_time: 11.612629329413027
+  soc: 0.6311260474717016
+  soc_target: 1.0
+  vehicle_type: *id002
+- arrival_time: 2020-01-05 08:00:00
+  leaving_time: 2020-01-05 20:52:51.671895
+  parking_time: 12.881019970815306
+  soc: 0.6482330117444567
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-05 08:15:00
+  leaving_time: 2020-01-05 23:47:59.760890
+  parking_time: 15.549933580473363
+  soc: 0.6644752331167361
+  soc_target: 1.0
+  vehicle_type: *id002
+- arrival_time: 2020-01-05 08:15:00
+  leaving_time: 2020-01-05 22:09:15.417168
+  parking_time: 13.90428254653725
+  soc: 0.7569651760894767
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-05 09:30:00
+  leaving_time: 2020-01-05 22:03:03.602231
+  parking_time: 12.551000619791788
+  soc: 0.48939888968390305
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-05 10:00:00
+  leaving_time: 2020-01-05 19:17:05.359707
+  parking_time: 9.284822140731066
+  soc: 0.46126704867794527
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-05 10:15:00
+  leaving_time: 2020-01-06 01:00:00.146868
+  parking_time: 14.750040796557226
+  soc: 0.5157941500721273
+  soc_target: 1.0
+  vehicle_type: *id002
+- arrival_time: 2020-01-05 10:30:00
+  leaving_time: 2020-01-06 01:19:51.839314
+  parking_time: 14.831066476169898
+  soc: 0.4680635825343541
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-05 10:45:00
+  leaving_time: 2020-01-06 03:11:08.038603
+  parking_time: 16.43556627861696
+  soc: 0.7702453025242362
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-05 10:45:00
+  leaving_time: 2020-01-05 22:17:03.802578
+  parking_time: 11.534389605022842
+  soc: 0.942676619382293
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-05 11:00:00
+  leaving_time: 2020-01-06 00:44:05.495552
+  parking_time: 13.734859875509166
+  soc: 0.42655644192602493
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-05 11:45:00
+  leaving_time: 2020-01-06 01:11:42.428233
+  parking_time: 13.445118953494738
+  soc: 0.3159768159468306
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-05 13:15:00
+  leaving_time: 2020-01-06 03:21:47.863804
+  parking_time: 14.113295501021433
+  soc: 0.23065947772360806
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-05 13:30:00
+  leaving_time: 2020-01-06 01:22:16.206451
+  parking_time: 11.87116845862234
+  soc: 0.9048399106791029
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-05 14:00:00
+  leaving_time: 2020-01-05 23:34:01.324376
+  parking_time: 9.56703454894075
+  soc: 0.6077142990083682
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-05 14:00:00
+  leaving_time: 2020-01-06 01:47:19.908567
+  parking_time: 11.788863490911556
+  soc: 0.7281307889355444
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-05 14:15:00
+  leaving_time: 2020-01-06 02:44:38.600376
+  parking_time: 12.49405565993892
+  soc: 0.5431633671395433
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-05 15:00:00
+  leaving_time: 2020-01-06 03:22:20.369968
+  parking_time: 12.372324991055505
+  soc: 0.14439987858120545
+  soc_target: 1.0
+  vehicle_type: *id002
+- arrival_time: 2020-01-05 15:30:00
+  leaving_time: 2020-01-06 05:01:26.938041
+  parking_time: 13.524149455815527
+  soc: 0.529171131644188
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-05 16:00:00
+  leaving_time: 2020-01-06 03:22:39.703193
+  parking_time: 11.377695331426736
+  soc: 0.7308786443084475
+  soc_target: 1.0
+  vehicle_type: *id002
+- arrival_time: 2020-01-05 17:00:00
+  leaving_time: 2020-01-06 04:36:57.755794
+  parking_time: 11.61604327599836
+  soc: 0.7312223659923968
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-05 17:15:00
+  leaving_time: 2020-01-06 03:39:36.120380
+  parking_time: 10.410033438960184
+  soc: 0.46579949575495894
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-05 17:45:00
+  leaving_time: 2020-01-06 05:26:51.394807
+  parking_time: 11.697609668518993
+  soc: 1
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-05 18:00:00
+  leaving_time: 2020-01-06 05:15:57.656627
+  parking_time: 11.266015729818367
+  soc: 0.6860648310692719
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-05 19:45:00
+  leaving_time: 2020-01-06 06:03:31.314532
+  parking_time: 10.308698481007276
+  soc: 0.5251655741644226
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-05 20:00:00
+  leaving_time: 2020-01-06 06:07:49.279773
+  parking_time: 10.130355492582375
+  soc: 0.6361612768978383
+  soc_target: 1.0
+  vehicle_type: *id002
+- arrival_time: 2020-01-05 20:45:00
+  leaving_time: 2020-01-06 09:27:32.290742
+  parking_time: 12.708969650464933
+  soc: 0.31814587420528156
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-05 20:45:00
+  leaving_time: 2020-01-06 10:11:48.517979
+  parking_time: 13.446810549853314
+  soc: 0.7851506449287438
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-05 21:15:00
+  leaving_time: 2020-01-06 08:18:38.957505
+  parking_time: 11.060821529238229
+  soc: 0.8149827573367658
+  soc_target: 1.0
+  vehicle_type: *id002
+- arrival_time: 2020-01-05 21:15:00
+  leaving_time: 2020-01-06 07:31:50.627634
+  parking_time: 10.280729898472046
+  soc: 0.5663398962928798
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-05 21:30:00
+  leaving_time: 2020-01-06 11:29:55.561810
+  parking_time: 13.998767169523243
+  soc: 1
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-05 22:30:00
+  leaving_time: 2020-01-06 08:39:41.231549
+  parking_time: 10.1614532079419
+  soc: 0.627266329485536
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-05 23:00:00
+  leaving_time: 2020-01-06 08:42:43.475522
+  parking_time: 9.71207653390525
+  soc: 0.4712085106914316
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-05 23:30:00
+  leaving_time: 2020-01-06 16:06:12.119405
+  parking_time: 16.60336650137137
+  soc: 0.6083597044006405
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-06 00:30:00
+  leaving_time: 2020-01-06 12:15:23.172844
+  parking_time: 11.756436900996183
+  soc: 0.6806433548648699
+  soc_target: 1.0
+  vehicle_type: *id002
+- arrival_time: 2020-01-06 01:45:00
+  leaving_time: 2020-01-06 13:11:37.499968
+  parking_time: 11.44374999119362
+  soc: 0.49005894098457964
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-06 05:30:00
+  leaving_time: 2020-01-06 16:25:47.765629
+  parking_time: 10.929934896901955
+  soc: 0.7558361216080203
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-06 06:00:00
+  leaving_time: 2020-01-06 16:48:33.756893
+  parking_time: 10.809376914771315
+  soc: 0.48034756294742953
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-06 07:15:00
+  leaving_time: 2020-01-06 17:29:12.819608
+  parking_time: 10.23689433547529
+  soc: 0.4250660977437791
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-06 07:45:00
+  leaving_time: 2020-01-06 22:33:27.001229
+  parking_time: 14.807500341515272
+  soc: 0.36024771500232433
   soc_target: 1.0
   vehicle_type: *id002
 - arrival_time: 2020-01-06 08:00:00
-  leaving_time: 2020-01-06 12:28:43.587360
-  parking_time: 4.478774266697079
-  soc: 0.5366159766579063
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-06 08:00:00
-  leaving_time: 2020-01-06 11:58:29.331906
-  parking_time: 3.9748144182928073
-  soc: 0.39701838272615997
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-06 08:00:00
-  leaving_time: 2020-01-06 11:13:10.715539
-  parking_time: 3.2196432051907946
-  soc: 0.4573503242296214
+  leaving_time: 2020-01-06 20:51:26.429291
+  parking_time: 12.857341469786107
+  soc: 0.6099774067055364
   soc_target: 1.0
   vehicle_type: *id001
 - arrival_time: 2020-01-06 09:00:00
-  leaving_time: 2020-01-06 12:54:55.185652
-  parking_time: 3.915329347702586
-  soc: 0.9933362164467774
+  leaving_time: 2020-01-07 01:47:37.343906
+  parking_time: 16.793706640572385
+  soc: 0.5886430523083044
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-06 09:00:00
-  leaving_time: 2020-01-06 12:50:46.498913
-  parking_time: 3.846249697955805
-  soc: 0.8727939843939532
+- arrival_time: 2020-01-06 09:15:00
+  leaving_time: 2020-01-06 20:33:28.629776
+  parking_time: 11.307952715599662
+  soc: 0.633524047251797
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-06 09:00:00
-  leaving_time: 2020-01-06 13:36:45.306854
-  parking_time: 4.61258523713749
-  soc: 0.7340115449885398
+- arrival_time: 2020-01-06 09:15:00
+  leaving_time: 2020-01-06 22:32:05.412388
+  parking_time: 13.284836774331577
+  soc: 0.4453957823429009
   soc_target: 1.0
   vehicle_type: *id002
-- arrival_time: 2020-01-06 09:00:00
-  leaving_time: 2020-01-06 13:37:16.545163
-  parking_time: 4.621262545175148
-  soc: 0.6185550201626571
+- arrival_time: 2020-01-06 09:30:00
+  leaving_time: 2020-01-07 01:04:15.707704
+  parking_time: 15.571029917796153
+  soc: 0.5236027742459621
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-06 09:00:00
-  leaving_time: 2020-01-06 12:22:00.983490
-  parking_time: 3.366939858412696
-  soc: 0.5845804241144
+- arrival_time: 2020-01-06 09:45:00
+  leaving_time: 2020-01-06 23:38:21.434398
+  parking_time: 13.889287332895114
+  soc: 0.4242653432062588
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-06 09:00:00
-  leaving_time: 2020-01-06 13:52:05.972849
-  parking_time: 4.868325791506516
-  soc: 0.7015967902527284
+- arrival_time: 2020-01-06 09:45:00
+  leaving_time: 2020-01-06 21:23:40.600023
+  parking_time: 11.644611117632087
+  soc: 0.5664627681105731
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-06 09:00:00
-  leaving_time: 2020-01-06 13:18:42.842939
-  parking_time: 4.3119008164098585
-  soc: 0.4031257024089311
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-06 09:00:00
-  leaving_time: 2020-01-06 12:36:21.184599
-  parking_time: 3.6058846109636233
-  soc: 0.8005955378968739
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-06 09:00:00
-  leaving_time: 2020-01-06 13:52:30.597252
-  parking_time: 4.875165903349243
-  soc: 0.9040443830623865
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-06 09:00:00
-  leaving_time: 2020-01-06 13:18:02.207330
-  parking_time: 4.300613147145298
-  soc: 0.6452778975131136
+- arrival_time: 2020-01-06 09:45:00
+  leaving_time: 2020-01-07 00:43:46.745298
+  parking_time: 14.979651471613705
+  soc: 0.6296785665007749
   soc_target: 1.0
   vehicle_type: *id001
 - arrival_time: 2020-01-06 10:00:00
-  leaving_time: 2020-01-06 14:45:04.233410
-  parking_time: 4.75117594715505
-  soc: 0.6828784911765223
+  leaving_time: 2020-01-07 00:22:34.066635
+  parking_time: 14.376129620835178
+  soc: 0.6268408923458517
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-06 10:00:00
-  leaving_time: 2020-01-06 14:20:57.600657
-  parking_time: 4.349333515967882
-  soc: 0.43903191098094074
+- arrival_time: 2020-01-06 10:30:00
+  leaving_time: 2020-01-06 23:21:15.713068
+  parking_time: 12.85436474099691
+  soc: 0.5030871153008115
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-06 10:00:00
-  leaving_time: 2020-01-06 13:34:08.923452
-  parking_time: 3.5691454032845646
-  soc: 0.4668010813569087
+- arrival_time: 2020-01-06 11:00:00
+  leaving_time: 2020-01-06 18:01:02.357092
+  parking_time: 7.017321414560282
+  soc: 0.757349139952633
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-06 10:00:00
-  leaving_time: 2020-01-06 14:24:41.625102
-  parking_time: 4.411562528349938
-  soc: 0.4429741044371366
+- arrival_time: 2020-01-06 11:00:00
+  leaving_time: 2020-01-06 23:36:49.975001
+  parking_time: 12.613881944730688
+  soc: 0.533263917421743
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-06 10:00:00
-  leaving_time: 2020-01-06 14:25:55.015289
-  parking_time: 4.431948691314327
-  soc: 0.6617636576685477
+- arrival_time: 2020-01-06 11:15:00
+  leaving_time: 2020-01-07 01:19:23.853988
+  parking_time: 14.073292774358293
+  soc: 0.6010953534681559
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-06 10:00:00
-  leaving_time: 2020-01-06 12:50:32.011381
-  parking_time: 2.842225383520171
-  soc: 0.5020244660986144
+- arrival_time: 2020-01-06 11:30:00
+  leaving_time: 2020-01-07 00:41:07.931254
+  parking_time: 13.185536459424245
+  soc: 0.49088308160348587
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-06 10:00:00
-  leaving_time: 2020-01-06 13:43:19.263357
-  parking_time: 3.72201759928544
-  soc: 0.6077709065230825
+- arrival_time: 2020-01-06 11:30:00
+  leaving_time: 2020-01-06 19:37:41.761098
+  parking_time: 8.128266971545438
+  soc: 0.746880798536528
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-06 12:30:00
+  leaving_time: 2020-01-06 21:30:59.726988
+  parking_time: 9.016590829950573
+  soc: 0.5305631898972791
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-06 12:45:00
+  leaving_time: 2020-01-06 23:32:06.860204
+  parking_time: 10.785238945598822
+  soc: 0.7004991162443834
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-06 13:00:00
+  leaving_time: 2020-01-07 01:19:26.637310
+  parking_time: 12.324065919473817
+  soc: 0.49693493632919633
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-06 14:00:00
+  leaving_time: 2020-01-07 01:46:36.103833
+  parking_time: 11.776695509171434
+  soc: 0.6876235005913917
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-06 14:00:00
+  leaving_time: 2020-01-07 02:32:17.778535
+  parking_time: 12.53827181514971
+  soc: 0.8735105609379521
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-06 14:30:00
+  leaving_time: 2020-01-07 00:31:17.015883
+  parking_time: 10.02139330092424
+  soc: 0.6773249731693736
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-06 14:30:00
+  leaving_time: 2020-01-07 02:56:32.108280
+  parking_time: 12.442252300121243
+  soc: 0.7503432819776225
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-06 15:00:00
+  leaving_time: 2020-01-07 00:15:26.338101
+  parking_time: 9.257316139190893
+  soc: 0.5512396671886086
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-06 15:00:00
+  leaving_time: 2020-01-07 02:22:02.573523
+  parking_time: 11.367381534201767
+  soc: 0.5964601537089401
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-06 15:00:00
+  leaving_time: 2020-01-07 01:08:44.377201
+  parking_time: 10.145660333658027
+  soc: 0.5240869174380863
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-06 15:30:00
+  leaving_time: 2020-01-07 03:14:52.997154
+  parking_time: 11.748054765024424
+  soc: 0.4059246130765294
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-06 15:30:00
+  leaving_time: 2020-01-07 08:16:17.296019
+  parking_time: 16.7714711162703
+  soc: 0.6788373997397829
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-06 15:45:00
+  leaving_time: 2020-01-07 04:06:04.720987
+  parking_time: 12.351311385153009
+  soc: 0.780430184509785
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-06 16:30:00
+  leaving_time: 2020-01-07 02:24:03.746388
+  parking_time: 9.901040663307427
+  soc: 0.947131272000868
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-06 17:00:00
+  leaving_time: 2020-01-07 07:09:38.059746
+  parking_time: 14.160572151562368
+  soc: 0.24031115759280974
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-06 17:15:00
+  leaving_time: 2020-01-07 02:30:41.353297
+  parking_time: 9.261487027059928
+  soc: 0.526847451690571
   soc_target: 1.0
   vehicle_type: *id002
-- arrival_time: 2020-01-06 10:00:00
-  leaving_time: 2020-01-06 13:37:20.203407
-  parking_time: 3.6222787240797834
-  soc: 0.5674078127247941
+- arrival_time: 2020-01-06 17:15:00
+  leaving_time: 2020-01-07 05:44:49.603418
+  parking_time: 12.497112060642515
+  soc: 0.6127363717388015
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-06 11:00:00
-  leaving_time: 2020-01-06 15:07:12.780405
-  parking_time: 4.120216779193162
-  soc: 0.33827343001723514
+- arrival_time: 2020-01-06 17:45:00
+  leaving_time: 2020-01-07 04:56:35.713265
+  parking_time: 11.193253684858657
+  soc: 0.5914420821948139
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-06 11:00:00
-  leaving_time: 2020-01-06 15:11:10.020756
-  parking_time: 4.186116876739458
-  soc: 0.873886406500155
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-06 11:00:00
-  leaving_time: 2020-01-06 14:25:59.161754
-  parking_time: 3.433100487264436
-  soc: 0.5236752742020874
+- arrival_time: 2020-01-06 18:00:00
+  leaving_time: 2020-01-07 04:33:20.681288
+  parking_time: 10.555744802326629
+  soc: 0.6517711505904797
   soc_target: 1.0
   vehicle_type: *id002
-- arrival_time: 2020-01-06 11:00:00
-  leaving_time: 2020-01-06 15:26:31.946118
-  parking_time: 4.44220725493833
-  soc: 0.449958996589385
-  soc_target: 1.0
-  vehicle_type: *id002
-- arrival_time: 2020-01-06 11:00:00
-  leaving_time: 2020-01-06 15:01:53.032232
-  parking_time: 4.031397842113027
-  soc: 0.30736778563545697
+- arrival_time: 2020-01-06 18:45:00
+  leaving_time: 2020-01-07 06:22:36.415378
+  parking_time: 11.626782049363282
+  soc: 0.6461030091153146
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-06 11:00:00
-  leaving_time: 2020-01-06 15:40:30.266343
-  parking_time: 4.675073984128986
-  soc: 0.6981928057291662
+- arrival_time: 2020-01-06 19:15:00
+  leaving_time: 2020-01-07 03:20:30.661034
+  parking_time: 8.091850287102226
+  soc: 0.7534462353828493
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-06 11:00:00
-  leaving_time: 2020-01-06 15:00:47.427692
-  parking_time: 4.013174358858778
-  soc: 0.7644986760149352
+- arrival_time: 2020-01-06 20:45:00
+  leaving_time: 2020-01-07 10:53:45.498291
+  parking_time: 14.14597174749062
+  soc: 0.5397678235544399
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-06 11:00:00
-  leaving_time: 2020-01-06 15:24:06.969135
-  parking_time: 4.401935870822086
-  soc: 0.8262193440367822
+- arrival_time: 2020-01-07 05:00:00
+  leaving_time: 2020-01-07 17:10:36.547619
+  parking_time: 12.176818783125977
+  soc: 0.3293079003333696
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-06 11:00:00
-  leaving_time: 2020-01-06 15:30:33.079102
-  parking_time: 4.509188639549125
-  soc: 0.7329488065882663
+- arrival_time: 2020-01-07 09:00:00
+  leaving_time: 2020-01-07 20:49:18.393295
+  parking_time: 11.821775915211397
+  soc: 0.21727774834037872
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-06 11:00:00
-  leaving_time: 2020-01-06 15:11:26.076217
-  parking_time: 4.1905767269689695
-  soc: 0.5170489133979657
+- arrival_time: 2020-01-07 09:15:00
+  leaving_time: 2020-01-07 21:27:38.554567
+  parking_time: 12.210709601969688
+  soc: 0.812901978691617
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-06 11:00:00
-  leaving_time: 2020-01-06 15:02:55.169683
-  parking_time: 4.048658245213844
-  soc: 0.34164549589388826
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-06 12:00:00
-  leaving_time: 2020-01-06 15:58:10.195409
-  parking_time: 3.9694987246009776
-  soc: 0.5822958918494244
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-06 12:00:00
-  leaving_time: 2020-01-06 15:50:55.994042
-  parking_time: 3.8488872340124227
-  soc: 0.5388951212519765
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-06 12:00:00
-  leaving_time: 2020-01-06 16:08:03.427629
-  parking_time: 4.1342854524297
-  soc: 0.8251953285447746
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-06 12:00:00
-  leaving_time: 2020-01-06 16:02:50.562719
-  parking_time: 4.047378532921262
-  soc: 0.508768152346638
-  soc_target: 1.0
-  vehicle_type: *id002
-- arrival_time: 2020-01-06 12:00:00
-  leaving_time: 2020-01-06 15:30:24.342546
-  parking_time: 3.5067618184700122
-  soc: 0.48693669885343815
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-06 12:00:00
-  leaving_time: 2020-01-06 16:40:23.709197
-  parking_time: 4.673252554828985
-  soc: 0.6198856439612571
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-06 12:00:00
-  leaving_time: 2020-01-06 16:04:30.080229
-  parking_time: 4.075022285849697
-  soc: 0.7807050312687518
-  soc_target: 1.0
-  vehicle_type: *id002
-- arrival_time: 2020-01-06 12:00:00
-  leaving_time: 2020-01-06 15:34:30.739261
-  parking_time: 3.57520535026217
-  soc: 0.7677834300958412
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-06 12:00:00
-  leaving_time: 2020-01-06 15:53:36.609039
-  parking_time: 3.8935025108309693
-  soc: 0.519333929702878
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-06 12:00:00
-  leaving_time: 2020-01-06 15:47:00.290549
-  parking_time: 3.783414041476141
-  soc: 0.6169892987974883
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-06 12:00:00
-  leaving_time: 2020-01-06 15:40:13.877641
-  parking_time: 3.6705215669317726
-  soc: 0.41349825647612515
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-06 12:00:00
-  leaving_time: 2020-01-06 16:55:14.453529
-  parking_time: 4.92068153582687
-  soc: 0.6017584137297679
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-06 12:00:00
-  leaving_time: 2020-01-06 16:39:23.416545
-  parking_time: 4.656504595805844
-  soc: 0.832427594440879
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-06 13:00:00
-  leaving_time: 2020-01-06 16:42:47.034071
-  parking_time: 3.713065019780947
-  soc: 0.9733050262589162
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-06 13:00:00
-  leaving_time: 2020-01-06 16:59:06.495811
-  parking_time: 3.9851377252189533
-  soc: 0.9061478886275148
-  soc_target: 1.0
-  vehicle_type: *id002
-- arrival_time: 2020-01-06 13:00:00
-  leaving_time: 2020-01-06 17:41:00.435769
-  parking_time: 4.683454380302068
-  soc: 0.6500765576473423
-  soc_target: 1.0
-  vehicle_type: *id002
-- arrival_time: 2020-01-06 13:00:00
-  leaving_time: 2020-01-06 17:18:45.496548
-  parking_time: 4.312637929874827
-  soc: 0.6169242207421285
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-06 13:00:00
-  leaving_time: 2020-01-06 16:57:39.363026
-  parking_time: 3.960934173810279
-  soc: 0.6349252442041242
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-06 13:00:00
-  leaving_time: 2020-01-06 17:30:42.316322
-  parking_time: 4.511754533777449
-  soc: 0.7516675511401656
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-06 13:00:00
-  leaving_time: 2020-01-06 16:09:47.666903
-  parking_time: 3.163240806483481
-  soc: 0.7211634607958372
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-06 13:00:00
-  leaving_time: 2020-01-06 16:38:31.055293
-  parking_time: 3.641959803619814
-  soc: 0.6494059199622549
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-06 13:00:00
-  leaving_time: 2020-01-06 16:41:10.320170
-  parking_time: 3.6862000472299172
-  soc: 0.8247224487282352
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-06 13:00:00
-  leaving_time: 2020-01-06 16:45:52.610186
-  parking_time: 3.7646139405482137
-  soc: 0.6202534023916715
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-06 13:00:00
-  leaving_time: 2020-01-06 16:20:17.685393
-  parking_time: 3.338245942459614
-  soc: 0.14501297920900702
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-06 13:00:00
-  leaving_time: 2020-01-06 18:17:49.763390
-  parking_time: 5.29715649722023
-  soc: 0.5107098500638003
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-06 13:00:00
-  leaving_time: 2020-01-06 16:20:36.644254
-  parking_time: 3.343512292690855
-  soc: 0.4890812045070664
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-06 13:00:00
-  leaving_time: 2020-01-06 16:33:23.392546
-  parking_time: 3.556497929496137
-  soc: 0.6445462223524341
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-06 13:00:00
-  leaving_time: 2020-01-06 17:34:01.662413
-  parking_time: 4.567128448072568
-  soc: 0.3543894877055419
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-06 13:00:00
-  leaving_time: 2020-01-06 16:59:15.381797
-  parking_time: 3.9876060546975753
-  soc: 0.4423505388949437
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-06 13:00:00
-  leaving_time: 2020-01-06 16:28:27.312935
-  parking_time: 3.474253592992781
-  soc: 0.4693969753843782
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-06 13:00:00
-  leaving_time: 2020-01-06 17:16:02.890883
-  parking_time: 4.267469689624696
-  soc: 0.2001019009477134
-  soc_target: 1.0
-  vehicle_type: *id002
-- arrival_time: 2020-01-06 13:00:00
-  leaving_time: 2020-01-06 17:07:54.441876
-  parking_time: 4.131789410118155
-  soc: 0.407122276627767
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-06 13:00:00
-  leaving_time: 2020-01-06 16:31:50.383189
-  parking_time: 3.5306619969318187
+- arrival_time: 2020-01-07 10:15:00
+  leaving_time: 2020-01-07 23:37:02.366283
+  parking_time: 13.367323967522767
   soc: 1
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-06 14:00:00
-  leaving_time: 2020-01-06 18:38:47.535701
-  parking_time: 4.646537694678054
-  soc: 0.6077292658889608
+- arrival_time: 2020-01-07 11:00:00
+  leaving_time: 2020-01-07 22:15:13.564643
+  parking_time: 11.253767956318704
+  soc: 0.5377025393583631
+  soc_target: 1.0
+  vehicle_type: *id002
+- arrival_time: 2020-01-07 11:15:00
+  leaving_time: 2020-01-07 20:18:04.089567
+  parking_time: 9.051135990927172
+  soc: 0.31113759039314237
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-06 14:00:00
-  leaving_time: 2020-01-06 17:12:38.151963
-  parking_time: 3.210597767591127
-  soc: 0.7508982796528028
+- arrival_time: 2020-01-07 11:15:00
+  leaving_time: 2020-01-07 22:58:44.183242
+  parking_time: 11.72893978942348
+  soc: 0.3587642199763821
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-06 14:00:00
-  leaving_time: 2020-01-06 18:23:39.021733
-  parking_time: 4.394172703576204
+- arrival_time: 2020-01-07 12:45:00
+  leaving_time: 2020-01-07 22:01:19.519992
+  parking_time: 9.272088886596139
+  soc: 0.3943247108345431
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-07 12:45:00
+  leaving_time: 2020-01-07 21:02:22.407742
+  parking_time: 8.289557706193385
+  soc: 0.36890393524983844
+  soc_target: 1.0
+  vehicle_type: *id002
+- arrival_time: 2020-01-07 13:00:00
+  leaving_time: 2020-01-08 03:00:14.551292
+  parking_time: 14.004042025470934
+  soc: 0.5454474596193695
+  soc_target: 1.0
+  vehicle_type: *id001
+- arrival_time: 2020-01-07 14:00:00
+  leaving_time: 2020-01-08 01:37:31.949682
+  parking_time: 11.625541578332054
+  soc: 0.7188201776682522
+  soc_target: 1.0
+  vehicle_type: *id002
+- arrival_time: 2020-01-07 14:15:00
+  leaving_time: 2020-01-07 22:31:40.962017
+  parking_time: 8.278045004754329
   soc: 1
   soc_target: 1.0
   vehicle_type: *id002
-- arrival_time: 2020-01-06 14:00:00
-  leaving_time: 2020-01-06 17:45:25.711816
-  parking_time: 3.757142171071822
-  soc: 0.6484243214794493
+- arrival_time: 2020-01-07 14:45:00
+  leaving_time: 2020-01-08 00:05:10.725279
+  parking_time: 9.33631257762687
+  soc: 0.6762592065636145
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-06 14:00:00
-  leaving_time: 2020-01-06 17:51:33.639615
-  parking_time: 3.859344337362554
-  soc: 0.7248559757590033
+- arrival_time: 2020-01-07 14:45:00
+  leaving_time: 2020-01-08 05:00:31.399608
+  parking_time: 14.258722113234594
+  soc: 0.7635614615196877
   soc_target: 1.0
-  vehicle_type: *id002
-- arrival_time: 2020-01-06 14:00:00
-  leaving_time: 2020-01-06 18:19:27.758374
-  parking_time: 4.324377325976264
-  soc: 0.5142582869408305
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-06 14:00:00
-  leaving_time: 2020-01-06 18:18:27.710462
-  parking_time: 4.307697350485479
-  soc: 0.62252043993441
-  soc_target: 1.0
-  vehicle_type: *id002
-- arrival_time: 2020-01-06 14:00:00
-  leaving_time: 2020-01-06 18:00:35.561801
-  parking_time: 4.009878278050238
-  soc: 0.5362431086889341
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-06 14:00:00
-  leaving_time: 2020-01-06 18:34:14.302005
-  parking_time: 4.570639445881819
-  soc: 0.6369041484534449
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-06 14:00:00
-  leaving_time: 2020-01-06 16:12:31.846107
-  parking_time: 2.2088461408344875
-  soc: 0.2912419586911235
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-06 14:00:00
-  leaving_time: 2020-01-06 17:41:36.568862
-  parking_time: 3.6934913506105183
-  soc: 0.4138663769564165
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-06 14:00:00
-  leaving_time: 2020-01-06 17:56:28.169992
-  parking_time: 3.9411583311162355
-  soc: 0.8931974389294495
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-06 14:00:00
-  leaving_time: 2020-01-06 17:29:54.445582
-  parking_time: 3.498457106219223
-  soc: 0.6125622102631448
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-06 14:00:00
-  leaving_time: 2020-01-06 17:23:14.729014
-  parking_time: 3.3874247259901296
-  soc: 0.28792022280560187
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-06 14:00:00
-  leaving_time: 2020-01-06 18:13:34.902656
-  parking_time: 4.226361848794431
-  soc: 0.29773779799514716
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-06 14:00:00
-  leaving_time: 2020-01-06 17:46:46.157429
-  parking_time: 3.7794881748249747
-  soc: 0.5682890628400851
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-06 14:00:00
-  leaving_time: 2020-01-06 18:07:56.208566
-  parking_time: 4.132280157224878
-  soc: 0.704597429288888
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-06 14:00:00
-  leaving_time: 2020-01-06 18:01:38.106983
-  parking_time: 4.027251939606617
-  soc: 0.39808505668693855
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-06 15:00:00
-  leaving_time: 2020-01-06 18:43:25.173141
-  parking_time: 3.7236592057768787
-  soc: 0.6341716208105076
-  soc_target: 1.0
-  vehicle_type: *id002
-- arrival_time: 2020-01-06 15:00:00
-  leaving_time: 2020-01-06 18:40:21.019702
-  parking_time: 3.6725054728539006
-  soc: 0.3961581118839068
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-06 15:00:00
-  leaving_time: 2020-01-06 18:27:56.747496
-  parking_time: 3.4657631934450537
-  soc: 0.5336048524484739
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-06 15:00:00
-  leaving_time: 2020-01-06 18:24:04.970837
-  parking_time: 3.401380787975461
-  soc: 0.5109381307593205
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-06 15:00:00
-  leaving_time: 2020-01-06 19:02:34.895752
-  parking_time: 4.0430265977531405
-  soc: 0.5005689094314834
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-06 15:00:00
-  leaving_time: 2020-01-06 18:02:33.040162
-  parking_time: 3.042511156064773
-  soc: 0.38326045385080554
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-06 15:00:00
-  leaving_time: 2020-01-06 19:01:57.305162
-  parking_time: 4.032584767167482
-  soc: 0.44772227360702266
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-06 16:00:00
-  leaving_time: 2020-01-06 19:36:04.272916
-  parking_time: 3.601186921033364
-  soc: 0.7209992088692116
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-06 16:00:00
-  leaving_time: 2020-01-06 19:53:06.557656
-  parking_time: 3.885154904353551
-  soc: 0.5220265184635198
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-06 16:00:00
-  leaving_time: 2020-01-06 20:49:19.371982
-  parking_time: 4.822047772687064
-  soc: 0.5179838611404602
-  soc_target: 1.0
-  vehicle_type: *id002
-- arrival_time: 2020-01-06 16:00:00
-  leaving_time: 2020-01-06 20:01:48.252568
-  parking_time: 4.030070157786329
-  soc: 0.31171937835648034
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 08:00:00
-  leaving_time: 2020-01-07 11:54:22.898032
-  parking_time: 3.9063605645681396
-  soc: 0.7597134039483554
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 08:00:00
-  leaving_time: 2020-01-07 11:36:59.887582
-  parking_time: 3.6166354393408837
-  soc: 0.57054737521498
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 08:00:00
-  leaving_time: 2020-01-07 11:08:55.679485
-  parking_time: 3.148799857064827
-  soc: 0.8532438191665247
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 08:00:00
-  leaving_time: 2020-01-07 12:14:18.133079
-  parking_time: 4.238370299704233
-  soc: 0.05197544984019553
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 08:00:00
-  leaving_time: 2020-01-07 11:45:10.881252
-  parking_time: 3.753022569900675
-  soc: 0.3619961790879068
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 08:00:00
-  leaving_time: 2020-01-07 12:39:38.398255
-  parking_time: 4.660666181921794
-  soc: 0.6611066571713535
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 08:00:00
-  leaving_time: 2020-01-07 12:12:31.037468
-  parking_time: 4.208621518977825
-  soc: 0.7855762374132051
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 08:00:00
-  leaving_time: 2020-01-07 11:51:58.619563
-  parking_time: 3.866283211917625
-  soc: 1
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 08:00:00
-  leaving_time: 2020-01-07 11:55:31.836481
-  parking_time: 3.925510133544772
-  soc: 0.6975540980427899
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 09:00:00
-  leaving_time: 2020-01-07 12:17:15.098522
-  parking_time: 3.287527367109416
-  soc: 1
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 09:00:00
-  leaving_time: 2020-01-07 13:28:54.582123
-  parking_time: 4.481828367480485
-  soc: 0.2991223134178481
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 09:00:00
-  leaving_time: 2020-01-07 12:38:39.632601
-  parking_time: 3.644342389062285
-  soc: 0.47512121685934794
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 09:00:00
-  leaving_time: 2020-01-07 13:38:48.752683
-  parking_time: 4.646875745283375
-  soc: 0.8165910947633552
-  soc_target: 1.0
-  vehicle_type: *id002
-- arrival_time: 2020-01-07 09:00:00
-  leaving_time: 2020-01-07 13:23:57.162390
-  parking_time: 4.399211775006339
-  soc: 0.6769582942512526
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 09:00:00
-  leaving_time: 2020-01-07 13:23:25.476791
-  parking_time: 4.390410219854503
-  soc: 0.4521373263813184
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 09:00:00
-  leaving_time: 2020-01-07 13:32:36.746510
-  parking_time: 4.543540697170127
-  soc: 0.706128920897896
-  soc_target: 1.0
-  vehicle_type: *id002
-- arrival_time: 2020-01-07 09:00:00
-  leaving_time: 2020-01-07 13:22:09.005723
-  parking_time: 4.36916825626004
-  soc: 0.1332256654695435
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 09:00:00
-  leaving_time: 2020-01-07 12:57:45.388014
-  parking_time: 3.962607781735028
-  soc: 0.4340170531408004
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 09:00:00
-  leaving_time: 2020-01-07 12:40:05.276237
-  parking_time: 3.668132287931467
-  soc: 0.4598297692401545
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 09:00:00
-  leaving_time: 2020-01-07 13:06:30.077702
-  parking_time: 4.108354917226092
-  soc: 0.5338199059916788
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 09:00:00
-  leaving_time: 2020-01-07 12:31:51.500902
-  parking_time: 3.5309724727779885
-  soc: 0.3523655785238905
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 09:00:00
-  leaving_time: 2020-01-07 12:35:59.677542
-  parking_time: 3.599910428290702
-  soc: 0.3118452280709188
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 09:00:00
-  leaving_time: 2020-01-07 12:39:38.244393
-  parking_time: 3.6606234424004036
-  soc: 0.569211487550667
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 09:00:00
-  leaving_time: 2020-01-07 13:30:03.591107
-  parking_time: 4.5009975296375195
-  soc: 0.9074041700511353
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 09:00:00
-  leaving_time: 2020-01-07 13:43:03.218411
-  parking_time: 4.717560669790664
-  soc: 0.14397478695448684
-  soc_target: 1.0
-  vehicle_type: *id002
-- arrival_time: 2020-01-07 09:00:00
-  leaving_time: 2020-01-07 11:48:58.180606
-  parking_time: 2.8161612795237705
-  soc: 0.5614623930705822
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 09:00:00
-  leaving_time: 2020-01-07 12:57:13.149317
-  parking_time: 3.9536525879864457
-  soc: 0.4786772603589344
-  soc_target: 1.0
-  vehicle_type: *id002
-- arrival_time: 2020-01-07 10:00:00
-  leaving_time: 2020-01-07 14:35:09.428473
-  parking_time: 4.585952353474912
-  soc: 0.7070081236404522
-  soc_target: 1.0
-  vehicle_type: *id002
-- arrival_time: 2020-01-07 10:00:00
-  leaving_time: 2020-01-07 14:36:33.252832
-  parking_time: 4.609236897755444
-  soc: 1
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 10:00:00
-  leaving_time: 2020-01-07 14:09:57.726317
-  parking_time: 4.166035088015701
-  soc: 0.93906662052452
-  soc_target: 1.0
-  vehicle_type: *id002
-- arrival_time: 2020-01-07 10:00:00
-  leaving_time: 2020-01-07 14:19:18.549477
-  parking_time: 4.321819299029296
-  soc: 0.6626531752693298
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 10:00:00
-  leaving_time: 2020-01-07 13:29:51.235404
-  parking_time: 3.497565390085161
-  soc: 0.8902077142356698
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 10:00:00
-  leaving_time: 2020-01-07 14:39:26.799398
-  parking_time: 4.6574442771493185
-  soc: 0.6818543011599733
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 10:00:00
-  leaving_time: 2020-01-07 14:12:58.683476
-  parking_time: 4.216300965655112
-  soc: 0.8638649549004783
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 10:00:00
-  leaving_time: 2020-01-07 14:37:24.072194
-  parking_time: 4.623353387157799
-  soc: 0.5879032878681358
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 10:00:00
-  leaving_time: 2020-01-07 14:28:55.876576
-  parking_time: 4.482187937714547
-  soc: 0.6552043850001277
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 10:00:00
-  leaving_time: 2020-01-07 13:14:20.330093
-  parking_time: 3.2389805814196366
-  soc: 0.7702309196713775
-  soc_target: 1.0
-  vehicle_type: *id002
-- arrival_time: 2020-01-07 10:00:00
-  leaving_time: 2020-01-07 14:05:20.063741
-  parking_time: 4.088906594630527
-  soc: 0.9584944198351695
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 11:00:00
-  leaving_time: 2020-01-07 15:46:10.955182
-  parking_time: 4.769709772896934
-  soc: 0.38994434371165065
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 11:00:00
-  leaving_time: 2020-01-07 14:39:46.658513
-  parking_time: 3.6629606981427734
-  soc: 0.46609989723627
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 11:00:00
-  leaving_time: 2020-01-07 14:37:57.872813
-  parking_time: 3.632742448122261
-  soc: 0.23143587617776284
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 11:00:00
-  leaving_time: 2020-01-07 15:44:41.496075
-  parking_time: 4.744860020735019
-  soc: 0.562235871204336
-  soc_target: 1.0
-  vehicle_type: *id002
-- arrival_time: 2020-01-07 11:00:00
-  leaving_time: 2020-01-07 15:16:05.703278
-  parking_time: 4.2682509104753015
-  soc: 0.6629392377628313
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 11:00:00
-  leaving_time: 2020-01-07 14:13:41.445923
-  parking_time: 3.228179423144366
-  soc: 0.8782203669714291
-  soc_target: 1.0
-  vehicle_type: *id002
-- arrival_time: 2020-01-07 11:00:00
-  leaving_time: 2020-01-07 14:56:50.282682
-  parking_time: 3.947300745054701
-  soc: 0.8915108786781935
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 11:00:00
-  leaving_time: 2020-01-07 15:18:30.789921
-  parking_time: 4.30855275574833
-  soc: 0.7463275352319223
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 11:00:00
-  leaving_time: 2020-01-07 15:17:21.257836
-  parking_time: 4.289238287776495
-  soc: 0.4757143872433721
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 11:00:00
-  leaving_time: 2020-01-07 14:59:22.069446
-  parking_time: 3.9894637349538233
-  soc: 0.6395746907354897
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 11:00:00
-  leaving_time: 2020-01-07 15:00:17.043369
-  parking_time: 4.0047342692856605
-  soc: 0.6194434966401375
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 11:00:00
-  leaving_time: 2020-01-07 15:22:51.304770
-  parking_time: 4.380917991759159
-  soc: 0.6226290949905543
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 11:00:00
-  leaving_time: 2020-01-07 14:57:07.249011
-  parking_time: 3.9520136142126057
-  soc: 0.5763992850995759
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 12:00:00
-  leaving_time: 2020-01-07 16:21:11.741199
-  parking_time: 4.353261444029083
-  soc: 0.8010510552459822
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 12:00:00
-  leaving_time: 2020-01-07 15:29:20.529275
-  parking_time: 3.489035909706147
-  soc: 0.5538631922065688
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 12:00:00
-  leaving_time: 2020-01-07 15:44:12.262542
-  parking_time: 3.736739595125627
-  soc: 0.9113138260895242
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 12:00:00
-  leaving_time: 2020-01-07 15:50:37.603819
-  parking_time: 3.843778838596966
-  soc: 0.4900212119778197
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 12:00:00
-  leaving_time: 2020-01-07 16:04:34.441497
-  parking_time: 4.0762337492926015
-  soc: 0.367618881274683
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 12:00:00
-  leaving_time: 2020-01-07 16:45:57.644656
-  parking_time: 4.766012404313953
-  soc: 0.5166281114221714
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 12:00:00
-  leaving_time: 2020-01-07 15:48:51.011109
-  parking_time: 3.814169752614842
-  soc: 0.5584537688606759
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 12:00:00
-  leaving_time: 2020-01-07 15:53:36.231073
-  parking_time: 3.893397520175321
-  soc: 0.3834345460746319
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 13:00:00
-  leaving_time: 2020-01-07 17:34:11.195870
-  parking_time: 4.569776630547242
-  soc: 0.5589300235210547
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 13:00:00
-  leaving_time: 2020-01-07 17:03:24.513860
-  parking_time: 4.056809405598162
-  soc: 0.786497302119007
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 13:00:00
-  leaving_time: 2020-01-07 17:47:02.276295
-  parking_time: 4.7839656376072845
-  soc: 0.7122686523580064
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 13:00:00
-  leaving_time: 2020-01-07 16:24:21.991530
-  parking_time: 3.4061087583490357
-  soc: 0.9431883248078082
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 13:00:00
-  leaving_time: 2020-01-07 15:43:01.023938
-  parking_time: 2.7169510939530284
-  soc: 0.4386316981264924
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 13:00:00
-  leaving_time: 2020-01-07 16:48:00.377535
-  parking_time: 3.8001048707953284
-  soc: 0.6615920567976747
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 13:00:00
-  leaving_time: 2020-01-07 16:36:20.099686
-  parking_time: 3.60558324612152
-  soc: 0.8163954797446742
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 13:00:00
-  leaving_time: 2020-01-07 17:20:11.873906
-  parking_time: 4.336631640529395
-  soc: 0.7923101848466395
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 13:00:00
-  leaving_time: 2020-01-07 17:23:25.804508
-  parking_time: 4.390501252293689
-  soc: 0.3271571341528055
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 13:00:00
-  leaving_time: 2020-01-07 16:30:54.628806
-  parking_time: 3.515174668326909
-  soc: 0.9711171529761835
-  soc_target: 1.0
-  vehicle_type: *id002
-- arrival_time: 2020-01-07 13:00:00
-  leaving_time: 2020-01-07 17:02:23.699936
-  parking_time: 4.039916648922254
-  soc: 0.09362557610921296
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 13:00:00
-  leaving_time: 2020-01-07 17:09:59.091612
-  parking_time: 4.166414336626559
-  soc: 0.5899663089087468
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 13:00:00
-  leaving_time: 2020-01-07 17:57:44.557857
-  parking_time: 4.962377182577335
-  soc: 0.7603205839051326
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 13:00:00
-  leaving_time: 2020-01-07 16:57:30.005159
-  parking_time: 3.9583347662759345
-  soc: 0.906920848743608
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 14:00:00
-  leaving_time: 2020-01-07 16:54:49.040057
-  parking_time: 2.913622238161297
-  soc: 0.5652968546967795
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 14:00:00
-  leaving_time: 2020-01-07 18:23:41.811952
-  parking_time: 4.394947764491083
-  soc: 0.7629262714028153
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 14:00:00
-  leaving_time: 2020-01-07 19:15:15.679680
-  parking_time: 5.254355466691685
-  soc: 0.21494020880429232
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 14:00:00
-  leaving_time: 2020-01-07 17:28:34.383514
-  parking_time: 3.476217642667791
-  soc: 0.7161573599819455
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 14:00:00
-  leaving_time: 2020-01-07 18:30:39.758164
-  parking_time: 4.5110439343231175
-  soc: 0.46707321791880574
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 14:00:00
-  leaving_time: 2020-01-07 17:43:52.116792
-  parking_time: 3.731143553411726
-  soc: 0.722005617415405
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 14:00:00
-  leaving_time: 2020-01-07 17:37:31.277018
-  parking_time: 3.6253547271063153
-  soc: 0.4365289561736838
-  soc_target: 1.0
-  vehicle_type: *id002
-- arrival_time: 2020-01-07 14:00:00
-  leaving_time: 2020-01-07 17:49:34.406026
-  parking_time: 3.8262238961392976
-  soc: 0.6411726038333356
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 14:00:00
-  leaving_time: 2020-01-07 18:04:54.454901
-  parking_time: 4.081793027963752
-  soc: 0.45927953638207797
-  soc_target: 1.0
-  vehicle_type: *id002
-- arrival_time: 2020-01-07 14:00:00
-  leaving_time: 2020-01-07 17:37:19.724742
-  parking_time: 3.6221457616756405
-  soc: 0.6521586073268671
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 14:00:00
-  leaving_time: 2020-01-07 18:16:59.007342
-  parking_time: 4.283057595072018
-  soc: 0.6584379795731231
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 14:00:00
-  leaving_time: 2020-01-07 17:49:29.536965
-  parking_time: 3.8248713791266384
-  soc: 0.518408965803535
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 14:00:00
-  leaving_time: 2020-01-07 17:16:09.687517
-  parking_time: 3.269357643570428
-  soc: 0.9177817515896262
-  soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-07 14:00:00
-  leaving_time: 2020-01-07 18:08:30.781495
-  parking_time: 4.141883748540667
-  soc: 0.6326478830610347
+- arrival_time: 2020-01-07 14:45:00
+  leaving_time: 2020-01-08 03:50:27.679864
+  parking_time: 13.09102218447753
+  soc: 0.6827611830336073
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-07 14:00:00
-  leaving_time: 2020-01-07 17:51:09.193832
-  parking_time: 3.8525538421275405
-  soc: 0.444018887124064
+- arrival_time: 2020-01-07 15:15:00
+  leaving_time: 2020-01-08 02:00:14.393861
+  parking_time: 10.75399829474712
+  soc: 0.609574477616224
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-07 14:00:00
-  leaving_time: 2020-01-07 18:04:14.113893
-  parking_time: 4.070587192428593
-  soc: 0.9423546060440557
+- arrival_time: 2020-01-07 15:30:00
+  leaving_time: 2020-01-08 03:23:19.262236
+  parking_time: 11.888683954310912
+  soc: 0.4901990545224089
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-07 14:00:00
-  leaving_time: 2020-01-07 17:45:32.234882
-  parking_time: 3.75895413391488
-  soc: 0.7776293516004236
+- arrival_time: 2020-01-07 15:45:00
+  leaving_time: 2020-01-08 00:38:45.320514
+  parking_time: 8.895922364954718
+  soc: 0.4552082465523028
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-07 14:00:00
-  leaving_time: 2020-01-07 19:05:21.238945
-  parking_time: 5.089233040355551
-  soc: 0.555669892442161
+- arrival_time: 2020-01-07 15:45:00
+  leaving_time: 2020-01-08 00:33:28.977402
+  parking_time: 8.80804927830301
+  soc: 0.7462247270029181
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-07 14:00:00
-  leaving_time: 2020-01-07 17:58:04.536986
-  parking_time: 3.9679269406822035
-  soc: 0.9333341157096088
+- arrival_time: 2020-01-07 17:30:00
+  leaving_time: 2020-01-08 04:41:40.458074
+  parking_time: 11.19457168720916
+  soc: 0.8837677834678657
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-07 15:00:00
-  leaving_time: 2020-01-07 18:30:49.089198
-  parking_time: 3.5136358883687198
-  soc: 0.47842568160285087
+- arrival_time: 2020-01-07 19:15:00
+  leaving_time: 2020-01-08 10:16:04.064292
+  parking_time: 15.017795636614238
+  soc: 0.4128132854500574
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-07 15:00:00
-  leaving_time: 2020-01-07 19:16:03.183075
-  parking_time: 4.267550854218721
-  soc: 0.46296767583766885
+- arrival_time: 2020-01-07 20:00:00
+  leaving_time: 2020-01-08 07:26:29.617429
+  parking_time: 11.44156039701088
+  soc: 0.8385204516168252
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-07 15:00:00
-  leaving_time: 2020-01-07 19:50:18.805625
-  parking_time: 4.838557118135803
-  soc: 0.9576702303396176
-  soc_target: 1.0
-  vehicle_type: *id002
-- arrival_time: 2020-01-07 15:00:00
-  leaving_time: 2020-01-07 19:04:05.233493
-  parking_time: 4.068120414717416
-  soc: 0.7879213386522036
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 15:00:00
-  leaving_time: 2020-01-07 19:18:43.295726
-  parking_time: 4.3120265905662025
-  soc: 0.5482492986586428
-  soc_target: 1.0
-  vehicle_type: *id002
-- arrival_time: 2020-01-07 15:00:00
-  leaving_time: 2020-01-07 19:07:23.597324
-  parking_time: 4.123221478929861
-  soc: 0.5637672642997127
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 15:00:00
-  leaving_time: 2020-01-07 18:33:28.897860
-  parking_time: 3.5580271833979324
-  soc: 0.11692186606888239
-  soc_target: 1.0
-  vehicle_type: *id002
-- arrival_time: 2020-01-07 15:00:00
-  leaving_time: 2020-01-07 18:22:50.951191
-  parking_time: 3.380819775180713
-  soc: 0.6546625691185216
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 15:00:00
-  leaving_time: 2020-01-07 18:27:56.160810
-  parking_time: 3.4656002250977123
-  soc: 0.930147789335668
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 15:00:00
-  leaving_time: 2020-01-07 18:26:30.401069
-  parking_time: 3.4417780747142714
-  soc: 0.8528686042193487
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 15:00:00
-  leaving_time: 2020-01-07 18:53:01.086385
-  parking_time: 3.8836351070664765
-  soc: 0.9020095475935765
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 15:00:00
-  leaving_time: 2020-01-07 18:42:47.852500
-  parking_time: 3.7132923611630986
-  soc: 0.7429668178641671
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 15:00:00
-  leaving_time: 2020-01-07 18:15:57.603758
-  parking_time: 3.266001043961743
-  soc: 0.5133914924278129
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 15:00:00
-  leaving_time: 2020-01-07 19:00:50.262036
-  parking_time: 4.013961676756285
-  soc: 0.441765576738144
-  soc_target: 1.0
-  vehicle_type: *id002
-- arrival_time: 2020-01-07 16:00:00
-  leaving_time: 2020-01-07 19:52:19.204064
-  parking_time: 3.872001128921939
-  soc: 0.5628810480538993
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 16:00:00
-  leaving_time: 2020-01-07 20:16:17.673432
-  parking_time: 4.271575953301925
-  soc: 0.44346795183939575
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 16:00:00
-  leaving_time: 2020-01-07 19:52:13.564948
-  parking_time: 3.870434707834197
-  soc: 0.4912620120435629
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 16:00:00
-  leaving_time: 2020-01-07 20:07:49.087473
-  parking_time: 4.130302075875602
-  soc: 0.36188836178482947
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 16:00:00
-  leaving_time: 2020-01-07 19:33:23.124285
-  parking_time: 3.5564234125699152
-  soc: 0.7552038412768814
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 16:00:00
-  leaving_time: 2020-01-07 19:55:16.878987
-  parking_time: 3.9213552742801467
-  soc: 0.7326790370536174
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 16:00:00
-  leaving_time: 2020-01-07 18:48:34.394600
-  parking_time: 2.8095540556755045
-  soc: 0.6178175652856451
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 16:00:00
-  leaving_time: 2020-01-07 20:16:10.844348
-  parking_time: 4.269678985656474
-  soc: 0.766414582308661
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 16:00:00
-  leaving_time: 2020-01-07 20:34:23.799798
-  parking_time: 4.573277721602605
-  soc: 0.32790064205246855
-  soc_target: 1.0
-  vehicle_type: *id002
-- arrival_time: 2020-01-07 16:00:00
-  leaving_time: 2020-01-07 20:05:57.428960
-  parking_time: 4.099285822201842
-  soc: 0.427754136249897
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 16:00:00
-  leaving_time: 2020-01-07 19:28:46.132079
-  parking_time: 3.4794811330707502
-  soc: 0.8564550638575306
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 16:00:00
-  leaving_time: 2020-01-07 19:27:11.885397
-  parking_time: 3.4533014992441107
-  soc: 0.605416470900412
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 16:00:00
-  leaving_time: 2020-01-07 20:13:06.457368
-  parking_time: 4.218460379886515
-  soc: 0.8679478717134615
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 16:00:00
-  leaving_time: 2020-01-07 20:06:51.617139
-  parking_time: 4.114338094082739
-  soc: 1
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 16:00:00
-  leaving_time: 2020-01-07 20:23:46.400022
-  parking_time: 4.396222228462871
-  soc: 0.703578004658931
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 16:00:00
-  leaving_time: 2020-01-07 20:49:05.032853
-  parking_time: 4.818064681250291
-  soc: 0.7989603359616004
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 17:00:00
-  leaving_time: 2020-01-07 20:56:03.935176
-  parking_time: 3.9344264378604015
-  soc: 0.06947250902241064
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 17:00:00
-  leaving_time: 2020-01-07 22:03:41.782045
-  parking_time: 5.061606123510347
-  soc: 0.7356178042630851
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 17:00:00
-  leaving_time: 2020-01-07 21:30:37.032807
-  parking_time: 4.510286890882844
-  soc: 0.7289060121010438
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 17:00:00
-  leaving_time: 2020-01-07 20:53:24.837250
-  parking_time: 3.8902325693119
-  soc: 0.38048777214321483
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 17:00:00
-  leaving_time: 2020-01-07 20:55:57.313225
-  parking_time: 3.9325870068602615
-  soc: 0.6044493520954587
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 17:00:00
-  leaving_time: 2020-01-07 20:56:25.239403
-  parking_time: 3.9403442785818594
-  soc: 0.4418984733697323
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 17:00:00
-  leaving_time: 2020-01-07 21:43:37.161947
-  parking_time: 4.726989429619894
-  soc: 0.06939342006892046
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 17:00:00
-  leaving_time: 2020-01-07 21:15:14.320180
-  parking_time: 4.25397782764561
-  soc: 0.49305845182028535
-  soc_target: 1.0
-  vehicle_type: *id001
-- arrival_time: 2020-01-07 18:00:00
-  leaving_time: 2020-01-07 21:50:11.811715
-  parking_time: 3.8366143652363442
-  soc: 0.7950085911685646
-  soc_target: 1.0
-  vehicle_type: *id002
-- arrival_time: 2020-01-07 18:00:00
-  leaving_time: 2020-01-07 22:34:19.527084
-  parking_time: 4.572090856746495
-  soc: 0.44980287386986106
+- arrival_time: 2020-01-07 20:30:00
+  leaving_time: 2020-01-08 10:05:49.717087
+  parking_time: 13.597143635341235
+  soc: 0.6841108765602635
   soc_target: 1.0
   vehicle_type: *id001
-- arrival_time: 2020-01-07 18:00:00
-  leaving_time: 2020-01-07 21:44:36.698623
-  parking_time: 3.7435273953710966
-  soc: 0.6299385296187421
+- arrival_time: 2020-01-07 22:45:00
+  leaving_time: 2020-01-08 12:19:40.825927
+  parking_time: 13.57800720190798
+  soc: 0.43677892671122587
   soc_target: 1.0
   vehicle_type: *id001
 disconnect_by_time: true
@@ -3009,327 +1521,761 @@ infrastructure:
   - charging_points:
     - connection_points:
       - id: connection_point1
-        max_power: 11
+        max_power: 3.7
         min_power: 0
       id: charging_point1
-      max_power: 11
+      max_power: 3.7
       min_power: 0
     - connection_points:
       - id: connection_point2
-        max_power: 11
+        max_power: 3.7
         min_power: 0
       id: charging_point2
-      max_power: 11
+      max_power: 3.7
       min_power: 0
     - connection_points:
       - id: connection_point3
-        max_power: 11
+        max_power: 3.7
         min_power: 0
       id: charging_point3
-      max_power: 11
+      max_power: 3.7
       min_power: 0
     - connection_points:
       - id: connection_point4
-        max_power: 11
+        max_power: 3.7
         min_power: 0
       id: charging_point4
-      max_power: 11
+      max_power: 3.7
       min_power: 0
     - connection_points:
       - id: connection_point5
-        max_power: 11
+        max_power: 3.7
         min_power: 0
       id: charging_point5
-      max_power: 11
+      max_power: 3.7
       min_power: 0
     - connection_points:
       - id: connection_point6
-        max_power: 11
+        max_power: 3.7
         min_power: 0
       id: charging_point6
-      max_power: 11
+      max_power: 3.7
       min_power: 0
     - connection_points:
       - id: connection_point7
-        max_power: 11
+        max_power: 3.7
         min_power: 0
       id: charging_point7
-      max_power: 11
+      max_power: 3.7
       min_power: 0
     - connection_points:
       - id: connection_point8
-        max_power: 11
+        max_power: 3.7
         min_power: 0
       id: charging_point8
-      max_power: 11
+      max_power: 3.7
       min_power: 0
     - connection_points:
       - id: connection_point9
-        max_power: 11
+        max_power: 3.7
         min_power: 0
       id: charging_point9
-      max_power: 11
+      max_power: 3.7
       min_power: 0
     - connection_points:
       - id: connection_point10
-        max_power: 11
+        max_power: 3.7
         min_power: 0
       id: charging_point10
-      max_power: 11
-      min_power: 0
-    - connection_points:
-      - id: connection_point11
-        max_power: 11
-        min_power: 0
-      id: charging_point11
-      max_power: 11
-      min_power: 0
-    - connection_points:
-      - id: connection_point12
-        max_power: 11
-        min_power: 0
-      id: charging_point12
-      max_power: 11
-      min_power: 0
-    - connection_points:
-      - id: connection_point13
-        max_power: 11
-        min_power: 0
-      id: charging_point13
-      max_power: 11
-      min_power: 0
-    - connection_points:
-      - id: connection_point14
-        max_power: 11
-        min_power: 0
-      id: charging_point14
-      max_power: 11
-      min_power: 0
-    - connection_points:
-      - id: connection_point15
-        max_power: 11
-        min_power: 0
-      id: charging_point15
-      max_power: 11
-      min_power: 0
-    - connection_points:
-      - id: connection_point16
-        max_power: 11
-        min_power: 0
-      id: charging_point16
-      max_power: 11
-      min_power: 0
-    - connection_points:
-      - id: connection_point17
-        max_power: 11
-        min_power: 0
-      id: charging_point17
-      max_power: 11
-      min_power: 0
-    - connection_points:
-      - id: connection_point18
-        max_power: 11
-        min_power: 0
-      id: charging_point18
-      max_power: 11
-      min_power: 0
-    - connection_points:
-      - id: connection_point19
-        max_power: 11
-        min_power: 0
-      id: charging_point19
-      max_power: 11
-      min_power: 0
-    - connection_points:
-      - id: connection_point20
-        max_power: 11
-        min_power: 0
-      id: charging_point20
-      max_power: 11
+      max_power: 3.7
       min_power: 0
     id: transformer1
-    max_power: 220
+    max_power: 37.0
     min_power: 0
-mean_park: 4
+mean_park: 12
 mean_soc: 0.6
-num_charging_events: 500
+num_charging_events: 250
 queue_length: 0
 scheduling_policy: Uncontrolled
-std_deviation_park: 0.5
+std_deviation_park: 2
 std_deviation_soc: 0.2
 time_params: !!python/tuple
 - '2020-01-01T00:00:00'
 - '2020-01-07T23:59:00'
-- '1:00:00'
+- 0:15:00
 transformer_preload:
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
-- 0
+- 121.79899999999999
+- 119.60846803571428
+- 117.41793607142857
+- 115.22740410714286
+- 113.03687214285715
+- 111.16106546428571
+- 109.28525878571429
+- 107.40945210714287
+- 105.53364542857143
+- 104.08285982142857
+- 102.63207421428572
+- 101.18128860714286
+- 99.730503
+- 98.73756303571429
+- 97.74462307142858
+- 96.75168310714287
+- 95.75874314285716
+- 95.13950153571429
+- 94.52025992857143
+- 93.90101832142858
+- 93.28177671428571
+- 92.8436729047619
+- 92.40556909523809
+- 91.9674652857143
+- 91.52936147619049
+- 91.15281333333334
+- 90.7762651904762
+- 90.39971704761905
+- 90.0231689047619
+- 89.55298784523809
+- 89.0828067857143
+- 88.61262572619049
+- 88.14244466666668
+- 87.58494546428572
+- 87.02744626190477
+- 86.46994705952382
+- 85.91244785714287
+- 85.36325739285715
+- 84.81406692857142
+- 84.26487646428569
+- 83.71568599999998
+- 83.20615117857142
+- 82.69661635714284
+- 82.18708153571427
+- 81.67754671428571
+- 81.23859409523808
+- 80.79964147619047
+- 80.36068885714286
+- 79.92173623809524
+- 79.51622597619048
+- 79.11071571428573
+- 78.70520545238097
+- 78.29969519047621
+- 77.92256727380953
+- 77.54543935714287
+- 77.1683114404762
+- 76.79118352380952
+- 76.35243019047618
+- 75.91367685714286
+- 75.47492352380952
+- 75.03617019047618
+- 74.53235154761904
+- 74.0285329047619
+- 73.52471426190476
+- 73.02089561904762
+- 72.53663945238095
+- 72.05238328571428
+- 71.56812711904762
+- 71.08387095238095
+- 70.70943413095237
+- 70.3349973095238
+- 69.96056048809524
+- 69.58612366666667
+- 69.38628917857143
+- 69.1864546904762
+- 68.98662020238096
+- 68.78678571428573
+- 68.85661764285716
+- 68.92644957142858
+- 68.99628150000001
+- 69.06611342857144
+- 69.33534252380954
+- 69.60457161904763
+- 69.87380071428572
+- 70.14302980952382
+- 70.42371672619049
+- 70.70440364285716
+- 70.98509055952381
+- 71.26577747619048
+- 71.50495797619047
+- 71.74413847619047
+- 71.98331897619046
+- 72.22249947619045
+- 72.3114569285714
+- 72.40041438095237
+- 72.48937183333334
+- 72.57832928571429
+- 72.6074150357143
+- 72.63650078571429
+- 72.66558653571428
+- 72.69467228571429
+- 72.84445764285715
+- 72.994243
+- 73.14402835714284
+- 73.2938137142857
+- 73.66344627380951
+- 74.03307883333332
+- 74.40271139285714
+- 74.77234395238095
+- 75.46939629761906
+- 76.16644864285715
+- 76.86350098809525
+- 77.56055333333336
+- 78.48283950000001
+- 79.40512566666668
+- 80.32741183333334
+- 81.249698
+- 82.23197470238095
+- 83.21425140476191
+- 84.19652810714285
+- 85.17880480952381
+- 86.06841992857143
+- 86.95803504761906
+- 87.84765016666668
+- 88.7372652857143
+- 89.49256404761906
+- 90.24786280952381
+- 91.00316157142856
+- 91.75846033333332
+- 92.681165
+- 93.60386966666667
+- 94.52657433333333
+- 95.449279
+- 96.93564670238095
+- 98.4220144047619
+- 99.90838210714284
+- 101.39474980952379
+- 103.81109610714284
+- 106.22744240476192
+- 108.64378870238099
+- 111.06013500000005
+- 114.70350447619052
+- 118.34687395238097
+- 121.99024342857143
+- 125.6336129047619
+- 130.1498028809524
+- 134.66599285714287
+- 139.18218283333334
+- 143.69837280952382
+- 148.64493652380952
+- 153.59150023809525
+- 158.53806395238098
+- 163.48462766666668
+- 168.31342791666668
+- 173.14222816666668
+- 177.97102841666668
+- 182.79982866666668
+- 187.191919
+- 191.58400933333334
+- 195.97609966666667
+- 200.36819
+- 204.23861602380953
+- 208.10904204761903
+- 211.97946807142856
+- 215.84989409523808
+- 219.2196974285714
+- 222.58950076190476
+- 225.9593040952381
+- 229.32910742857143
+- 232.26594114285717
+- 235.2027748571429
+- 238.13960857142868
+- 241.07644228571442
+- 243.5410142500001
+- 246.0055862142858
+- 248.4701581785715
+- 250.93473014285718
+- 252.9189648571429
+- 254.9031995714286
+- 256.8874342857143
+- 258.871669
+- 260.2567656071428
+- 261.6418622142857
+- 263.0269588214286
+- 264.4120554285714
+- 265.11540261904764
+- 265.81874980952387
+- 266.52209700000003
+- 267.22544419047625
+- 267.23207708333337
+- 267.23870997619053
+- 267.2453428690477
+- 267.2519757619048
+- 266.7572331071429
+- 266.26249045238103
+- 265.7677477976191
+- 265.2730051428572
+- 264.5824509880953
+- 263.89189683333336
+- 263.20134267857145
+- 262.51078852380954
+- 261.8615348571429
+- 261.21228119047623
+- 260.5630275238095
+- 259.91377385714287
+- 259.5021311309524
+- 259.0904884047619
+- 258.6788456785714
+- 258.26720295238096
+- 257.80176046428573
+- 257.33631797619046
+- 256.87087548809524
+- 256.405433
+- 255.5119993452381
+- 254.6185656904762
+- 253.72513203571432
+- 252.83169838095242
+- 251.09544853571433
+- 249.35919869047623
+- 247.62294884523814
+- 245.88669900000005
+- 243.07322240476194
+- 240.25974580952382
+- 237.4462692142857
+- 234.6327926190476
+- 231.10835279761903
+- 227.58391297619045
+- 224.0594731547619
+- 220.53503333333333
+- 216.80573739285714
+- 213.07644145238095
+- 209.34714551190478
+- 205.6178495714286
+- 202.22777592857145
+- 198.83770228571433
+- 195.44762864285718
+- 192.05755500000004
+- 189.35586625000002
+- 186.65417750000003
+- 183.95248875000004
+- 181.25080000000003
+- 179.22960442857146
+- 177.2084088571429
+- 175.1872132857143
+- 173.16601771428574
+- 171.63252964285718
+- 170.09904157142861
+- 168.56555350000005
+- 167.03206542857149
+- 165.8582194285715
+- 164.68437342857146
+- 163.51052742857144
+- 162.33668142857144
+- 161.45061248809526
+- 160.56454354761905
+- 159.67847460714285
+- 158.79240566666667
+- 158.43428886904763
+- 158.07617207142857
+- 157.7180552738095
+- 157.35993847619048
+- 157.93951263095238
+- 158.5190867857143
+- 159.0986609404762
+- 159.6782350952381
+- 161.56914246428573
+- 163.46004983333336
+- 165.35095720238095
+- 167.24186457142858
+- 170.65026142857144
+- 174.05865828571427
+- 177.46705514285713
+- 180.875452
+- 185.37158682142856
+- 189.86772164285713
+- 194.36385646428573
+- 198.8599912857143
+- 203.83007145238096
+- 208.80015161904765
+- 213.77023178571432
+- 218.74031195238098
+- 223.60021848809527
+- 228.46012502380952
+- 233.32003155952378
+- 238.17993809523807
+- 242.35320976190476
+- 246.52648142857146
+- 250.69975309523815
+- 254.87302476190484
+- 258.14598335714294
+- 261.41894195238103
+- 264.69190054761907
+- 267.96485914285716
+- 270.1548297857143
+- 272.3448004285715
+- 274.5347710714286
+- 276.72474171428576
+- 277.65993126190483
+- 278.59512080952385
+- 279.53031035714287
+- 280.46549990476194
+- 280.07743969047624
+- 279.68937947619054
+- 279.3013192619048
+- 278.9132590476191
+- 277.53581575000004
+- 276.158372452381
+- 274.78092915476196
+- 273.4034858571429
+- 271.4772680119048
+- 269.5510501666667
+- 267.6248323214286
+- 265.69861447619047
+- 263.6782883809524
+- 261.65796228571435
+- 259.63763619047626
+- 257.61731009523817
+- 255.81890266666673
+- 254.0204952380953
+- 252.22208780952386
+- 250.42368038095242
+- 248.80195671428575
+- 247.18023304761908
+- 245.55850938095242
+- 243.93678571428575
+- 242.37206809523815
+- 240.80735047619055
+- 239.24263285714292
+- 237.67791523809532
+- 236.05085920238102
+- 234.4238031666667
+- 232.79674713095238
+- 231.16969109523808
+- 229.2899153095238
+- 227.41013952380953
+- 225.53036373809528
+- 223.650587952381
+- 221.45766234523813
+- 219.26473673809528
+- 217.0718111309524
+- 214.87888552380954
+- 212.25651986904762
+- 209.63415421428573
+- 207.01178855952384
+- 204.38942290476191
+- 201.2133968809524
+- 198.03737085714286
+- 194.86134483333333
+- 191.6853188095238
+- 187.9603355595238
+- 184.23535230952382
+- 180.5103690595238
+- 176.7853858095238
+- 172.74840896428572
+- 168.71143211904763
+- 164.67445527380957
+- 160.63747842857148
+- 156.6265810714286
+- 152.61568371428575
+- 148.60478635714287
+- 144.593889
+- 140.95365347619048
+- 137.31341795238097
+- 133.67318242857144
+- 130.03294690476193
+- 127.00416460714288
+- 123.97538230952382
+- 120.94660001190476
+- 117.91781771428572
+- 115.46638089285715
+- 113.01494407142857
+- 110.56350725
+- 108.11207042857143
+- 106.09415642857144
+- 104.07624242857143
+- 102.05832842857143
+- 100.04041442857144
+- 98.30423580952382
+- 96.5680571904762
+- 94.83187857142859
+- 93.09569995238097
+- 100.27657390476192
+- 107.45744785714288
+- 114.63832180952383
+- 121.81919576190478
+- 119.62457585714287
+- 117.42995595238096
+- 115.23533604761906
+- 113.04071614285715
+- 111.16466921428572
+- 109.2886222857143
+- 107.41257535714286
+- 105.53652842857143
+- 104.08574282142857
+- 102.63495721428572
+- 101.18417160714286
+- 99.733386
+- 98.74044603571429
+- 97.74750607142857
+- 96.75456610714286
+- 95.76162614285715
+- 95.1423845357143
+- 94.52314292857145
+- 93.90390132142858
+- 93.28465971428572
+- 92.84655590476191
+- 92.4084520952381
+- 91.9703482857143
+- 91.53224447619048
+- 91.15545608333335
+- 90.7786676904762
+- 90.40187929761905
+- 90.02509090476191
+- 89.5551500952381
+- 89.08520928571428
+- 88.61526847619048
+- 88.14532766666667
+- 87.58782846428572
+- 87.03032926190477
+- 86.47283005952382
+- 85.91533085714286
+- 85.36614039285715
+- 84.81694992857143
+- 84.2677594642857
+- 83.71856899999999
+- 83.20879392857142
+- 82.69901885714285
+- 82.18924378571427
+- 81.6794687142857
+- 81.24051609523809
+- 80.80156347619047
+- 80.36261085714285
+- 79.92365823809524
+- 79.51814797619048
+- 79.11263771428573
+- 78.70712745238097
+- 78.30161719047621
+- 77.92448927380954
+- 77.54736135714286
+- 77.17023344047618
+- 76.79310552380952
+- 76.35435219047619
+- 75.91559885714285
+- 75.47684552380952
+- 75.03809219047619
+- 74.53427354761905
+- 74.03045490476191
+- 73.52663626190477
+- 73.02281761904763
+- 72.53856145238096
+- 72.05430528571429
+- 71.57004911904762
+- 71.08579295238096
+- 70.71135613095238
+- 70.33691930952381
+- 69.96248248809525
+- 69.58804566666667
+- 69.38821117857144
+- 69.18837669047619
+- 68.98854220238096
+- 68.78870771428572
+- 68.85853964285715
+- 68.92837157142858
+- 68.9982035
+- 69.06803542857143
+- 69.33726452380954
+- 69.60649361904763
+- 69.87572271428573
+- 70.14495180952383
+- 70.4256387261905
+- 70.70632564285715
+- 70.9870125595238
+- 71.26769947619047
+- 71.50687997619048
+- 71.74606047619046
+- 71.98524097619045
+- 72.22442147619046
+- 72.31337892857141
+- 72.40233638095236
+- 72.49129383333333
+- 72.58025128571428
+- 72.60933703571429
+- 72.63842278571428
+- 72.66750853571429
+- 72.6965942857143
+- 72.84637964285716
+- 72.996165
+- 73.14595035714285
+- 73.29573571428571
+- 73.66536827380952
+- 74.03500083333333
+- 74.40463339285712
+- 74.77426595238093
+- 75.47131829761904
+- 76.16837064285713
+- 76.86542298809523
+- 77.56247533333334
+- 78.48476149999999
+- 79.40704766666666
+- 80.32933383333332
+- 81.25161999999997
+- 82.23413695238094
+- 83.2166539047619
+- 84.19917085714285
+- 85.18168780952381
+- 86.07130292857143
+- 86.96091804761903
+- 87.85053316666665
+- 88.74014828571427
+- 89.49544704761904
+- 90.2507458095238
+- 91.00604457142857
+- 91.76134333333334
+- 92.68428825000001
+- 93.60723316666667
+- 94.53017808333334
+- 95.453123
+- 96.93973095238096
+- 98.4263389047619
+- 99.91294685714284
+- 101.39955480952379
+- 103.81590110714285
+- 106.2322474047619
+- 108.64859370238096
+- 111.06494000000002
+- 114.7083094761905
+- 118.35167895238098
+- 121.99504842857145
+- 125.63841790476192
+- 130.15484813095242
+- 134.67127835714288
+- 139.18770858333335
+- 143.70413880952384
+- 148.65094277380956
+- 153.59774673809525
+- 158.54455070238095
+- 163.49135466666667
+- 168.32015491666667
+- 173.14895516666667
+- 177.97775541666667
+- 182.80655566666667
+- 187.19888625
+- 191.59121683333333
+- 195.98354741666668
+- 200.375878
+- 204.24630402380953
+- 208.11673004761906
+- 211.98715607142856
+- 215.8575820952381
+- 219.22738542857144
+- 222.59718876190476
+- 225.96699209523808
+- 229.33679542857143
+- 232.2738693928572
+- 235.21094335714292
+- 238.14801732142865
+- 241.0850912857144
+- 243.5496632500001
+- 246.0142352142858
+- 248.4788071785715
+- 250.94337914285717
+- 252.9276138571429
+- 254.91184857142858
+- 256.89608328571427
+- 258.880318
+- 260.26565485714286
+- 261.65099171428574
+- 263.03632857142856
+- 264.42166542857143
+- 265.12501261904765
+- 265.8283598095238
+- 266.53170700000004
+- 267.23505419047626
+- 267.24168708333343
+- 267.24831997619054
+- 267.25495286904766
+- 267.2615857619048
+- 266.7668431071429
+- 266.272100452381
+- 265.7773577976191
+- 265.2826151428572
+- 264.5920609880953
+- 263.9015068333334
+- 263.2109526785715
+- 262.5203985238096
+- 261.8709046071429
+- 261.2214106904762
+- 260.57191677380956
+- 259.92242285714286
+- 259.5107801309524
+- 259.0991374047619
+- 258.68749467857145
+- 258.275851952381
+- 257.8104094642857
+- 257.3449669761905
+- 256.8795244880953
+- 256.414082
+- 255.5204080952381
+- 254.6267341904762
+- 253.73306028571432
+- 252.83938638095242
+- 251.10289628571434
+- 249.36640619047623
+- 247.62991609523812
+- 245.89342600000003
+- 243.07994940476192
+- 240.26647280952383
+- 237.45299621428575
+- 234.63951961904763
+- 231.11483954761906
+- 227.59015947619048
+- 224.0654794047619
+- 220.54079933333333
+- 216.81174364285715
+- 213.08268795238098
+- 209.35363226190478
+- 205.6245765714286
+- 202.23426267857144
+- 198.8439487857143
+- 195.45363489285717
+- 192.063321
+- 189.36163225
+- 186.6599435
+- 183.95825474999998
+- 181.256566
+- 179.23513017857144
+- 177.21369435714286
+- 175.1922585357143
+- 173.17082271428575
+- 171.63733464285718
+- 170.1038465714286
+- 168.5703585
+- 167.03687042857143
+- 165.86302442857144
+- 164.68917842857144
+- 163.51533242857144
+- 162.34148642857144
+- 161.45565773809525
+- 160.56982904761907
+- 159.68400035714285
+- 158.79817166666666
+- 158.4398146190476
+- 158.0814575714286
+- 157.72310052380953
+- 157.36474347619048
+- 157.94431763095238
+- 158.52389178571428
+- 159.10346594047618
+- 159.68304009523808
+- 161.5739474642857
+- 163.46485483333333
+- 165.35576220238096
+- 167.24666957142858
+- 170.65530667857143
+- 174.0639437857143
+- 177.47258089285714
+- 180.881218
+- 185.37711257142857
+- 189.87300714285715
+- 194.36890171428573
+- 198.8647962857143
+- 203.83511670238096
+- 208.80543711904764
+- 213.77575753571432
+- 218.74607795238097
+- 223.60622473809525
+- 228.46637152380953
+- 233.3265183095238
+- 238.18666509523808
+- 242.35993676190478
+- 246.53320842857147
+- 250.70648009523813
 vehicle_types:
 - battery:
     capacity: 35.8

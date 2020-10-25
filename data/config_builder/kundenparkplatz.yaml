@@ -341,7 +341,7 @@ vehicle_types:
 time_params: !!python/tuple
 - '2020-01-01T00:00:00'
 - '2020-01-07T23:59:00'
-- '1:00:00'
+- '00:15:00'
 transformer_preload: 0
 repeat_preload: True
 mean_soc: 0.6
