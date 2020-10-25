@@ -168,15 +168,15 @@ charging_events:
 - 0.264069264
 - 0.225108225
 disconnect_by_time: true
-mean_park: 19
+mean_park: 12
 num_charging_events: 250
 queue_length: 0
-resolution_preload: '0:15:00'
+resolution_preload: '1:00:00'
 repeat_preload: True
 scheduling_policy: Uncontrolled
 mean_soc: 0.6
 std_deviation_soc: 0.2
-std_deviation_park: 3
+std_deviation_park: 2
 time_params: !!python/tuple
 - '2020-01-01T00:00:00'
 - '2020-01-07T23:59:00'
@@ -186,77 +186,79 @@ infrastructure:
   - charging_points:
     - connection_points:
       - id: connection_point1
-        max_power: 11
+        max_power: 3.7
         min_power: 0
-      id: connection_point10
-      max_power: 11
+      id: charging_point1
+      max_power: 3.7
       min_power: 0
     - connection_points:
-      - id: connection_point1
-        max_power: 11
+      - id: connection_point2
+        max_power: 3.7
         min_power: 0
-      id: connection_point10
-      max_power: 11
+      id: charging_point2
+      max_power: 3.7
       min_power: 0
     - connection_points:
-      - id: connection_point1
-        max_power: 11
+      - id: connection_point3
+        max_power: 3.7
         min_power: 0
-      id: connection_point10
-      max_power: 11
+      id: charging_point3
+      max_power: 3.7
       min_power: 0
     - connection_points:
-      - id: connection_point1
-        max_power: 11
+      - id: connection_point4
+        max_power: 3.7
         min_power: 0
-      id: connection_point10
-      max_power: 11
+      id: charging_point4
+      max_power: 3.7
       min_power: 0
     - connection_points:
-      - id: connection_point1
-        max_power: 11
+      - id: connection_point5
+        max_power: 3.7
         min_power: 0
-      id: connection_point10
-      max_power: 11
+      id: charging_point5
+      max_power: 3.7
       min_power: 0
     - connection_points:
-      - id: connection_point1
-        max_power: 11
+      - id: connection_point6
+        max_power: 3.7
         min_power: 0
-      id: connection_point10
-      max_power: 11
+      id: charging_point6
+      max_power: 3.7
       min_power: 0
     - connection_points:
-      - id: connection_point1
-        max_power: 11
+      - id: connection_point7
+        max_power: 3.7
         min_power: 0
-      id: connection_point10
-      max_power: 11
+      id: charging_point7
+      max_power: 3.7
       min_power: 0
     - connection_points:
-      - id: connection_point1
-        max_power: 11
+      - id: connection_point8
+        max_power: 3.7
         min_power: 0
-      id: connection_point10
-      max_power: 11
+      id: charging_point8
+      max_power: 3.7
       min_power: 0
     - connection_points:
-      - id: connection_point1
-        max_power: 11
+      - id: connection_point9
+        max_power: 3.7
         min_power: 0
-      id: connection_point10
-      max_power: 11
+      id: charging_point9
+      max_power: 3.7
       min_power: 0
     - connection_points:
-      - id: connection_point1
-        max_power: 11
+      - id: connection_point10
+        max_power: 3.7
         min_power: 0
-      id: connection_point10
-      max_power: 11
+      id: charging_point10
+      max_power: 3.7
       min_power: 0
     id: transformer1
-    max_power: 150
+    max_power: 37.0
     min_power: 0
+
+
 vehicle_types:
 - battery:
     capacity: 35.8
