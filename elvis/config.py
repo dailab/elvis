@@ -687,8 +687,8 @@ class ElvisConfigBuilder:
         # resolution
         time_format = '%H:%M:%S'
         if type(time_params[2]) is datetime.timedelta:
-            self.start_date = time_params[2]
-        elif type(time_params[0]) is str:
+            self.resolution = time_params[2]
+        elif type(time_params[2]) is str:
             try:
                 date = datetime.datetime.strptime(time_params[2], time_format)
                 self.resolution = datetime.timedelta(hours=date.hour, minutes=date.minute,
