@@ -18,14 +18,16 @@ class ChargingEvent:
         """
 
         Args:
-            arrival_time: Date and time the vehicle arrives at the infrastructure.
-            mean_park: (float): Mean of the gaussian distribution the parking time is generated
-                from.
-            std_deviation_park: (float): Standard deviation of the gaussian distribution the parking
-                time is generated from.
+            arrival_time: (datetime.datetime): Date and time the vehicle arrives at the
+                infrastructure.
+            parking_time: (float): Number of hours the vehicle is parking.
+            soc: (float): SOC of the vehicle at arrival.
+            vehicle_type: (:obj: `elvis.vehicle.VehicleType`): Instance of the vehicle describing
+                class VehicleType.
         """
         assert isinstance(arrival_time, datetime.datetime)
         assert isinstance(parking_time, (float, int))
+        assert isinstance(soc, (float, int)) and (0 <= soc <= 1.0)
         assert isinstance(vehicle_type, ElectricVehicle)
 
         # TODO: Implement variable values.
@@ -58,18 +60,24 @@ class ChargingEvent:
         dictionary['vehicle_type'] = self.vehicle_type.to_dict()
         return dictionary
 
-    def to_dict(self):
-        """Make dict of the instance of :obj: `charging_event.ChargingEvent`
-            to speed up simulation.
+    @staticmethod
+    def from_dict(**kwargs):
+        """Initialise an instance of ChargingEvent with values stored in a dict.
 
-        Returns:
-            dictionary: (dict)"""
+        Args:
 
-        dictionary = {'arrival_time': self.arrival_time,
-                      'parking_time': self.parking_time,
-                      'leaving_time': self.leaving_time,
-                      'soc': self.soc,
-                      'soc_target': self.soc_target,
-                      'vehicle_type': self.vehicle_type}
+            **kwargs: Arbitrary keyword arguments.
+        """
 
-        return dictionary
+        necessary_keys = ['arrival_time', 'parking_time', 'soc', 'vehicle_type']
+
+        for key in necessary_keys:
+            assert key in kwargs, 'Not all necessary keys are included to create a ChargingEvent ' \
+                                  'from dict.'
+
+        arrival_time = kwargs['arrival_time']
+        parking_time = kwargs['parking_time']
+        soc = kwargs['soc']
+        vehicle_type = ElectricVehicle.from_dict(**kwargs['vehicle_type'])
+
+        return ChargingEvent(arrival_time, parking_time, soc, vehicle_type)

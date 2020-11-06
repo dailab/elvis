@@ -15,7 +15,7 @@ import numpy as np
 import elvis.distribution as distribution
 import elvis.charging_event as charging_event
 
-from utility.walker import WalkerRandomSampling
+from elvis.utility.walker import WalkerRandomSampling
 
 
 def time_stamp_to_hours(time_stamps):
@@ -149,33 +149,10 @@ def create_vehicle_arrivals(arrival_distribution, num_charging_events, time_step
 
     return sorted(arrivals)
 
+def create_charging_events_from_weekly_distribution(
+        arrival_distribution, time_steps, num_charging_events, mean_park, std_deviation_park,
+        mean_soc, std_deviation_soc, vehicle_types):
 
-def create_time_steps(start_date, end_date, resolution):
-    """Create list from start, end date and resolution of the simulation period with all individual
-    time steps.
-
-    Args:
-        start_date: (:obj: `datetime.datetime`): First time stamp.
-        end_date: (:obj: `datetime.datetime`): Upper bound for time stamps.
-        resolution: (:obj: `datetime.timedelta`): Time in between two adjacent time stamps.
-
-    Returns:
-        time_steps: (list): Contains time_steps in `datetime.datetime` format
-
-    """
-    # Create list containing all time steps as datetime.datetime object
-    time_step = start_date
-    time_steps = []
-    while time_step <= end_date:
-        time_steps.append(time_step)
-        time_step += resolution
-
-    return time_steps
-
-
-def create_charging_events_from_distribution(arrival_distribution, time_steps, num_charging_events,
-                                             mean_park, std_deviation_park, mean_soc,
-                                             std_deviation_soc, vehicle_types):
     """Create all charging events for the simulation period.
 
     Args:

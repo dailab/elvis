@@ -5,12 +5,13 @@
 import datetime
 import logging
 
-from elvis.charging_event_generator import create_time_steps
+from elvis.utility.elvis_general import create_time_steps
 from elvis.set_up_infrastructure import set_up_infrastructure
 from elvis.sched.schedulers import Uncontrolled, FCFS
 from elvis.waiting_queue import WaitingQueue
 from elvis.config import ElvisConfig, ElvisConfigBuilder
 from elvis.result import ElvisResult
+from elvis.config_new import ScenarioRealisation, ScenarioConfig
 
 
 def handle_car_arrival(free_connection_points, busy_connection_points, event, waiting_queue):
@@ -164,20 +165,28 @@ def charge_connected_vehicles(assign_power, busy_connection_points, res):
                      str(power))
 
 
-def simulate(config):
+def simulate(start_date, end_date, resolution, config):
     """Main simulation loop.
     Iterates over simulation period and simulates the infrastructure.
 
     Args:
-        config (:obj: `ElvisConfig`): User input.
+        start_date: (:obj: `datetime.datetime`): First time stamp.
+        end_date: (:obj: `datetime.datetime`): Upper bound for time stamps.
+        resolution: (:obj: `datetime.timedelta`): Time in between two adjacent time stamps.
+        config (:obj: `elvis.config.ScenarioConfig` or elvis.config.ScenarioRealisation):
+        User input.
     """
     # ---------------------Initialisation---------------------------
+    # if input is instance of ScenarioConfig transform to ScenarioRealisation
+    if isinstance(config, ScenarioConfig):
+        time_params = {'start_date': start_date, 'end_date': end_date, 'resolution': resolution}
+        config = ScenarioRealisation(config, **time_params)
     # empty log file
     with open('log.log', 'w'):
         pass
     logging.basicConfig(filename='log.log', level=logging.INFO)
     # get list with all time_steps as datetime.datetime
-    time_steps = create_time_steps(config.start_date, config.end_date, config.resolution)
+    time_steps = create_time_steps(start_date, end_date, resolution)
     # Initialize waiting queue for cars at the infrastructure
     waiting_queue = WaitingQueue(maxsize=config.queue_length)
     # copy charging_events from config
@@ -218,9 +227,9 @@ def simulate(config):
 
 if __name__ == '__main__':
 
-    start_date = '2020-01-01 00:00:00'  # datetime.datetime(2020, 1, 1)
+    start_date = datetime.datetime(2020, 1, 1)  # '2020-01-01 00:00:00'
     end_date = datetime.datetime(2020, 1, 7, 23, 59)
-    resolution = '01:0:0'
+    resolution = datetime.timedelta(hours=1) # '01:0:0'
     time_params = (start_date, end_date, resolution)
     # time_params = (start_date, end_date, resolution)
     num_charging_events = 500
@@ -242,32 +251,31 @@ if __name__ == '__main__':
         pass
     logging.basicConfig(filename='log.log', level=logging.INFO)
 
-    builder = ElvisConfigBuilder()
-    builder.with_time_params(time_params).with_scheduling_policy(FCFS())
-    builder.with_std_deviation_soc(0.3)
-    builder.with_mean_soc(0.4)
-    #builder.with_scheduling_policy(FCFS())
-    builder.with_infrastructure(infrastructure)
-    builder.with_disconnect_by_time(disconnect_by_time)
-    builder.with_queue_length(queue_length)
-    builder.with_num_charging_events(num_charging_events)
-    builder.with_mean_park(4)
-    builder.with_std_deviation_park(1)
+    config = ScenarioConfig()
+    config.with_scheduling_policy('UC')
+    config.with_std_deviation_soc(0.3)
+    config.with_mean_soc(0.4)
+    #config.with_scheduling_policy(FCFS())
+    config.with_infrastructure(infrastructure)
+    config.with_disconnect_by_time(disconnect_by_time)
+    config.with_queue_length(queue_length)
+    config.with_num_charging_events(num_charging_events)
+    config.with_mean_park(4)
+    config.with_std_deviation_park(1)
     kwargs = {'brand': 'VW', 'model': 'e-Golf', 'probability': 1, 'battery': {'capacity': 35.8,
               'min_charge_power': 0, 'max_charge_power': 150, 'efficiency': 1}}
-    builder.with_vehicle_types(**kwargs)
+    config.with_vehicle_types(**kwargs)
     kwargs = {'brand': 'VW', 'model': 'Up', 'probability': 1, 'battery': {'capacity': 35.8,
                                                                               'min_charge_power': 0,
                                                                               'max_charge_power': 150,
                                                                               'efficiency': 1}}
-    builder.with_vehicle_types(**kwargs)
-    builder.with_charging_events(arrival_distribution)
+    config.with_vehicle_types(**kwargs)
+    config.with_arrival_distribution(arrival_distribution)
     import random
-    builder.with_transformer_preload([0] * 10000)
-    config = builder.build()
+    config.with_transformer_preload([0] * 10000)
 
-    result = simulate(config)
+    result = simulate(start_date, end_date, resolution, config)
     print(result.power_connection_points)
-    load_profile = result.aggregate_load_profile(config.num_simulation_steps())
-    print(list(zip(load_profile, create_time_steps(config.start_date, config.end_date, config.resolution))))
+    # load_profile = result.aggregate_load_profile(config.num_simulation_steps())
+    # print(list(zip(load_profile, create_time_steps(config.start_date, config.end_date, config.resolution))))
 

@@ -5,8 +5,9 @@ import math
 import yaml
 
 import elvis.sched.schedulers as schedulers
-from elvis.charging_event_generator import create_charging_events_from_distribution as create_events
-from elvis.charging_event_generator import create_time_steps
+from elvis.charging_event_generator import create_charging_events_from_weekly_distribution as \
+    create_events
+from elvis.utility.elvis_general import create_time_steps
 from elvis.battery import EVBattery
 from elvis.vehicle import ElectricVehicle
 from elvis.charging_event import ChargingEvent
@@ -272,10 +273,10 @@ class ElvisConfigBuilder:
             self.charging_events = charging_events
 
         elif type(charging_events[0]) is float or type(charging_events[0]) is int:
-            msg_params_missing = 'Please assign builder.num_charging_events and ' \
-                                 'builder.time_params, builder.mean_park, builder.std_deviation_' \
-                                 'park, builder.mean_soc, builder.std_deviatoin_soc, '\
-                                 'before using builder.with_charging_events with an ' \
+            msg_params_missing = 'Please assign config.num_charging_events and ' \
+                                 'config.time_params, config.mean_park, config.std_deviation_' \
+                                 'park, config.mean_soc, config.std_deviatoin_soc, '\
+                                 'before using config.with_charging_events with an ' \
                                  'arrival distribution.'
 
             assert type(self.num_charging_events) is int, \
