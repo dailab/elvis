@@ -90,7 +90,6 @@ def align_distribution(distr, first_time_stamp, last_time_stamp):
     starting_pos = math.floor(offset.total_seconds()/seconds_per_value)
     difference = (offset.total_seconds()/seconds_per_value - starting_pos) / 3600
 
-
     period = last_time_stamp - first_time_stamp
     # Upward estimate of the needed length of the distribution
     total_weeks = math.ceil(period.total_seconds() / seconds_per_week)
@@ -149,6 +148,7 @@ def create_vehicle_arrivals(arrival_distribution, num_charging_events, time_step
 
     return sorted(arrivals)
 
+
 def create_charging_events_from_weekly_distribution(
         arrival_distribution, time_steps, num_charging_events, mean_park, std_deviation_park,
         mean_soc, std_deviation_soc, vehicle_types):
@@ -166,6 +166,8 @@ def create_charging_events_from_weekly_distribution(
         mean_park: (float): Mean of the gaussian distribution the SOC is generated from.
         std_deviation_park: (float): Standard deviation of the gaussian distribution the SOC
             is generated from.
+        mean_soc: (float): Limits: [0, 1]. State of charge of the cars when arriving on average.
+        std_deviation_soc: (float): Standard deviation of the arrival SOC.
         vehicle_types: (list): Containing all instances of :obj: `elvis.vehicle.ElectricVehicle`
 
     Returns:

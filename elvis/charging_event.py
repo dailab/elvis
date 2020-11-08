@@ -3,10 +3,9 @@
 - parking time: The time the car parks at the infrastructure before it is being driven away.
 - """
 import datetime
-import numpy as np
+
 
 from elvis.vehicle import ElectricVehicle
-from elvis.battery import EVBattery
 
 
 class ChargingEvent:
@@ -30,7 +29,6 @@ class ChargingEvent:
         assert isinstance(soc, (float, int)) and (0 <= soc <= 1.0)
         assert isinstance(vehicle_type, ElectricVehicle)
 
-        # TODO: Implement variable values.
         self.id = 'Charging event: ' + str(ChargingEvent.counter)
         ChargingEvent.counter += 1
         self.arrival_time = arrival_time
@@ -50,14 +48,28 @@ class ChargingEvent:
         print_out += 'Connected car: ' + str(self.vehicle_type)
         return print_out
 
-    def to_dict(self):
-        dictionary = dict()
-        dictionary['arrival_time'] = self.arrival_time
-        dictionary['parking_time'] = self.parking_time
-        dictionary['leaving_time'] = self.leaving_time
+    def to_dict(self, deep=True):
+        """Transforms the an instance of ChargingEvent into a dict.
+
+        Args:
+            deep: (bool): If True: Instances of vehicle type and battery are converted into dicts
+                too. If False: Instances of vehicle type and battery remain objects.
+                Use True for storing results, configs, realisations. Use False inside simulation
+                so class methods of vehicle type and battery can be used.
+
+        Returns:
+            dictionary: (dict): Var names as keys.
+
+        """
+        dictionary = self.__dict__
+        dictionary['arrival_time'] = str(self.arrival_time.isoformat())
+
         dictionary['soc'] = self.soc
-        dictionary['soc_target'] = self.soc_target
-        dictionary['vehicle_type'] = self.vehicle_type.to_dict()
+        if deep is True:
+            dictionary['vehicle_type'] = self.vehicle_type.to_dict()
+        else:
+            dictionary['vehicle_type'] = self.vehicle_type
+            dictionary['leaving_time'] = self.leaving_time
         return dictionary
 
     @staticmethod

@@ -165,34 +165,61 @@ def charge_connected_vehicles(assign_power, busy_connection_points, res):
                      str(power))
 
 
-def simulate(start_date, end_date, resolution, config):
+def simulate_config(config, start_date, end_date, resolution):
+    """ Converts a config into a realisation and starts simulation.
+
+    Args:
+        config (:obj: `elvis.config.ScenarioConfig` or elvis.config.ScenarioRealisation):
+        start_date: (:obj: `datetime.datetime`): First time stamp.
+        end_date: (:obj: `datetime.datetime`): Upper bound for time stamps.
+        resolution: (:obj: `datetime.timedelta`): Time in between two adjacent time stamps.
+
+
+    Returns:
+        Result of simulation.
+    """
+    assert isinstance(config, ScenarioConfig), 'config must be of type ScenarioConfig ' + \
+                                               str(type(config)) + ' is not allowed.'
+
+    time_params = {'start_date': start_date, 'end_date': end_date, 'resolution': resolution}
+    realisation = ScenarioRealisation(config, **time_params)
+    return realisation
+
+
+def simulate(scenario, start_date=None, end_date=None, resolution=None):
     """Main simulation loop.
     Iterates over simulation period and simulates the infrastructure.
 
     Args:
+        scenario: (:obj: `elvis.scenario.ScenarioRealisation`): Scenario to be simulated.
         start_date: (:obj: `datetime.datetime`): First time stamp.
         end_date: (:obj: `datetime.datetime`): Upper bound for time stamps.
         resolution: (:obj: `datetime.timedelta`): Time in between two adjacent time stamps.
-        config (:obj: `elvis.config.ScenarioConfig` or elvis.config.ScenarioRealisation):
-        User input.
+
+    Returns:
+        result: (:obj: `elvis.result.ElvisResult`): Contains the results of the simulation.
     """
     # ---------------------Initialisation---------------------------
     # if input is instance of ScenarioConfig transform to ScenarioRealisation
-    if isinstance(config, ScenarioConfig):
-        time_params = {'start_date': start_date, 'end_date': end_date, 'resolution': resolution}
-        config = ScenarioRealisation(config, **time_params)
+
+    if isinstance(scenario, ScenarioConfig):
+        scenario = simulate_config(scenario, start_date, end_date, resolution)
+
+    assert isinstance(scenario, ScenarioRealisation), 'Realisation must be of type ' \
+                                                      'ScenarioRealisation or ScenarioConfig.'
+
     # empty log file
     with open('log.log', 'w'):
         pass
     logging.basicConfig(filename='log.log', level=logging.INFO)
     # get list with all time_steps as datetime.datetime
-    time_steps = create_time_steps(start_date, end_date, resolution)
+    time_steps = create_time_steps(scenario.start_date, scenario.end_date, scenario.resolution)
     # Initialize waiting queue for cars at the infrastructure
-    waiting_queue = WaitingQueue(maxsize=config.queue_length)
-    # copy charging_events from config
-    charging_events = config.charging_events
+    waiting_queue = WaitingQueue(maxsize=scenario.queue_length)
+    # copy charging_events from scenario
+    charging_events = scenario.charging_events
     # set up infrastructure and get all connection points
-    free_connection_points = set(set_up_infrastructure(config.infrastructure))
+    free_connection_points = set(set_up_infrastructure(scenario.infrastructure))
     busy_connection_points = set()
 
     # set up connection points in result to store assigned powers
@@ -204,10 +231,10 @@ def simulate(start_date, end_date, resolution, config):
         time_step = time_steps[time_step_pos]
         logging.info(' %s', time_step)
         # check if cars must be disconnected, if yes immediately connect car from queue if possible
-        update_queue(waiting_queue, time_step, config.disconnect_by_time)
+        update_queue(waiting_queue, time_step, scenario.disconnect_by_time)
 
         update_connection_points(free_connection_points, busy_connection_points, waiting_queue,
-                                 time_step, config.disconnect_by_time)
+                                 time_step, scenario.disconnect_by_time)
 
         # in case of multiple charging events in the same time step: handle one after the other
         while len(charging_events) > 0 and time_step == charging_events[0].arrival_time:
@@ -217,10 +244,10 @@ def simulate(start_date, end_date, resolution, config):
             charging_events = charging_events[1:]
 
         # assign power
-        assign_power = config.scheduling_policy.schedule(config, free_connection_points,
-                                                         busy_connection_points, time_step_pos)
+        assign_power = scenario.scheduling_policy.schedule(scenario, free_connection_points,
+                                                           busy_connection_points, time_step_pos)
 
-        charge_connected_vehicles(assign_power, busy_connection_points, config.resolution)
+        charge_connected_vehicles(assign_power, busy_connection_points, scenario.resolution)
         results.store_power_connection_points(assign_power, time_step_pos)
     return results
 

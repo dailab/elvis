@@ -50,7 +50,7 @@ class ConnectionPoint(InfrastructureNode):
 
         Args:
             event: (:obj: `charging_event.ChargingEvent`): Event of car arrival."""
-        self.connected_vehicle = event.to_dict()
+        self.connected_vehicle = event.to_dict(deep=False)
 
     def disconnect_vehicle(self):
         """Set field connected_vehicle to None so connection point is available for
@@ -63,6 +63,9 @@ class ConnectionPoint(InfrastructureNode):
         vehicle_type = self.connected_vehicle['vehicle_type']
         battery = vehicle_type.battery
         hours = resolution.total_seconds()/3600
+        # TODO: This should be calculated by chaining some class methods from battery, vehicle type,
+        # hardware. Each of them have different ways of converting/transporting power with their
+        # specific losses
         delta = power * hours / battery.capacity
 
         self.connected_vehicle['soc'] += delta
