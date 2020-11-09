@@ -19,11 +19,8 @@ class ElectricVehicle:
         return printout
 
     def to_dict(self):
-        dictionary = dict()
-        dictionary['brand'] = self.brand
-        dictionary['model'] = self.model
+        dictionary = self.__dict__.copy()
         dictionary['battery'] = self.battery.to_dict()
-        dictionary['probability'] = self.probability
         return dictionary
 
     @staticmethod

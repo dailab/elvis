@@ -25,11 +25,7 @@ class Battery:
         self.efficiency = efficiency
 
     def to_dict(self):
-        dictionary = dict()
-        dictionary['capacity'] = self.capacity
-        dictionary['max_charge_power'] = self.max_charge_power
-        dictionary['min_charge_power'] = self.min_charge_power
-        dictionary['efficiency'] = self.efficiency
+        dictionary = self.__dict__.copy()
         return dictionary
 
 
