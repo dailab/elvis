@@ -216,6 +216,24 @@ class ScenarioConfig:
 
         return
 
+    def with_transformer_preload(self, transformer_preload):
+        # TODO: Add pandas
+        assert type(transformer_preload) is list, 'Arrival distribution must be of type list or ' \
+                                                   'pandas DataFrame.'
+
+        msg_invalid_value_type = "Arrival distribution should be of type: pandas DataFrame or a " \
+                                 "list containing float or int."
+        # Check if all values in list are either float or int
+        if transformer_preload is list:
+            assert all(isinstance(x, (float, int)) for x in transformer_preload), \
+                msg_invalid_value_type
+        else:
+            NotImplementedError()
+
+        self.arrival_distribution = transformer_preload
+
+        return
+
     # Outdated
     def with_charging_events(self, charging_events):
         """Update the arrival distribution to use.
@@ -591,6 +609,9 @@ class ScenarioRealisation:
             self.scheduling_policy = config.scheduling_policy
             self.queue_length = config.queue_length
             self.disconnect_by_time = config.disconnect_by_time
+            self.transformer_preload = self.with_transformer_preload(
+                config.transformer_preload, config.transformer_preload_res_data,
+                config.transformer_preload_repeat)
 
             if config.charging_events is not None:
                 self.charging_events = config.charging_events
@@ -677,156 +698,154 @@ class ScenarioRealisation:
     def transform_arrival_distribution(self):
         pass
 
+    def with_transformer_preload(self, transformer_preload, res_data=None, repeat=False):
+        """Update the renewable energy scenario to use.
+        Simulation time parameter must be set before transformer preload can be initialised."""
+        # TODO: if trafo preload has another res_data than simulation or an offset a correct list
+        # must be created
 
-# Outdated check and alignment now must be done when transformerd to ScenarioRealisation
-    # def with_transformer_preload(self, transformer_preload, res_data=None, repeat=False):
-    #     """Update the renewable energy scenario to use.
-    #     Simulation time parameter must be set before transformer preload can be initialised."""
-    #     # TODO: if trafo preload has another res_data than simulation or an offset a correct list
-    #     # must be created
-    #
-    #     """List possible cases:
-    #     Case 1:
-    #         List has n=simulationSteps entries.
-    #         Meta info: None
-    #         To Do: Nothing just pass.
-    #     Case 2:
-    #         List has n=simulationSteps entries.
-    #         Meta info: Resolution. Repeat.
-    #     Case 3:
-    #         List has n!=simulation step entries.
-    #         Meta info: None.
-    #         To Do: Raise error
-    #     Case 4:
-    #         List has n!=simulationSteps entries.
-    #         Meta info: Resolution.
-    #         To Do: Adjust res_data as stated. Check if there are enough values. If not raise error
-    #
-    #     Case 5:
-    #         List has n!=simulationSteps entries.
-    #         Meta info: Resolution. Repeat.
-    #         To Do: Adjust Resolution. Repeat until n equals simulaiton steps.
-    #
-    #     Case 7:
-    #         DF has n=simulationSteps rows.
-    #         Index of DF aligns with simulationSteps.
-    #         To Do: Nothing just pass.
-    #     Case 8:
-    #         DF has n=simulationSteps rows.
-    #         Index of DF does not align with simulationSteps."""
-    #
-    #     def adjust_resolution(preload, res_data, res_simulation):
-    #         """Adjusts res_data of the transformer preload to the simulation res_data.
-    #
-    #         Args:
-    #             preload: (list): Containing the transformer preload in "wrong"
-    #                 res_data.
-    #             res_data: (datetime.timedelta): Time in between two adjacent data points of
-    #                 transformer preload with "wrong" res_data.
-    #             res_simulation: (datetime.timedelta): Time in between two adjacent time steps in
-    #                 the simulation.
-    #
-    #         Returns:
-    #             transformer_preload_new_res: (list): Transformer preload with linearly interpolated data
-    #                 points having the res_data of the simulation.
-    #             """
-    #
-    #         x_values = list(range(len(preload)))
-    #         distribution = EquallySpacedInterpolatedDistribution.linear(
-    #             list(zip(x_values, preload)), None)
-    #
-    #         coefficient = res_simulation / res_data
-    #         x_values_new_res = list(range(math.ceil(len(preload) * 1 / coefficient)))
-    #         x_values_new_res = [x * coefficient for x in x_values_new_res]
-    #
-    #         transformer_preload_new_res = []
-    #         for x in x_values_new_res:
-    #             transformer_preload_new_res.append(distribution[x])
-    #
-    #         return transformer_preload_new_res
-    #
-    #     def repeat_data(preload, num_simulation_steps):
-    #         """Repeats the transformer preload data until there are as many values as there are
-    #         simulation steps.
-    #
-    #         Args:
-    #             preload: (list): Containing the data (floats) to be repeated.
-    #             num_simulation_steps: (int): Number of simulation steps and expected length of
-    #                 the transformer preload after it is repeated.
-    #
-    #         Returns:
-    #             transformer_preload_repeated: (list): Repeated values. len() = num_simulation_steps.
-    #             """
-    #
-    #         n = math.floor(num_simulation_steps / len(preload))
-    #
-    #         transformer_preload_repeated = preload * n
-    #
-    #         values_to_add = num_simulation_steps - len(transformer_preload_repeated)
-    #
-    #         transformer_preload_repeated += preload[:values_to_add]
-    #
-    #         return transformer_preload_repeated
-    #
-    #     # Error messages
-    #     msg_wrong_resolution_type = "If the transformer preload is passed as list and the" \
-    #                                 "resolution is supposed to be of adjusted please" \
-    #                                 "use type datetime.timedelta."
-    #     msg_wrong_transformer_preload_type = "Transformer preload should be of type: " \
-    #                                          "pandas DataFrame, list containing float or int," \
-    #                                          " int, float."
-    #     msg_alignement_unsuccessful = "Transformer preload could not be aligned to simulation" \
-    #                                   "steps."
-    #     msg_invalid_value_type = "Transformer preload should be of type: pandas DataFrame, " \
-    #                              "list containing float or int, int, float."
-    #     msg_not_enough_data_points = "There are less values for the transformer preload than " \
-    #                                  "simulation steps. Please adjust the data."
-    #
-    #     # Check whether passed value is a DataFrame or a list
-    #     if isinstance(transformer_preload, pd.DataFrame):  # DataFrame
-    #         # Make sure length is aligned to simulation period and resolution
-    #         num_values = len(transformer_preload)
-    #     else:  # list or numeric
-    #         num_simulation_steps = int((self.end_date - self.start_date) / self.resolution) + 1
-    #
-    #         if isinstance(transformer_preload, (int, float)):
-    #             transformer_preload = [transformer_preload]
-    #
-    #         assert type(transformer_preload) is list, msg_wrong_transformer_preload_type
-    #
-    #         # Check if all values in list are either float or int
-    #         assert all(isinstance(x, (float, int)) for x in transformer_preload), \
-    #             msg_invalid_value_type
-    #
-    #         # Check whether the length of the list alignes with the simulation period and resolution
-    #         # If num_values don't fit simulation period and no action is wanted return error
-    #         num_values = len(transformer_preload)
-    #
-    #         assert num_simulation_steps <= num_values or res_data is not None or repeat, \
-    #             msg_not_enough_data_points
-    #
-    #         if res_data is not None:
-    #             if type(res_data) is str:
-    #                 try:
-    #                     date = datetime.datetime.strptime(res_data, '%H:%M:%S')
-    #                     res_data = datetime.timedelta(hours=date.hour, minutes=date.minute,
-    #                                                   seconds=date.second)
-    #                 except ValueError:
-    #                     logging.error('%s is of incorrect format. Please use %s',
-    #                                   res_data, '%H:%M:%S')
-    #                     raise ValueError
-    #             assert isinstance(res_data, datetime.timedelta), msg_wrong_resolution_type
-    #
-    #             transformer_preload = adjust_resolution(transformer_preload, res_data,
-    #                                                     self.resolution)
-    #
-    #         if repeat is True:
-    #             transformer_preload = repeat_data(transformer_preload, num_simulation_steps)
-    #
-    #         # Should it be ==?
-    #         assert len(transformer_preload) >= num_simulation_steps, msg_alignement_unsuccessful
-    #
-    #     self.transformer_preload = transformer_preload
-    #
-    #     return self
+        """List possible cases:
+        Case 1:
+            List has n=simulationSteps entries.
+            Meta info: None
+            To Do: Nothing just pass.
+        Case 2:
+            List has n=simulationSteps entries.
+            Meta info: Resolution. Repeat.
+        Case 3:
+            List has n!=simulation step entries.
+            Meta info: None.
+            To Do: Raise error
+        Case 4:
+            List has n!=simulationSteps entries.
+            Meta info: Resolution.
+            To Do: Adjust res_data as stated. Check if there are enough values. If not raise error
+
+        Case 5:
+            List has n!=simulationSteps entries.
+            Meta info: Resolution. Repeat.
+            To Do: Adjust Resolution. Repeat until n equals simulaiton steps.
+
+        Case 7:
+            DF has n=simulationSteps rows.
+            Index of DF aligns with simulationSteps.
+            To Do: Nothing just pass.
+        Case 8:
+            DF has n=simulationSteps rows.
+            Index of DF does not align with simulationSteps."""
+
+        def adjust_resolution(preload, res_data, res_simulation):
+            """Adjusts res_data of the transformer preload to the simulation res_data.
+
+            Args:
+                preload: (list): Containing the transformer preload in "wrong"
+                    res_data.
+                res_data: (datetime.timedelta): Time in between two adjacent data points of
+                    transformer preload with "wrong" res_data.
+                res_simulation: (datetime.timedelta): Time in between two adjacent time steps in
+                    the simulation.
+
+            Returns:
+                transformer_preload_new_res: (list): Transformer preload with linearly interpolated data
+                    points having the res_data of the simulation.
+                """
+
+            x_values = list(range(len(preload)))
+            distribution = EquallySpacedInterpolatedDistribution.linear(
+                list(zip(x_values, preload)), None)
+
+            coefficient = res_simulation / res_data
+            x_values_new_res = list(range(math.ceil(len(preload) * 1 / coefficient)))
+            x_values_new_res = [x * coefficient for x in x_values_new_res]
+
+            transformer_preload_new_res = []
+            for x in x_values_new_res:
+                transformer_preload_new_res.append(distribution[x])
+
+            return transformer_preload_new_res
+
+        def repeat_data(preload, num_simulation_steps):
+            """Repeats the transformer preload data until there are as many values as there are
+            simulation steps.
+
+            Args:
+                preload: (list): Containing the data (floats) to be repeated.
+                num_simulation_steps: (int): Number of simulation steps and expected length of
+                    the transformer preload after it is repeated.
+
+            Returns:
+                transformer_preload_repeated: (list): Repeated values. len() = num_simulation_steps.
+                """
+
+            n = math.floor(num_simulation_steps / len(preload))
+
+            transformer_preload_repeated = preload * n
+
+            values_to_add = num_simulation_steps - len(transformer_preload_repeated)
+
+            transformer_preload_repeated += preload[:values_to_add]
+
+            return transformer_preload_repeated
+
+        # Error messages
+        msg_wrong_resolution_type = "If the transformer preload is passed as list and the" \
+                                    "resolution is supposed to be of adjusted please" \
+                                    "use type datetime.timedelta."
+        msg_wrong_transformer_preload_type = "Transformer preload should be of type: " \
+                                             "pandas DataFrame, list containing float or int," \
+                                             " int, float."
+        msg_alignement_unsuccessful = "Transformer preload could not be aligned to simulation" \
+                                      "steps."
+        msg_invalid_value_type = "Transformer preload should be of type: pandas DataFrame, " \
+                                 "list containing float or int, int, float."
+        msg_not_enough_data_points = "There are less values for the transformer preload than " \
+                                     "simulation steps. Please adjust the data."
+
+        # Check whether passed value is a DataFrame or a list
+        if isinstance(transformer_preload, pd.DataFrame):  # DataFrame
+            # Make sure length is aligned to simulation period and resolution
+            num_values = len(transformer_preload)
+        else:  # list or numeric
+            num_simulation_steps = int((self.end_date - self.start_date) / self.resolution) + 1
+
+            if isinstance(transformer_preload, (int, float)):
+                transformer_preload = [transformer_preload]
+
+            assert type(transformer_preload) is list, msg_wrong_transformer_preload_type
+
+            # Check if all values in list are either float or int
+            assert all(isinstance(x, (float, int)) for x in transformer_preload), \
+                msg_invalid_value_type
+
+            # Check whether the length of the list alignes with the simulation period and resolution
+            # If num_values don't fit simulation period and no action is wanted return error
+            num_values = len(transformer_preload)
+
+            assert num_simulation_steps <= num_values or res_data is not None or repeat, \
+                msg_not_enough_data_points
+
+            if res_data is not None:
+                if type(res_data) is str:
+                    try:
+                        date = datetime.datetime.strptime(res_data, '%H:%M:%S')
+                        res_data = datetime.timedelta(hours=date.hour, minutes=date.minute,
+                                                      seconds=date.second)
+                    except ValueError:
+                        logging.error('%s is of incorrect format. Please use %s',
+                                      res_data, '%H:%M:%S')
+                        raise ValueError
+                assert isinstance(res_data, datetime.timedelta), msg_wrong_resolution_type
+
+                transformer_preload = adjust_resolution(transformer_preload, res_data,
+                                                        self.resolution)
+
+            if repeat is True:
+                transformer_preload = repeat_data(transformer_preload, num_simulation_steps)
+
+            # Should it be ==?
+            assert len(transformer_preload) >= num_simulation_steps, msg_alignement_unsuccessful
+
+        self.transformer_preload = transformer_preload
+
+        return self
 
