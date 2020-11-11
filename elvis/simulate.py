@@ -9,9 +9,8 @@ from elvis.utility.elvis_general import create_time_steps
 from elvis.set_up_infrastructure import set_up_infrastructure
 from elvis.sched.schedulers import Uncontrolled, FCFS
 from elvis.waiting_queue import WaitingQueue
-from elvis.config import ElvisConfig, ElvisConfigBuilder
 from elvis.result import ElvisResult
-from elvis.config_new import ScenarioRealisation, ScenarioConfig
+from elvis.config import ScenarioRealisation, ScenarioConfig
 
 
 def handle_car_arrival(free_connection_points, busy_connection_points, event, waiting_queue):
