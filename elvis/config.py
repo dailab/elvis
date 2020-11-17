@@ -65,7 +65,7 @@ class ScenarioConfig:
         if 'infrastructure' in kwargs:
             self.infrastructure = kwargs['infrastructure']
         if 'scheduling_policy' in kwargs:
-            self.scheduling_policy = kwargs['scheduling_policy']
+            self.with_scheduling_policy(kwargs['scheduling_policy'])
         if 'mean_park' in kwargs:
             self.mean_park = kwargs['mean_park']
         if 'std_deviation_park' in kwargs:
@@ -92,11 +92,13 @@ class ScenarioConfig:
         else:
             printout = ' Vehicle types: ' + str(vt + '\n' for vt in self.vehicle_types)
 
-        printout += str('Mean parking time: ' + self.mean_park + '\n')
-        printout += str('Std deviation of parking time: ' + self.std_deviation_park + '\n')
-        printout += str('Mean value of the SOC distribution: ' + self.mean_soc + '\n')
-        printout += str('Std deviation of the SOC distribution: ' + self.std_deviation_soc + '\n')
-        printout += str('Number of charging events per week: ' + self.num_charging_events + '\n')
+        printout += str('Mean parking time: ' + str(self.mean_park) + '\n')
+        printout += str('Std deviation of parking time: ' + str(self.std_deviation_park) + '\n')
+        printout += str('Mean value of the SOC distribution: ' + str(self.mean_soc) + '\n')
+        printout += str('Std deviation of the SOC distribution: ' +
+                        str(self.std_deviation_soc )+ '\n')
+        printout += str('Number of charging events per week: ' +
+                        str(self.num_charging_events) + '\n')
 
         if self.disconnect_by_time is True:
             printout += str('Vehicles are disconnected only depending on their parking time')
@@ -106,10 +108,10 @@ class ScenarioConfig:
         if self.queue_length is None:
             printout += str('No queue is considered.')
         else:
-            printout += str('Queue length: ' + self.queue_length + '\n')
+            printout += str('Queue length: ' + str(self.queue_length) + '\n')
 
-        printout += str('Opening hours: ' + self.opening_hours + '\n')
-        printout += str('Scheduling policy: ' + self.scheduling_policy + '\n')
+        printout += str('Opening hours: ' + str(self.opening_hours) + '\n')
+        printout += str('Scheduling policy: ' + str(self.scheduling_policy) + '\n')
 
         return printout
 
@@ -143,22 +145,27 @@ class ScenarioConfig:
         config.with_num_charging_events(dictionary['num_charging_events'])
         config.with_queue_length(dictionary['queue_length'])
         config.with_disconnect_by_time(dictionary['disconnect_by_time'])
+
         if 'resolution_preload' in dictionary:
+            # if both macro parameter are in
             if 'repeat_preload' in dictionary:
                 config.with_transformer_preload(dictionary['transformer_preload'],
                                                 res_data=dictionary['resolution_preload'],
                                                 repeat=dictionary['repeat_preload'])
+            # only resolution preload
             else:
                 config.with_transformer_preload(dictionary['transformer_preload'],
                                                 res_data=dictionary['resolution_preload'])
+        # only repeat preload
         elif 'repeat_preload' in dictionary:
             config.with_transformer_preload(dictionary['transformer_preload'],
                                             repeat=dictionary['repeat_preload'])
+        # no macro parameter given
         else:
             config.with_transformer_preload(dictionary['transformer_preload'])
 
         config.with_vehicle_types(vehicle_types=dictionary['vehicle_types'])
-        # TODO: Adjust with_wrrival_distribution method
+        # TODO: Adjust with_arrival_distribution method
         config.with_arrival_distribution(dictionary['arrival_distribution'])
 
         return config
@@ -167,7 +174,6 @@ class ScenarioConfig:
         data = self.to_dict()
         with open(yaml_file, 'w') as file:
             yaml.dump(data, file, default_flow_style=None)
-
         return
 
     @staticmethod
@@ -178,7 +184,7 @@ class ScenarioConfig:
             yaml_str: (dict): Import from yaml file.
             """
         assert type(yaml_str) == dict, 'The data specified in the yaml for creating an instance ' \
-                                       'Scenario config must be a dict.'
+                                       'Scenario scenario must be a dict.'
 
         return ScenarioConfig.from_dict(yaml_str)
 
@@ -191,7 +197,7 @@ class ScenarioConfig:
             resolution: (:obj: `datetime.timedelta`): Time in between two adjacent time stamps.
 
         Returns:
-            realisation: (:obj: `elvis.config.ScenarioRealisation`): Scenario realisation.
+            realisation: (:obj: `elvis.scenario.ScenarioRealisation`): Scenario realisation.
         """
 
         time_params = {'start_date': start_date, 'end_date': end_date, 'resolution': resolution}
@@ -216,24 +222,6 @@ class ScenarioConfig:
 
         return
 
-    def with_transformer_preload(self, transformer_preload):
-        # TODO: Add pandas
-        assert type(transformer_preload) is list, 'Arrival distribution must be of type list or ' \
-                                                   'pandas DataFrame.'
-
-        msg_invalid_value_type = "Arrival distribution should be of type: pandas DataFrame or a " \
-                                 "list containing float or int."
-        # Check if all values in list are either float or int
-        if transformer_preload is list:
-            assert all(isinstance(x, (float, int)) for x in transformer_preload), \
-                msg_invalid_value_type
-        else:
-            NotImplementedError()
-
-        self.arrival_distribution = transformer_preload
-
-        return
-
     # Outdated
     def with_charging_events(self, charging_events):
         """Update the arrival distribution to use.
@@ -243,10 +231,10 @@ class ScenarioConfig:
             self.charging_events = charging_events
 
         elif type(charging_events[0]) is float or type(charging_events[0]) is int:
-            msg_params_missing = 'Please assign config.num_charging_events and ' \
-                                 'config.time_params, config.mean_park, config.std_deviation_' \
-                                 'park, config.mean_soc, config.std_deviatoin_soc, ' \
-                                 'before using config.with_charging_events with an ' \
+            msg_params_missing = 'Please assign scenario.num_charging_events and ' \
+                                 'scenario.time_params, scenario.mean_park, scenario.std_deviation_' \
+                                 'park, scenario.mean_soc, scenario.std_deviatoin_soc, ' \
+                                 'before using scenario.with_charging_events with an ' \
                                  'arrival distribution.'
 
             assert type(self.num_charging_events) is int, \
@@ -293,15 +281,16 @@ class ScenarioConfig:
         if type(transformer_preload) is pd.DataFrame:
             NotImplementedError()
         else:
-            assert type(transformer_preload) is list, 'Transformer preload must be of type list ' \
-                                                      'or pandas DataFrame.'
+            assert isinstance(transformer_preload, (int, float, list)), \
+                'Transformer preload must be of type list or pandas DataFrame.'
 
             msg_invalid_value_type = "Transformer preload should be of type: pandas DataFrame or" \
                                      " a list containing float or int."
             # Check if all values in list are either float or int
-            assert all(isinstance(x, (float, int)) for x in transformer_preload), \
-                msg_invalid_value_type
-
+            if type(transformer_preload) is list:
+                assert all(isinstance(x, (float, int)) for x in transformer_preload), \
+                    msg_invalid_value_type
+            #print(transformer_preload)
             self.transformer_preload = transformer_preload
 
         if res_data is not None:
@@ -331,30 +320,30 @@ class ScenarioConfig:
         # if input is already instance of Scheduling Policy assign
         if isinstance(scheduling_policy_input, schedulers.SchedulingPolicy):
             self.scheduling_policy = scheduling_policy_input
-            return
+            return self
 
         # ensure input is str. If not return default
         if type(scheduling_policy_input) is not str:
             logging.error('Scheduling policy should be of type str or an instance of '
                           'SchedulingPolicy. The uncontrolled strategy has been used as a default.')
             self.scheduling_policy = scheduling_policy
-            return
+            return self
 
         # Match string
         if scheduling_policy_input in ('Uncontrolled', 'UC', 'Uc', 'uc'):
-            scheduling_policy = schedulers.Uncontrolled()
+            self.scheduling_policy = schedulers.Uncontrolled()
 
         elif scheduling_policy_input in ('Discrimination Free', 'DF', 'df'):
-            scheduling_policy = schedulers.DiscriminationFree()
+            self.scheduling_policy = schedulers.DiscriminationFree()
 
         elif scheduling_policy_input == 'FCFS':
-            scheduling_policy = schedulers.FCFS()
+            self.scheduling_policy = schedulers.FCFS()
 
         elif scheduling_policy_input in ('With Storage', 'ws', 'WS'):
-            scheduling_policy = schedulers.WithStorage()
+            self.scheduling_policy = schedulers.WithStorage()
 
         elif scheduling_policy_input in ('Optimized', 'opt', 'OPT'):
-            scheduling_policy = schedulers.Optimized()
+            self.scheduling_policy = schedulers.Optimized()
 
         # invalid str use default: Uncontrolled
         else:
@@ -364,7 +353,7 @@ class ScenarioConfig:
                           'Uncontrolled is the default value and has been used for the simulation.',
                           str(scheduling_policy_input))
 
-        self.scheduling_policy = scheduling_policy
+            self.scheduling_policy = schedulers.Uncontrolled()
         return self
 
     def with_infrastructure(self, infrastructure):
@@ -567,7 +556,7 @@ class ScenarioRealisation:
                 'of datetime.datetime')
 
             # str
-            if type(kwargs['start_date']) is str:
+            if type(kwargs['end_date']) is str:
                 try:
                     self.end_date = datetime.datetime.fromisoformat(kwargs['end_date'])
                 except ValueError:
@@ -606,12 +595,12 @@ class ScenarioRealisation:
             self.renewables_scenario = config.emissions_scenario
             self.opening_hours = config.opening_hours
             self.infrastructure = config.infrastructure
-            self.scheduling_policy = config.scheduling_policy
+            self.with_scheduling_policy(config.scheduling_policy)
             self.queue_length = config.queue_length
             self.disconnect_by_time = config.disconnect_by_time
-            self.transformer_preload = self.with_transformer_preload(
-                config.transformer_preload, config.transformer_preload_res_data,
-                config.transformer_preload_repeat)
+            self.with_transformer_preload(config.transformer_preload,
+                                          config.transformer_preload_res_data,
+                                          config.transformer_preload_repeat)
 
             if config.charging_events is not None:
                 self.charging_events = config.charging_events
@@ -630,7 +619,7 @@ class ScenarioRealisation:
             self.renewables_scenario = kwargs['renewables_scenario']
             self.opening_hours = kwargs['opening_hours']
             self.infrastructure = kwargs['infrastructure']
-            self.scheduling_policy = kwargs['scheduling_policy']
+            self.with_scheduling_policy(kwargs['scheduling_policy'])
             self.queue_length = kwargs['queue_length']
             self.disconnect_by_time = kwargs['disconnect_by_time']
             self.start_date = kwargs['start_date']
@@ -650,7 +639,7 @@ class ScenarioRealisation:
         return
 
     def to_dict(self):
-        dictionary = self.__dict__
+        dictionary = self.__dict__.copy()
 
         dictionary['scheduling_policy'] = str(self.scheduling_policy)
         # TODO: what if time series data is not a list
@@ -660,7 +649,7 @@ class ScenarioRealisation:
 
         # TODO: Once opening hours data format is determined convert it properly
         dictionary['opening_hours'] = self.opening_hours
-        dictionary['charging_events'] = [ce.to_dict() for ce in self.charging_events]
+        dictionary['charging_events'] = [ce.to_dict(deep=True) for ce in self.charging_events]
 
         dictionary['start_date'] = str(self.start_date.isoformat())
         dictionary['end_date'] = str(self.end_date.isoformat())
@@ -821,7 +810,7 @@ class ScenarioRealisation:
             # If num_values don't fit simulation period and no action is wanted return error
             num_values = len(transformer_preload)
 
-            assert num_simulation_steps <= num_values or res_data is not None or repeat, \
+            assert num_simulation_steps < num_values or res_data is not None or repeat, \
                 msg_not_enough_data_points
 
             if res_data is not None:
@@ -848,4 +837,56 @@ class ScenarioRealisation:
         self.transformer_preload = transformer_preload
 
         return self
+
+    def with_scheduling_policy(self, scheduling_policy_input):
+        """Update the scheduling policy to use.
+        Default: :obj: `elvis.sched.schedulers.Uncontrolled`.
+        Use default if input not a str or str can not be matched.
+
+        Args:
+            scheduling_policy_input: Either str containing name of the scheduling policy to be used.
+                Or instance of :obj: `elvis.sched.schedulers.SchedulingPolicy`.
+        """
+        # set default
+        scheduling_policy = schedulers.Uncontrolled()
+
+        # if input is already instance of Scheduling Policy assign
+        if isinstance(scheduling_policy_input, schedulers.SchedulingPolicy):
+            self.scheduling_policy = scheduling_policy_input
+            return self
+
+        # ensure input is str. If not return default
+        if type(scheduling_policy_input) is not str:
+            logging.error('Scheduling policy should be of type str or an instance of '
+                          'SchedulingPolicy. The uncontrolled strategy has been used as a default.')
+            self.scheduling_policy = scheduling_policy
+            return self
+
+        # Match string
+        if scheduling_policy_input in ('Uncontrolled', 'UC', 'Uc', 'uc'):
+            self.scheduling_policy = schedulers.Uncontrolled()
+
+        elif scheduling_policy_input in ('Discrimination Free', 'DF', 'df'):
+            self.scheduling_policy = schedulers.DiscriminationFree()
+
+        elif scheduling_policy_input == 'FCFS':
+            self.scheduling_policy = schedulers.FCFS()
+
+        elif scheduling_policy_input in ('With Storage', 'ws', 'WS'):
+            self.scheduling_policy = schedulers.WithStorage()
+
+        elif scheduling_policy_input in ('Optimized', 'opt', 'OPT'):
+            self.scheduling_policy = schedulers.Optimized()
+
+        # invalid str use default: Uncontrolled
+        else:
+            logging.error('"%s" can not be matched to any existing scheduling policy.'
+                          'Please use: "Uncontrolled", "Discrimination Free", "FCFS", '
+                          '"With Storage" or "Optimized". '
+                          'Uncontrolled is the default value and has been used for the simulation.',
+                          str(scheduling_policy_input))
+
+            self.scheduling_policy = schedulers.Uncontrolled()
+        return self
+
 

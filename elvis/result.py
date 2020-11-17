@@ -1,6 +1,7 @@
 import logging
 from elvis.connection_point import ConnectionPoint
-from elvis.config import ElvisConfig, ElvisConfigBuilder
+from elvis.config import ScenarioConfig, ScenarioRealisation
+from elvis.utility.elvis_general import num_time_steps
 
 
 class ElvisResult:
@@ -10,10 +11,13 @@ class ElvisResult:
     results.
     """
 
-    def __init__(self):
+    def __init__(self, scenario=None, realisation_file_name=None):
         self.power_connection_points = {}
         self.aggregated_load_profile = None
-        self.config = None
+        self.scenario = scenario
+
+        if realisation_file_name is not None:
+            self.scenario.to_json(r'../data/realisations/' + str(realisation_file_name) + '.JSON')
 
     def store_power_connection_points(self, power_connection_points, pos_current_time_stamp):
         """Adds the key pos_current_time_stamp and the power assigned to the individual connection
@@ -45,7 +49,16 @@ class ElvisResult:
 
         pass
 
-    def aggregate_load_profile(self, num_simulation_steps):
+    def aggregate_load_profile(self, num_simulation_steps=None):
+
+        if num_simulation_steps is None:
+            assert self.scenario is not None, 'If using result.aggregate_load_profile without ' \
+                                              'passing the number of simulation steps the ' \
+                                              'field result.scenario must be set to the scenario ' \
+                                              'realisation.'
+
+            num_simulation_steps = num_time_steps(self.scenario.start_date, self.scenario.end_date,
+                                                  self.scenario.resolution)
         load_profile = []
 
         for time_step in range(num_simulation_steps):
@@ -77,12 +90,12 @@ class ElvisResult:
         return max(self.aggregated_load_profile)
 
     def max_simultaneity(self, infrastructure=None):
-        if self.config is not None:
-            msg_config = 'Result.config must either be an instance of ElvisConfig or ' \
+        if self.scenario is not None:
+            msg_config = 'Result.scenario must either be an instance of ElvisConfig or ' \
                          'ElvisConfigBuilder'
-            assert isinstance(self.config, (ElvisConfig, ElvisConfigBuilder))
+            assert isinstance(self.scenario, (ScenarioRealisation, ScenarioConfig))
 
-            infrastructure = self.config.infrastructure
+            infrastructure = self.scenario.infrastructure
 
         assert self.aggregated_load_profile is not None, 'Before calculating KPIs the aggreagated' \
                                                          'load profile must be calculated.'

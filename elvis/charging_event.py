@@ -62,11 +62,13 @@ class ChargingEvent:
 
         """
         dictionary = self.__dict__
-        dictionary['arrival_time'] = str(self.arrival_time.isoformat())
 
+        dictionary['arrival_time'] = str(self.arrival_time.isoformat())
         dictionary['soc'] = self.soc
+
         if deep is True:
             dictionary['vehicle_type'] = self.vehicle_type.to_dict()
+            del dictionary['leaving_time']
         else:
             dictionary['vehicle_type'] = self.vehicle_type
             dictionary['leaving_time'] = self.leaving_time

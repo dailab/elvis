@@ -164,28 +164,7 @@ def charge_connected_vehicles(assign_power, busy_connection_points, res):
                      str(power))
 
 
-def simulate_config(config, start_date, end_date, resolution):
-    """ Converts a config into a realisation and starts simulation.
-
-    Args:
-        config (:obj: `elvis.config.ScenarioConfig` or elvis.config.ScenarioRealisation):
-        start_date: (:obj: `datetime.datetime`): First time stamp.
-        end_date: (:obj: `datetime.datetime`): Upper bound for time stamps.
-        resolution: (:obj: `datetime.timedelta`): Time in between two adjacent time stamps.
-
-
-    Returns:
-        Result of simulation.
-    """
-    assert isinstance(config, ScenarioConfig), 'config must be of type ScenarioConfig ' + \
-                                               str(type(config)) + ' is not allowed.'
-
-    time_params = {'start_date': start_date, 'end_date': end_date, 'resolution': resolution}
-    realisation = ScenarioRealisation(config, **time_params)
-    return realisation
-
-
-def simulate(scenario, start_date=None, end_date=None, resolution=None):
+def simulate(scenario, start_date=None, end_date=None, resolution=None, realisation_file_name=None):
     """Main simulation loop.
     Iterates over simulation period and simulates the infrastructure.
 
@@ -202,7 +181,7 @@ def simulate(scenario, start_date=None, end_date=None, resolution=None):
     # if input is instance of ScenarioConfig transform to ScenarioRealisation
 
     if isinstance(scenario, ScenarioConfig):
-        scenario = simulate_config(scenario, start_date, end_date, resolution)
+        scenario = scenario.create_realisation(start_date, end_date, resolution)
 
     assert isinstance(scenario, ScenarioRealisation), 'Realisation must be of type ' \
                                                       'ScenarioRealisation or ScenarioConfig.'
@@ -222,7 +201,10 @@ def simulate(scenario, start_date=None, end_date=None, resolution=None):
     busy_connection_points = set()
 
     # set up connection points in result to store assigned powers
-    results = ElvisResult()
+    if realisation_file_name is None:
+        results = ElvisResult()
+    else:
+        results = ElvisResult(scenario, realisation_file_name)
 
     # ---------------------  Main Loop  ---------------------------
     # loop over every time step
@@ -281,7 +263,7 @@ if __name__ == '__main__':
     config.with_scheduling_policy('UC')
     config.with_std_deviation_soc(0.3)
     config.with_mean_soc(0.4)
-    #config.with_scheduling_policy(FCFS())
+    #scenario.with_scheduling_policy(FCFS())
     config.with_infrastructure(infrastructure)
     config.with_disconnect_by_time(disconnect_by_time)
     config.with_queue_length(queue_length)
@@ -302,6 +284,6 @@ if __name__ == '__main__':
 
     result = simulate(start_date, end_date, resolution, config)
     print(result.power_connection_points)
-    # load_profile = result.aggregate_load_profile(config.num_simulation_steps())
-    # print(list(zip(load_profile, create_time_steps(config.start_date, config.end_date, config.resolution))))
+    # load_profile = result.aggregate_load_profile(scenario.num_simulation_steps())
+    # print(list(zip(load_profile, create_time_steps(scenario.start_date, scenario.end_date, scenario.resolution))))
 
