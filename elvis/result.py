@@ -1,4 +1,5 @@
 import logging
+from numpy import histogram
 from elvis.connection_point import ConnectionPoint
 from elvis.config import ScenarioConfig, ScenarioRealisation
 from elvis.utility.elvis_general import num_time_steps
@@ -14,9 +15,16 @@ class ElvisResult:
     def __init__(self, scenario=None, realisation_file_name=None):
         self.power_connection_points = {}
         self.aggregated_load_profile = None
+
+        if scenario is not None:
+            assert isinstance(scenario, ScenarioRealisation), 'Result.scenario must be of type ' \
+                                                              'ScenarioRealisation'
         self.scenario = scenario
 
         if realisation_file_name is not None:
+            assert self.scenario is not None, 'To store the simulated ScenarioRealisation the ' \
+                                              'scenario must be passed as type of ' \
+                                              'ScenarioRealisation.'
             self.scenario.to_json(r'../data/realisations/' + str(realisation_file_name) + '.JSON')
 
     def store_power_connection_points(self, power_connection_points, pos_current_time_stamp):
@@ -89,22 +97,55 @@ class ElvisResult:
                                                          'load profile must be calculated.'
         return max(self.aggregated_load_profile)
 
-    def max_simultaneity(self, infrastructure=None):
-        if self.scenario is not None:
-            msg_config = 'Result.scenario must either be an instance of ElvisConfig or ' \
-                         'ElvisConfigBuilder'
-            assert isinstance(self.scenario, (ScenarioRealisation, ScenarioConfig))
+    def simultaneity_factor(self, infrastructure=None, bins=None):
+        """Calculates the simultaneity factor of the infrastructure.
+            If bins is specified a histogram is returned.
+            If bins is None only the max value is returned.
 
+            The simultaneity factor for each time step is calculated via:
+                (power assigned to all charging points) / (nominal power of all charging points)
+            Args:
+                infrastructure: (dict): Elvis conform infrastructure from which the nominal power
+                    of all charging points is generated from.
+                bins: (list): Containing the values for the bins as per numpy.histogram.
+
+            returns.
+                simultaneity_factor: (list or float):
+                    If bins == None:
+                        Float representing the max simultaneity that was reached over the simulation
+                        period.
+                    If bins is not None:
+                        list of tuples containing the bin and the amount of time steps in which the
+                        simultaneity factor is within that bin.
+                """
+
+        if (infrastructure is None) and (self.scenario is not None):
             infrastructure = self.scenario.infrastructure
+        elif infrastructure is None and self.scenario is None:
+            raise ValueError('If no scenario is stored in result an infrastructure has to be passed'
+                             'to simultaneity factor to calculate the nominal power of the '
+                             'charging points.')
 
-        assert self.aggregated_load_profile is not None, 'Before calculating KPIs the aggreagated' \
+        if self.aggregated_load_profile is None:
+            assert self.scenario is not None, 'To calculate the simultaneity_factor the ' \
+                                               'aggregated load profile must be calculated.'
+
+            time_steps = num_time_steps(self.scenario.start_date, self.scenario.end_date,
+                                        self.scenario.resolution)
+
+            self.aggregate_load_profile(time_steps)
+        assert self.aggregated_load_profile is not None, 'Before calculating KPIs the aggregated' \
                                                          'load profile must be calculated.'
 
-        power_hardware_max = self.get_power_connection_points(infrastructure)
-        power_max = self.max_load()
-
-        return power_max / power_hardware_max
-
+        if bins is None:
+            power_hardware_max = self.get_power_connection_points(infrastructure)
+            power_max = self.max_load()
+            return power_max / power_hardware_max
+        else:
+            power_hardware_max = self.get_power_connection_points(infrastructure)
+            sim = [i / power_hardware_max for i in self.aggregated_load_profile]
+            hist = histogram(sim, bins)
+            return list(zip(hist[0], hist[1]))
 
 
 
