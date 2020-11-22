@@ -61,7 +61,7 @@ class ChargingEvent:
             dictionary: (dict): Var names as keys.
 
         """
-        dictionary = self.__dict__
+        dictionary = self.__dict__.copy()
 
         dictionary['arrival_time'] = str(self.arrival_time.isoformat())
         dictionary['soc'] = self.soc

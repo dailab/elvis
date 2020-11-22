@@ -90,7 +90,7 @@ class ScenarioConfig:
         if self.vehicle_types is None:
             printout += str('Vehicle types: None\n')
         else:
-            printout = ' Vehicle types: ' + str(vt + '\n' for vt in self.vehicle_types)
+            printout = 'Vehicle types: ' + str(vt + '\n' for vt in self.vehicle_types)
 
         printout += str('Mean parking time: ' + str(self.mean_park) + '\n')
         printout += str('Std deviation of parking time: ' + str(self.std_deviation_park) + '\n')
@@ -101,12 +101,12 @@ class ScenarioConfig:
                         str(self.num_charging_events) + '\n')
 
         if self.disconnect_by_time is True:
-            printout += str('Vehicles are disconnected only depending on their parking time')
+            printout += str('Vehicles are disconnected only depending on their parking time\n')
         else:
             printout += str('Vehicles are disconnected depending on their SOC and their parking'
-                            'parking time (what ever comes first')
+                            'parking time (what ever comes first\n')
         if self.queue_length is None:
-            printout += str('No queue is considered.')
+            printout += str('No queue is considered.\n')
         else:
             printout += str('Queue length: ' + str(self.queue_length) + '\n')
 
@@ -148,21 +148,12 @@ class ScenarioConfig:
 
         if 'resolution_preload' in dictionary:
             # if both macro parameter are in
-            if 'repeat_preload' in dictionary:
-                config.with_transformer_preload(dictionary['transformer_preload'],
-                                                res_data=dictionary['resolution_preload'],
-                                                repeat=dictionary['repeat_preload'])
-            # only resolution preload
-            else:
-                config.with_transformer_preload(dictionary['transformer_preload'],
-                                                res_data=dictionary['resolution_preload'])
-        # only repeat preload
-        elif 'repeat_preload' in dictionary:
-            config.with_transformer_preload(dictionary['transformer_preload'],
-                                            repeat=dictionary['repeat_preload'])
-        # no macro parameter given
-        else:
-            config.with_transformer_preload(dictionary['transformer_preload'])
+            config.transformer_preload_res_dataresolution_preload = dictionary['resolution_preload']
+
+        if 'repeat_preload' in dictionary:
+            config.transformer_preload_repeat = dictionary['repeat_preload']
+
+        config.transformer_preload = dictionary['transformer_preload']
 
         config.with_vehicle_types(vehicle_types=dictionary['vehicle_types'])
         # TODO: Adjust with_arrival_distribution method
