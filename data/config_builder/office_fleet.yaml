@@ -1,0 +1,183 @@
+arrival_distribution: [0.206989247, 0.077956989, 0.099462366, 0.134408602, 0.185483871,
+  0.201612903, 0.793010753, 1.0, 0.392473118, 0.155913978, 0.260752688, 0.365591398,
+  0.73655914, 0.629032258, 0.599462366, 0.572580645, 0.481182796, 0.362903226, 0.314516129,
+  0.266129032, 0.22311828, 0.142473118, 0.158602151, 0.166666667, 0.113456673, 0.14943074,
+  0.14943074, 0.14943074, 0.132827324, 0.309930424, 0.879981025, 0.832938014, 0.628162555,
+  0.18263757100000005, 0.071948134, 0.096853257, 0.160499684, 0.118991145, 0.235215054,
+  0.53684377, 0.600490196, 0.6807400379999999, 0.503636939, 0.528542062, 0.426154333,
+  0.334835547, 0.276723593, 0.16326692, 0.134408602, 0.13172043, 0.126344086, 0.177419355,
+  0.158602151, 0.311827957, 0.8870967740000001, 0.733870968, 0.529569892, 0.303763441,
+  0.048387097, 0.053763441, 0.102150538, 0.182795699, 0.161290323, 0.387096774, 0.567204301,
+  0.706989247, 0.60483871, 0.577956989, 0.376344086, 0.362903226, 0.341397849, 0.161290323,
+  0.129032258, 0.110215054, 0.102150538, 0.126344086, 0.150537634, 0.23655914, 0.924731183,
+  0.913978495, 0.516129032, 0.35483871, 0.069892473, 0.072580645, 0.110215054, 0.17204301100000002,
+  0.233870968, 0.400537634, 0.540322581, 0.610215054, 0.588709677, 0.459677419, 0.370967742,
+  0.376344086, 0.325268817, 0.163978495, 0.155913978, 0.161290323, 0.201612903, 0.142473118,
+  0.126344086, 0.258064516, 0.7553763440000001, 0.706989247, 0.397849462, 0.287634409,
+  0.064516129, 0.08064516099999999, 0.120967742, 0.180107527, 0.311827957, 0.330645161,
+  0.510752688, 0.594086022, 0.577956989, 0.448924731, 0.389784946, 0.301075269, 0.35752688200000005,
+  0.266129032, 0.163978495, 0.161290323, 0.11827957, 0.110215054, 0.13172043, 0.26344086,
+  0.830645161, 0.9005376340000001, 0.518817204, 0.206989247, 0.056451613, 0.077956989,
+  0.188172043, 0.158602151, 0.220430108, 0.4301075270000001, 0.524193548, 0.639784946,
+  0.478494624, 0.456989247, 0.319892473, 0.271505376, 0.217741935, 0.137096774, 0.153225806,
+  0.16935483899999998, 0.163978495, 0.155913978, 0.102150538, 0.17204301100000002,
+  0.543010753, 0.704301075, 0.177419355, 0.142473118, 0.086021505, 0.158602151, 0.137096774,
+  0.147849462, 0.115591398, 0.115591398, 0.163978495, 0.115591398, 0.161290323, 0.142473118,
+  0.112903226, 0.22311828, 0.08870967699999999, 0.150537634]
+disconnect_by_time: true
+infrastructure:
+  transformers:
+  - charging_points:
+    - connection_points:
+      - {id: connection_point1, max_power: 3.7, min_power: 0}
+      id: charging_point1
+      max_power: 3.7
+      min_power: 0
+    - connection_points:
+      - {id: connection_point2, max_power: 3.7, min_power: 0}
+      id: charging_point2
+      max_power: 3.7
+      min_power: 0
+    - connection_points:
+      - {id: connection_point3, max_power: 3.7, min_power: 0}
+      id: charging_point3
+      max_power: 3.7
+      min_power: 0
+    - connection_points:
+      - {id: connection_point4, max_power: 3.7, min_power: 0}
+      id: charging_point4
+      max_power: 3.7
+      min_power: 0
+    - connection_points:
+      - {id: connection_point5, max_power: 3.7, min_power: 0}
+      id: charging_point5
+      max_power: 3.7
+      min_power: 0
+    - connection_points:
+      - {id: connection_point6, max_power: 3.7, min_power: 0}
+      id: charging_point6
+      max_power: 3.7
+      min_power: 0
+    - connection_points:
+      - {id: connection_point7, max_power: 3.7, min_power: 0}
+      id: charging_point7
+      max_power: 3.7
+      min_power: 0
+    - connection_points:
+      - {id: connection_point8, max_power: 3.7, min_power: 0}
+      id: charging_point8
+      max_power: 3.7
+      min_power: 0
+    - connection_points:
+      - {id: connection_point9, max_power: 3.7, min_power: 0}
+      id: charging_point9
+      max_power: 3.7
+      min_power: 0
+    - connection_points:
+      - {id: connection_point10, max_power: 3.7, min_power: 0}
+      id: charging_point10
+      max_power: 3.7
+      min_power: 0
+    - connection_points:
+      - {id: connection_point11, max_power: 3.7, min_power: 0}
+      id: charging_point11
+      max_power: 3.7
+      min_power: 0
+    - connection_points:
+      - {id: connection_point12, max_power: 3.7, min_power: 0}
+      id: charging_point12
+      max_power: 3.7
+      min_power: 0
+    - connection_points:
+      - {id: connection_point13, max_power: 3.7, min_power: 0}
+      id: charging_point13
+      max_power: 3.7
+      min_power: 0
+    - connection_points:
+      - {id: connection_point14, max_power: 3.7, min_power: 0}
+      id: charging_point14
+      max_power: 3.7
+      min_power: 0
+    - connection_points:
+      - {id: connection_point15, max_power: 3.7, min_power: 0}
+      id: charging_point15
+      max_power: 3.7
+      min_power: 0
+    - connection_points:
+      - {id: connection_point16, max_power: 3.7, min_power: 0}
+      id: charging_point16
+      max_power: 3.7
+      min_power: 0
+    - connection_points:
+      - {id: connection_point17, max_power: 3.7, min_power: 0}
+      id: charging_point17
+      max_power: 3.7
+      min_power: 0
+    - connection_points:
+      - {id: connection_point18, max_power: 3.7, min_power: 0}
+      id: charging_point18
+      max_power: 3.7
+      min_power: 0
+    - connection_points:
+      - {id: connection_point19, max_power: 3.7, min_power: 0}
+      id: charging_point19
+      max_power: 3.7
+      min_power: 0
+    - connection_points:
+      - {id: connection_point20, max_power: 3.7, min_power: 0}
+      id: charging_point20
+      max_power: 3.7
+      min_power: 0
+    id: transformer1
+    max_power: 630.0
+    min_power: 0
+mean_park: 16
+mean_soc: 0.4
+num_charging_events: 400
+queue_length: 0
+repeat_preload: true
+scheduling_policy: UC
+std_deviation_park: 2
+std_deviation_soc: 0.2
+transformer_preload: 0
+vehicle_types:
+- battery: {capacity: 17.6, efficiency: 1, max_charge_power: 150, min_charge_power: 0}
+  brand: Smart
+  model: EQ Fortwo
+  probability: 0.13290513833992096
+- battery: {capacity: 17.6, efficiency: 1, max_charge_power: 150, min_charge_power: 0}
+  brand: Smart
+  model: EQ Forfour
+  probability: 0.07877346837944664
+- battery: {capacity: 18.7, efficiency: 1, max_charge_power: 150, min_charge_power: 0}
+  brand: VW
+  model: e-up!
+  probability: 0.031466156126482216
+- battery: {capacity: 28.0, efficiency: 1, max_charge_power: 150, min_charge_power: 0}
+  brand: Hyundai
+  model: Ioniq Elektro
+  probability: 0.05234066205533597
+- battery: {capacity: 30.0, efficiency: 1, max_charge_power: 150, min_charge_power: 0}
+  brand: Kia
+  model: Soul EV
+  probability: 0.10165513833992093
+- battery: {capacity: 33.2, efficiency: 1, max_charge_power: 150, min_charge_power: 0}
+  brand: BMW
+  model: i3
+  probability: 0.11709486166007906
+- battery: {capacity: 35.8, efficiency: 1, max_charge_power: 150, min_charge_power: 0}
+  brand: VW
+  model: e-Golf
+  probability: 0.17734066205533594
+- battery: {capacity: 40.0, efficiency: 1, max_charge_power: 150, min_charge_power: 0}
+  brand: Nissan
+  model: Leaf
+  probability: 0.07349308300395258
+- battery: {capacity: 41.0, efficiency: 1, max_charge_power: 150, min_charge_power: 0}
+  brand: Renault
+  model: Zoe
+  probability: 0.19639328063241107
+- battery: {capacity: 100.0, efficiency: 1, max_charge_power: 150, min_charge_power: 0}
+  brand: Tesla
+  model: Model S
+  probability: 0.038537549407114624

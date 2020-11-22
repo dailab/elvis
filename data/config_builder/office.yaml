@@ -1,16 +1,15 @@
-arrival_distribution: [0.05, 0.05, 0.05, 0.05, 0.33, 0.72, 0.88, 0.66, 0.38, 0.27,
-  0.27, 0.33, 0.27, 0.27, 0.22, 0.16, 0.16, 0.11, 0.11, 0.11, 0.11, 0.05, 0.05, 0.05,
-  0.05, 0.05, 0.05, 0.05, 0.16, 0.27, 0.44, 0.44, 0.44, 0.33, 0.16, 0.05, 0.05, 0.05,
-  0.05, 0.27, 0.38, 0.33, 0.16, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05,
-  0.05, 0.5, 0.66, 0.22, 0.05, 0.05, 0.05, 0.05, 0.11, 0.16, 0.22, 0.27, 0.27, 0.27,
-  0.22, 0.16, 0.11, 0.05, 0.05, 0.05, 0.05, 0.05, 0.0, 0.0, 0.05, 0.27, 0.61, 0.61,
-  0.27, 0.05, 0.61, 1.0, 0.22, 0.16, 0.27, 0.33, 0.38, 0.44, 0.38, 0.33, 0.22, 0.11,
-  0.05, 0.05, 0.05, 0.05, 0.0, 0.0, 0.16, 0.22, 0.22, 0.22, 0.16, 0.16, 0.16, 0.27,
-  0.33, 0.44, 0.44, 0.44, 0.38, 0.22, 0.11, 0.05, 0.22, 0.27, 0.05, 0.05, 0.05, 0.05,
-  0.05, 0.11, 0.05, 0.05, 0.05, 0.16, 0.27, 0.33, 0.33, 0.33, 0.27, 0.27, 0.22, 0.22,
-  0.16, 0.16, 0.16, 0.16, 0.16, 0.16, 0.11, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05,
-  0.05, 0.05, 0.16, 0.22, 0.27, 0.33, 0.38, 0.38, 0.38, 0.38, 0.33, 0.33, 0.22, 0.16,
-  0.11, 0.05, 0.05, 0.05]
+arrival_distribution: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.09, 0.34, 0.61, 0.63,
+  0.7, 0.89, 0.85, 0.65, 0.5, 0.32, 0.14, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+  0.0, 0.0, 0.0, 0.0, 0.0, 0.14, 0.38, 0.52, 0.49, 0.5, 0.6, 0.63, 0.54, 0.38, 0.21,
+  0.09, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.14, 0.34,
+  0.5, 0.5, 0.49, 0.5, 0.52, 0.47, 0.36, 0.23, 0.12, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+  0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.25, 0.6, 0.61, 0.43, 0.45, 0.61, 0.7, 0.65,
+  0.5, 0.3, 0.14, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+  0.14, 0.54, 0.81, 0.67, 0.72, 0.94, 1.0, 0.8, 0.49, 0.21, 0.0, 0.0, 0.0, 0.0, 0.0,
+  0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+  0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+  0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+  0.0, 0.0]
 disconnect_by_time: true
 infrastructure:
   transformers:
@@ -65,17 +64,67 @@ infrastructure:
       id: charging_point10
       max_power: 3.7
       min_power: 0
+    - connection_points:
+      - {id: connection_point11, max_power: 3.7, min_power: 0}
+      id: charging_point11
+      max_power: 3.7
+      min_power: 0
+    - connection_points:
+      - {id: connection_point12, max_power: 3.7, min_power: 0}
+      id: charging_point12
+      max_power: 3.7
+      min_power: 0
+    - connection_points:
+      - {id: connection_point13, max_power: 3.7, min_power: 0}
+      id: charging_point13
+      max_power: 3.7
+      min_power: 0
+    - connection_points:
+      - {id: connection_point14, max_power: 3.7, min_power: 0}
+      id: charging_point14
+      max_power: 3.7
+      min_power: 0
+    - connection_points:
+      - {id: connection_point15, max_power: 3.7, min_power: 0}
+      id: charging_point15
+      max_power: 3.7
+      min_power: 0
+    - connection_points:
+      - {id: connection_point16, max_power: 3.7, min_power: 0}
+      id: charging_point16
+      max_power: 3.7
+      min_power: 0
+    - connection_points:
+      - {id: connection_point17, max_power: 3.7, min_power: 0}
+      id: charging_point17
+      max_power: 3.7
+      min_power: 0
+    - connection_points:
+      - {id: connection_point18, max_power: 3.7, min_power: 0}
+      id: charging_point18
+      max_power: 3.7
+      min_power: 0
+    - connection_points:
+      - {id: connection_point19, max_power: 3.7, min_power: 0}
+      id: charging_point19
+      max_power: 3.7
+      min_power: 0
+    - connection_points:
+      - {id: connection_point20, max_power: 3.7, min_power: 0}
+      id: charging_point20
+      max_power: 3.7
+      min_power: 0
     id: transformer1
     max_power: 630.0
     min_power: 0
-mean_park: 9
-mean_soc: 0.5
+mean_park: 8.5
+mean_soc: 0.6
 num_charging_events: 500
 queue_length: 0
 repeat_preload: true
 scheduling_policy: UC
-std_deviation_park: 1
-std_deviation_soc: 0.3
+std_deviation_park: 0.5
+std_deviation_soc: 0.15
 transformer_preload: 0
 vehicle_types:
 - battery: {capacity: 17.6, efficiency: 1, max_charge_power: 150, min_charge_power: 0}

@@ -1,4 +1,4 @@
-charging_events:
+arrival_distribution:
 - 0.0
 - 0.0
 - 0.0
@@ -322,26 +322,47 @@ queue_length: 0
 scheduling_policy: UC
 std_deviation_park: 0.5
 vehicle_types:
-- battery:
-    capacity: 35.8
-    efficiency: 1
-    max_charge_power: 150
-    min_charge_power: 0
+- battery: {capacity: 17.6, efficiency: 1, max_charge_power: 150, min_charge_power: 0}
+  brand: Smart
+  model: EQ Fortwo
+  probability: 0.13290513833992096
+- battery: {capacity: 17.6, efficiency: 1, max_charge_power: 150, min_charge_power: 0}
+  brand: Smart
+  model: EQ Forfour
+  probability: 0.07877346837944664
+- battery: {capacity: 18.7, efficiency: 1, max_charge_power: 150, min_charge_power: 0}
+  brand: VW
+  model: e-up!
+  probability: 0.031466156126482216
+- battery: {capacity: 28.0, efficiency: 1, max_charge_power: 150, min_charge_power: 0}
+  brand: Hyundai
+  model: Ioniq Elektro
+  probability: 0.05234066205533597
+- battery: {capacity: 30.0, efficiency: 1, max_charge_power: 150, min_charge_power: 0}
+  brand: Kia
+  model: Soul EV
+  probability: 0.10165513833992093
+- battery: {capacity: 33.2, efficiency: 1, max_charge_power: 150, min_charge_power: 0}
+  brand: BMW
+  model: i3
+  probability: 0.11709486166007906
+- battery: {capacity: 35.8, efficiency: 1, max_charge_power: 150, min_charge_power: 0}
   brand: VW
   model: e-Golf
-  probability: 5743
-- battery:
-    capacity: 18.7
-    efficiency: 1
-    max_charge_power: 150
-    min_charge_power: 0
-  brand: VW
-  model: e-up
-  probability: 1019
-time_params: !!python/tuple
-- '2020-01-01T00:00:00'
-- '2020-01-07T23:59:00'
-- '00:15:00'
+  probability: 0.17734066205533594
+- battery: {capacity: 40.0, efficiency: 1, max_charge_power: 150, min_charge_power: 0}
+  brand: Nissan
+  model: Leaf
+  probability: 0.07349308300395258
+- battery: {capacity: 41.0, efficiency: 1, max_charge_power: 150, min_charge_power: 0}
+  brand: Renault
+  model: Zoe
+  probability: 0.19639328063241107
+- battery: {capacity: 100.0, efficiency: 1, max_charge_power: 150, min_charge_power: 0}
+  brand: Tesla
+  model: Model S
+  probability: 0.038537549407114624
+
 transformer_preload: 0
 repeat_preload: True
 mean_soc: 0.6
