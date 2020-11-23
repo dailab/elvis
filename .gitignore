@@ -3,6 +3,8 @@
 .history/
 dist/
 elvis/__pycache__
+elvis/schedule/__pycache__
+elvis/utility/__pycache__
 
 *.DS_Store
 *.log
