@@ -282,7 +282,7 @@ if __name__ == '__main__':
     import random
     config.with_transformer_preload([0] * 10000)
 
-    result = simulate(start_date, end_date, resolution, config)
+    result = simulate(config, start_date, end_date, resolution)
     print(result.power_connection_points)
     # load_profile = result.aggregate_load_profile(scenario.num_simulation_steps())
     # print(list(zip(load_profile, create_time_steps(scenario.start_date, scenario.end_date, scenario.resolution))))
