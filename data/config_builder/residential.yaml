@@ -29,10 +29,10 @@ arrival_distribution: [0.107142857, 0.08730158699999999, 0.067460317, 0.04761904
 disconnect_by_time: true
 infrastructure:
   transformers:
-  - charging_points:
-    - connection_points:
-      - {id: connection_point1, max_power: 3.7, min_power: 0}
-      id: charging_point1
+  - charging_stations:
+    - charging_points:
+      - {id: charging_point1, max_power: 3.7, min_power: 0}
+      id: charging_station1
       max_power: 3.7
       min_power: 0
     id: transformer1

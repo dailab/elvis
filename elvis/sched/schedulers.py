@@ -3,7 +3,7 @@ from elvis.infrastructure_node import Transformer
 
 
 class SchedulingPolicy:
-    def schedule(self, config, free_connection_points, busy_connection_points):
+    def schedule(self, config, free_cps, busy_cps):
         """Subclasses should override this with their scheduling implementation."""
         raise NotImplementedError()
 
@@ -14,29 +14,29 @@ class Uncontrolled(SchedulingPolicy):
     def __str__(self):
         return 'Uncontrolled'
 
-    def schedule(self, config, free_connection_points, busy_connection_points, time_steps_pos=0):
+    def schedule(self, config, free_cps, busy_cps, time_steps_pos=0):
         """Assign maximum power to all vehicles possible in disregard of available power from
         grid. Infrastructure limits will be disregarded."""
 
         assign_power = {}
         resolution = config.resolution
-        # All connection points without vehicle get 0 power.
-        for connection_point in free_connection_points:
-            assign_power[connection_point] = 0
+        # All charging points without vehicle get 0 power.
+        for cp in free_cps:
+            assign_power[cp] = 0
 
-        # For all connection points with a connected vehicle assign max possible power
-        for connection_point in busy_connection_points:
-            power_connection_point = connection_point.max_power
-            connected_vehicle = connection_point.connected_vehicle
+        # For all charging points with a connected vehicle assign max possible power
+        for cp in busy_cps:
+            power_cp = cp.max_power
+            connected_vehicle = cp.connected_vehicle
             soc = connected_vehicle['soc']
             battery = connected_vehicle['vehicle_type'].battery
             # Max power the battery can charge with at current SOC
             max_power_battery = battery.max_power_possible(soc)
             # Power needed to fully charge battery
-            power_to_charge_full = connection_point.power_to_charge_target(resolution, 1.0)
+            power_to_charge_full = cp.power_to_charge_target(resolution, 1.0)
             # Get the stricter constraint
-            power = (min(max_power_battery, power_to_charge_full, power_connection_point))
-            assign_power[connection_point] = power
+            power = (min(max_power_battery, power_to_charge_full, power_cp))
+            assign_power[cp] = power
 
         return assign_power
 
@@ -47,24 +47,24 @@ class FCFS(SchedulingPolicy):
     def __str__(self):
         return 'FCFS'
 
-    def schedule(self, config, free_connection_points, busy_connection_points, time_step_pos=0):
+    def schedule(self, config, free_cps, busy_cps, time_step_pos=0):
         """Assign power to all connected vehicles. Vehicle boundaries as well as infrastructure
             boundaries have to be met. The power is distributed in order of arrival time.
             """
 
-        assign_power = {cp: 0 for cp in set.union(free_connection_points, busy_connection_points)}
+        assign_power = {cp: 0 for cp in set.union(free_cps, busy_cps)}
         resolution = config.resolution
         preload = config.transformer_preload[time_step_pos]
 
-        # All connection points with a connected vehicle assign max possible power
-        sorted_busy_connection_points = list(busy_connection_points)
+        # All charging points with a connected vehicle assign max possible power
+        sorted_busy_cps = list(busy_cps)
         # TODO: Does only work if there is a connected vehicle (do we need an error handling here?)
-        sorted_busy_connection_points.sort(key=lambda x: x.connected_vehicle['leaving_time'])
-        for connection_point in sorted_busy_connection_points:
+        sorted_busy_cps.sort(key=lambda x: x.connected_vehicle['leaving_time'])
+        for cp in sorted_busy_cps:
             # check what the max power possible from vehicle to grid is based on hardware
             # and the already assigned power of every component (node)
-            max_hardware_power = connection_point.max_hardware_power()
-            parent = connection_point
+            max_hardware_power = cp.max_hardware_power()
+            parent = cp
             go_on = True
             while go_on is True:
                 if parent.parent is not None:
@@ -79,16 +79,10 @@ class FCFS(SchedulingPolicy):
                 else:
                     go_on = False
 
-            power_to_charge_full = connection_point.power_to_charge_target(resolution, 1.0)
+            power_to_charge_full = cp.power_to_charge_target(resolution, 1.0)
             power = min(power_to_charge_full, max_hardware_power)
 
-            assign_power[connection_point] = power
-
-
-
-
-        """go one after the other and assign max_power_possible:
-        soc_target_max, hardware_max (from connection point to transformer)"""
+            assign_power[cp] = power
 
         return assign_power
 

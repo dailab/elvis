@@ -28,105 +28,105 @@ arrival_distribution: [0.107142857, 0.08730158699999999, 0.067460317, 0.04761904
 disconnect_by_time: true
 infrastructure:
   transformers:
-  - charging_points:
-    - connection_points:
-      - {id: connection_point1, max_power: 3.7, min_power: 0}
-      id: charging_point1
+  - charging_stations:
+    - charging_points:
+      - {id: charging_point1, max_power: 3.7, min_power: 0}
+      id: charging_station1
       max_power: 3.7
       min_power: 0
-    - connection_points:
-      - {id: connection_point2, max_power: 3.7, min_power: 0}
-      id: charging_point2
+    - charging_points:
+      - {id: charging_point2, max_power: 3.7, min_power: 0}
+      id: charging_station2
       max_power: 3.7
       min_power: 0
-    - connection_points:
-      - {id: connection_point3, max_power: 3.7, min_power: 0}
-      id: charging_point3
+    - charging_points:
+      - {id: charging_point3, max_power: 3.7, min_power: 0}
+      id: charging_station3
       max_power: 3.7
       min_power: 0
-    - connection_points:
-      - {id: connection_point4, max_power: 3.7, min_power: 0}
-      id: charging_point4
+    - charging_points:
+      - {id: charging_point4, max_power: 3.7, min_power: 0}
+      id: charging_station4
       max_power: 3.7
       min_power: 0
-    - connection_points:
-      - {id: connection_point5, max_power: 3.7, min_power: 0}
-      id: charging_point5
+    - charging_points:
+      - {id: charging_point5, max_power: 3.7, min_power: 0}
+      id: charging_station5
       max_power: 3.7
       min_power: 0
-    - connection_points:
-      - {id: connection_point6, max_power: 3.7, min_power: 0}
-      id: charging_point6
+    - charging_points:
+      - {id: charging_point6, max_power: 3.7, min_power: 0}
+      id: charging_station6
       max_power: 3.7
       min_power: 0
-    - connection_points:
-      - {id: connection_point7, max_power: 3.7, min_power: 0}
-      id: charging_point7
+    - charging_points:
+      - {id: charging_point7, max_power: 3.7, min_power: 0}
+      id: charging_station7
       max_power: 3.7
       min_power: 0
-    - connection_points:
-      - {id: connection_point8, max_power: 3.7, min_power: 0}
-      id: charging_point8
+    - charging_points:
+      - {id: charging_point8, max_power: 3.7, min_power: 0}
+      id: charging_station8
       max_power: 3.7
       min_power: 0
-    - connection_points:
-      - {id: connection_point9, max_power: 3.7, min_power: 0}
-      id: charging_point9
+    - charging_points:
+      - {id: charging_point9, max_power: 3.7, min_power: 0}
+      id: charging_station9
       max_power: 3.7
       min_power: 0
-    - connection_points:
-      - {id: connection_point10, max_power: 3.7, min_power: 0}
-      id: charging_point10
+    - charging_points:
+      - {id: charging_point10, max_power: 3.7, min_power: 0}
+      id: charging_station10
       max_power: 3.7
       min_power: 0
-    - connection_points:
-      - {id: connection_point11, max_power: 3.7, min_power: 0}
-      id: charging_point11
+    - charging_points:
+      - {id: charging_point11, max_power: 3.7, min_power: 0}
+      id: charging_station11
       max_power: 3.7
       min_power: 0
-    - connection_points:
-      - {id: connection_point12, max_power: 3.7, min_power: 0}
-      id: charging_point12
+    - charging_points:
+      - {id: charging_point12, max_power: 3.7, min_power: 0}
+      id: charging_station12
       max_power: 3.7
       min_power: 0
-    - connection_points:
-      - {id: connection_point13, max_power: 3.7, min_power: 0}
-      id: charging_point13
+    - charging_points:
+      - {id: charging_point13, max_power: 3.7, min_power: 0}
+      id: charging_station13
       max_power: 3.7
       min_power: 0
-    - connection_points:
-      - {id: connection_point14, max_power: 3.7, min_power: 0}
-      id: charging_point14
+    - charging_points:
+      - {id: charging_point14, max_power: 3.7, min_power: 0}
+      id: charging_station14
       max_power: 3.7
       min_power: 0
-    - connection_points:
-      - {id: connection_point15, max_power: 3.7, min_power: 0}
-      id: charging_point15
+    - charging_points:
+      - {id: charging_point15, max_power: 3.7, min_power: 0}
+      id: charging_station15
       max_power: 3.7
       min_power: 0
-    - connection_points:
-      - {id: connection_point16, max_power: 3.7, min_power: 0}
-      id: charging_point16
+    - charging_points:
+      - {id: charging_point16, max_power: 3.7, min_power: 0}
+      id: charging_station16
       max_power: 3.7
       min_power: 0
-    - connection_points:
-      - {id: connection_point17, max_power: 3.7, min_power: 0}
-      id: charging_point17
+    - charging_points:
+      - {id: charging_point17, max_power: 3.7, min_power: 0}
+      id: charging_station17
       max_power: 3.7
       min_power: 0
-    - connection_points:
-      - {id: connection_point18, max_power: 3.7, min_power: 0}
-      id: charging_point18
+    - charging_points:
+      - {id: charging_point18, max_power: 3.7, min_power: 0}
+      id: charging_station18
       max_power: 3.7
       min_power: 0
-    - connection_points:
-      - {id: connection_point19, max_power: 3.7, min_power: 0}
-      id: charging_point19
+    - charging_points:
+      - {id: charging_point19, max_power: 3.7, min_power: 0}
+      id: charging_station19
       max_power: 3.7
       min_power: 0
-    - connection_points:
-      - {id: connection_point20, max_power: 3.7, min_power: 0}
-      id: charging_point20
+    - charging_points:
+      - {id: charging_point20, max_power: 3.7, min_power: 0}
+      id: charging_station20
       max_power: 3.7
       min_power: 0
     id: transformer1

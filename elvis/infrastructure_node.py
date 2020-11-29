@@ -6,20 +6,20 @@ import matplotlib.pyplot as plt
 
 
 class InfrastructureNode:
-    """Super class of all nodes (transformer, charging point, connection point)."""
+    """Super class of all nodes (transformer, charging station, charging point)."""
     def __init__(self, identification, min_power, max_power,
                  parent=None):
         """Create an InfrastructureNode given all parameters.
 
         Args:
-            identification: (str): ID of Node. Node type (transformer, charging point, connection
+            identification: (str): ID of Node. Node type (transformer, charging station, charging
                 point) followed by "_" and an increasing integer.
             max_power: (float): Maximum power allowed to go through node.
             min_power: (float): Minimum power allowed to go through node.
             parent: (obj): Depending on position in graph the obj differs:
-                transformer      -> child = None
-                charging point   -> child = :obj: `infrastructure_node.Transformer`
-                connection point -> child = :obj: `connection_point.ConnectionPoint`
+                transformer         -> parent = None
+                charging station    -> parent = :obj: `infrastructure_node.Transformer`
+                charging point      -> parent = :obj: `charging_point.ChargingPoint`
         Raises:
             AssertionError:
                 - If min_power and max_power are not numerical (int or float).
@@ -63,13 +63,13 @@ class InfrastructureNode:
         graph.add_node(transformer)
 
         # add charging points to graph
-        for charging_point in transformer.children:
-            graph.add_node(charging_point)
-            graph.add_edge(transformer, charging_point)
-            # add connection points to graph
-            for connection_point in charging_point.children:
-                graph.add_node(connection_point)
-                graph.add_edge(charging_point, connection_point)
+        for cs in transformer.children:
+            graph.add_node(cs)
+            graph.add_edge(transformer, cs)
+            # add charging points to graph
+            for cp in cs.children:
+                graph.add_node(cp)
+                graph.add_edge(cs, cp)
 
         nx.draw(graph, with_labels=True)
         plt.show()
@@ -118,7 +118,7 @@ class Transformer(InfrastructureNode):
             assigned power.
 
             Args:
-                power_assigned: (dict): Containing all :obj: `connection_points.ConnectionPoint`
+                power_assigned: (dict): Containing all :obj: `charging_point.ChargingPoint`
                     in the infrastructure and their currently assigned power.
                 preload: (float): Preload at the transformer in kWh.
 

@@ -170,75 +170,75 @@ arrival_distribution:
 disconnect_by_time: False
 infrastructure:
   transformers:
-  - charging_points:
-    - connection_points:
-      - id: connection_point1
+  - charging_stations:
+    - charging_points:
+      - id: charging_point1
         max_power: 150
         min_power: 0
-      id: connection_point10
+      id: charging_point10
       max_power: 150
       min_power: 0
-    - connection_points:
-      - id: connection_point1
+    - charging_points:
+      - id: charging_point1
         max_power: 150
         min_power: 0
-      id: connection_point10
+      id: charging_point10
       max_power: 150
       min_power: 0
-    - connection_points:
-      - id: connection_point1
+    - charging_points:
+      - id: charging_point1
         max_power: 150
         min_power: 0
-      id: connection_point10
+      id: charging_point10
       max_power: 150
       min_power: 0
-    - connection_points:
-      - id: connection_point1
+    - charging_points:
+      - id: charging_point1
         max_power: 150
         min_power: 0
-      id: connection_point10
+      id: charging_point10
       max_power: 150
       min_power: 0
-    - connection_points:
-      - id: connection_point1
+    - charging_points:
+      - id: charging_point1
         max_power: 150
         min_power: 0
-      id: connection_point10
+      id: charging_point10
       max_power: 150
       min_power: 0
-    - connection_points:
-      - id: connection_point1
+    - charging_points:
+      - id: charging_point1
         max_power: 150
         min_power: 0
-      id: connection_point10
+      id: charging_point10
       max_power: 150
       min_power: 0
-    - connection_points:
-      - id: connection_point1
+    - charging_points:
+      - id: charging_point1
         max_power: 150
         min_power: 0
-      id: connection_point10
+      id: charging_point10
       max_power: 150
       min_power: 0
-    - connection_points:
-      - id: connection_point1
+    - charging_points:
+      - id: charging_point1
         max_power: 150
         min_power: 0
-      id: connection_point10
+      id: charging_point10
       max_power: 150
       min_power: 0
-    - connection_points:
-      - id: connection_point1
+    - charging_points:
+      - id: charging_point1
         max_power: 150
         min_power: 0
-      id: connection_point10
+      id: charging_point10
       max_power: 150
       min_power: 0
-    - connection_points:
-      - id: connection_point1
+    - charging_points:
+      - id: charging_point1
         max_power: 150
         min_power: 0
-      id: connection_point10
+      id: charging_point10
       max_power: 150
       min_power: 0
     id: transformer1

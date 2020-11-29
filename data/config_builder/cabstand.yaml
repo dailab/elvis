@@ -32,19 +32,19 @@ arrival_distribution: [0.24, 0.14666666666666667, 0.08, 0.06666666666666668, 0.2
 disconnect_by_time: true
 infrastructure:
   transformers:
-  - charging_points:
-    - connection_points:
-      - {id: connection_point1, max_power: 50, min_power: 0}
+  - charging_stations:
+    - charging_points:
+      - {id: cp1, max_power: 50, min_power: 0}
       id: charging_point1
       max_power: 50
       min_power: 0
-    - connection_points:
-      - {id: connection_point2, max_power: 50, min_power: 0}
+    - charging_points:
+      - {id: cp2, max_power: 50, min_power: 0}
       id: charging_point2
       max_power: 50
       min_power: 0
-    - connection_points:
-      - {id: connection_point3, max_power: 50, min_power: 0}
+    - charging_points:
+      - {id: cp3, max_power: 50, min_power: 0}
       id: charging_point3
       max_power: 50
       min_power: 0

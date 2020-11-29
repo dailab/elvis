@@ -13,29 +13,29 @@ from elvis.result import ElvisResult
 from elvis.config import ScenarioRealisation, ScenarioConfig
 
 
-def handle_car_arrival(free_connection_points, busy_connection_points, event, waiting_queue):
+def handle_car_arrival(free_cps, busy_cps, event, waiting_queue):
     """Connects car to charging point, to the queue or send it off.
 
     Args:
-        free_connection_points: (set): Containing all :obj: `connection_points.ConnectionPoint`
+        free_cps: (set): Containing all :obj: `charging_poitns.ChargingPoint`
             of the infrastructure that are currently available.
-        busy_connection_points: (set): Containing all :obj: `connection_points.ConnectionPoint`
+        busy_cps: (set): Containing all :obj: `charging_poitns.ChargingPoint`
             of the infrastructure that are currently busy.
         event: (:obj: `charging_event.ChargingEvent`): Arriving charging event.
         waiting_queue: (:obj: `queue.WaitingQueue`): Containing the waiting vehicles
     """
 
-    # connect the arrival to an available connection point if possible
-    if len(free_connection_points) > 0:
-        # Get random free connection point and remove it from set
-        connection_point = free_connection_points.pop()
-        connection_point.connect_vehicle(event)
-        logging.info(' Connect: %s', connection_point)
-        # Put connection point to busy set
-        busy_connection_points.add(connection_point)
+    # connect the arrival to an available charging point if possible
+    if len(free_cps) > 0:
+        # Get random free charging point and remove it from set
+        cp = free_cps.pop()
+        cp.connect_vehicle(event)
+        logging.info(' Connect: %s', cp)
+        # Put charging point to busy set
+        busy_cps.add(cp)
         return waiting_queue
 
-    # if no free connection point available put arrival to queue
+    # if no free charging point available put arrival to queue
     # if not full and queue is considered in simulation (maxsize > 0)
     if not waiting_queue.size() == waiting_queue.maxsize and waiting_queue.maxsize > 0:
         waiting_queue.enqueue(event)
@@ -51,7 +51,7 @@ def update_queue(waiting_queue, current_time_step, by_time):
 
     Args:
         waiting_queue: (:obj: `queue.WaitingQueue`): Charging events waiting for available
-        connection point.
+        charging point.
         current_time_step (:obj: `datetime.datetime`): current time step of the simulation.
         by_time: (bool): True if cars shall be disconnected with respect to their parking time.
         False if cars shall be disconnected due to their SOC target.
@@ -77,15 +77,15 @@ def update_queue(waiting_queue, current_time_step, by_time):
         waiting_queue.determine_next_leaving_time()
 
 
-def update_connection_points(free_connection_points, busy_connection_points,
-                             waiting_queue, current_time_step, by_time):
-    """Removes cars due to their parking time or their SOC limit and updates the connection points
+def update_cps(free_cps, busy_cps,
+               waiting_queue, current_time_step, by_time):
+    """Removes cars due to their parking time or their SOC limit and updates the charging points
     respectively.
 
     Args:
-        free_connection_points: (set): Containing all :obj: `connection_points.ConnectionPoint`
+        free_cps: (set): Containing all :obj: `charging_point.ChargingPoint`
             of the infrastructure that are currently available.
-        busy_connection_points: (set): Containing all :obj: `connection_points.ConnectionPoint`
+        busy_cps: (set): Containing all :obj: `charging_point.ChargingPoint`
             of the infrastructure that are currently busy.
         waiting_queue: (:obj: `queue.WaitingQueue`): waiting vehicles/charging events.
         current_time_step: (:obj: `datetime.datetime`): current time step.
@@ -93,74 +93,74 @@ def update_connection_points(free_connection_points, busy_connection_points,
     """
     # if parking time is overdue: disconnect vehicle
     if by_time is True:
-        for connection_point in busy_connection_points.copy():
-            connected_vehicle = connection_point.connected_vehicle
+        for cp in busy_cps.copy():
+            connected_vehicle = cp.connected_vehicle
 
             if connected_vehicle['leaving_time'] <= current_time_step:
-                logging.info(' Disconnect: %s', connection_point)
-                connection_point.disconnect_vehicle()
-                # Put connection point from busy list to available list
-                free_connection_points.add(connection_point)
-                busy_connection_points.remove(connection_point)
+                logging.info(' Disconnect: %s', cp)
+                cp.disconnect_vehicle()
+                # Put charging point from busy list to available list
+                free_cps.add(cp)
+                busy_cps.remove(cp)
 
                 # immediately connect next waiting car
                 if waiting_queue.size() > 0:
-                    connection_point.connect_vehicle(waiting_queue.dequeue())
-                    # Put connection point from available to busy
-                    busy_connection_points.add(connection_point)
-                    free_connection_points.remove(connection_point)
+                    cp.connect_vehicle(waiting_queue.dequeue())
+                    # Put charging point from available to busy
+                    busy_cps.add(cp)
+                    free_cps.remove(cp)
 
-                    logging.info(' Connect: %s from queue.', connection_point)
+                    logging.info(' Connect: %s from queue.', cp)
 
     # if SOC limit is reached: disconnect vehicle
     # TODO: Test once power assignment is done.
     else:
-        for connection_point in busy_connection_points.copy():
-            connected_vehicle = connection_point.connected_vehicle
+        for cp in busy_cps.copy():
+            connected_vehicle = cp.connected_vehicle
 
             soc = connected_vehicle['soc']
             soc_target = connected_vehicle['soc_target']
 
             if soc >= soc_target:
-                logging.info(' Disconnect: %s', connection_point)
-                connection_point.disconnect_vehicle()
+                logging.info(' Disconnect: %s', cp)
+                cp.disconnect_vehicle()
 
-                # Put connection point from busy list to available list
-                free_connection_points.add(connection_point)
-                busy_connection_points.remove(connection_point)
+                # Put charging point from busy list to available list
+                free_cps.add(cp)
+                busy_cps.remove(cp)
 
                 # immediately connect next waiting car
                 if waiting_queue.size() > 0:
-                    connection_point.connect_vehicle(waiting_queue.dequeue())
-                    logging.info(' Connect: %s from queue.', connection_point)
+                    cp.connect_vehicle(waiting_queue.dequeue())
+                    logging.info(' Connect: %s from queue.', cp)
 
-                    # Put connection point from available to busy
-                    busy_connection_points.add(connection_point)
-                    free_connection_points.remove(connection_point)
+                    # Put charging point from available to busy
+                    busy_cps.add(cp)
+                    free_cps.remove(cp)
 
 
-def charge_connected_vehicles(assign_power, busy_connection_points, res):
+def charge_connected_vehicles(assign_power, busy_cps, res):
     """Change SOC of connected vehicles based on power assigned by scheduling policy.
 
     Args:
-        assign_power: (dict): keys=connection points, values=power to be assigned.
-        busy_connection_points: list of all connection points that currently have a connected
+        assign_power: (dict): keys=charging points, values=power to be assigned.
+        busy_cps: list of all charging points that currently have a connected
             vehicle.
         res: (:obj: `datetime.timedelta`): Time in between two adjacent time stamps.
 
     Returns: None
     """
 
-    for connection_point in busy_connection_points:
-        power = assign_power[connection_point]
-        vehicle = connection_point.connected_vehicle
+    for cp in busy_cps:
+        power = assign_power[cp]
+        vehicle = cp.connected_vehicle
         soc_before = vehicle['soc']
         if vehicle is None:
             raise TypeError
 
-        connection_point.charge_vehicle(power, res)
-        logging.info('At connection point %s the vehicle SOC has been charged from %s to %s. '
-                     'The power assigned is: %s', connection_point, soc_before, vehicle['soc'],
+        cp.charge_vehicle(power, res)
+        logging.info('At charging point %s the vehicle SOC has been charged from %s to %s. '
+                     'The power assigned is: %s', cp, soc_before, vehicle['soc'],
                      str(power))
 
 
@@ -196,11 +196,11 @@ def simulate(scenario, start_date=None, end_date=None, resolution=None, realisat
     waiting_queue = WaitingQueue(maxsize=scenario.queue_length)
     # copy charging_events from scenario
     charging_events = scenario.charging_events
-    # set up infrastructure and get all connection points
-    free_connection_points = set(set_up_infrastructure(scenario.infrastructure))
-    busy_connection_points = set()
+    # set up infrastructure and get all charging points
+    free_cps = set(set_up_infrastructure(scenario.infrastructure))
+    busy_cps = set()
 
-    # set up connection points in result to store assigned powers
+    # set up charging points in result to store assigned powers
     if realisation_file_name is None:
         results = ElvisResult()
     else:
@@ -214,22 +214,22 @@ def simulate(scenario, start_date=None, end_date=None, resolution=None, realisat
         # check if cars must be disconnected, if yes immediately connect car from queue if possible
         update_queue(waiting_queue, time_step, scenario.disconnect_by_time)
 
-        update_connection_points(free_connection_points, busy_connection_points, waiting_queue,
-                                 time_step, scenario.disconnect_by_time)
+        update_cps(free_cps, busy_cps, waiting_queue,
+                   time_step, scenario.disconnect_by_time)
 
         # in case of multiple charging events in the same time step: handle one after the other
         while len(charging_events) > 0 and time_step == charging_events[0].arrival_time:
-            waiting_queue = handle_car_arrival(free_connection_points, busy_connection_points,
+            waiting_queue = handle_car_arrival(free_cps, busy_cps,
                                                charging_events[0], waiting_queue)
             # remove the arrival from the list
             charging_events = charging_events[1:]
 
         # assign power
-        assign_power = scenario.scheduling_policy.schedule(scenario, free_connection_points,
-                                                           busy_connection_points, time_step_pos)
+        assign_power = scenario.scheduling_policy.schedule(scenario, free_cps,
+                                                           busy_cps, time_step_pos)
 
-        charge_connected_vehicles(assign_power, busy_connection_points, scenario.resolution)
-        results.store_power_connection_points(assign_power, time_step_pos)
+        charge_connected_vehicles(assign_power, busy_cps, scenario.resolution)
+        results.store_power_charging_points(assign_power, time_step_pos)
     return results
 
 
@@ -247,7 +247,7 @@ if __name__ == '__main__':
     arrival_distribution[5] = 1
     #
     queue_length = 2
-    infrastructure = {'transformers': [{'id': 'transformer1', 'max_power': 100, 'min_power': 10, 'charging_points': [{'id': 'charging_point1', 'max_power': 10, 'min_power': 1, 'connection_points': [{'id': 'connection_point1', 'max_power': 5, 'min_power': 0.5}, {'id': 'connection_point2', 'max_power': 5, 'min_power': 0.5}]}, {'id': 'charging_point2', 'max_power': 10, 'min_power': 1, 'connection_points': [{'id': 'connection_point3', 'max_power': 5, 'min_power': 0.5}, {'id': 'connection_point4', 'max_power': 5, 'min_power': 0.5}]}]}]}
+    infrastructure = {'transformers': [{'id': 'transformer1', 'max_power': 100, 'min_power': 10, 'charging_stations': [{'id': 'cs1', 'max_power': 10, 'min_power': 1, 'charging_points': [{'id': 'cp1', 'max_power': 5, 'min_power': 0.5}, {'id': 'cp2', 'max_power': 5, 'min_power': 0.5}]}, {'id': 'cs2', 'max_power': 10, 'min_power': 1, 'charging_points': [{'id': 'cp3', 'max_power': 5, 'min_power': 0.5}, {'id': 'cp4', 'max_power': 5, 'min_power': 0.5}]}]}]}
     disconnect_by_time = True
     # scheduling_policy = Uncontrolled()
     #
@@ -283,7 +283,7 @@ if __name__ == '__main__':
     config.with_transformer_preload([0] * 10000)
 
     result = simulate(config, start_date, end_date, resolution)
-    print(result.power_connection_points)
+    print(result.power_charging_points)
     # load_profile = result.aggregate_load_profile(scenario.num_simulation_steps())
     # print(list(zip(load_profile, create_time_steps(scenario.start_date, scenario.end_date, scenario.resolution))))
 

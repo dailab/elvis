@@ -1,7 +1,6 @@
-import logging
 from numpy import histogram
-from elvis.connection_point import ConnectionPoint
-from elvis.config import ScenarioConfig, ScenarioRealisation
+from elvis.charging_point import ChargingPoint
+from elvis.config import ScenarioRealisation
 from elvis.utility.elvis_general import num_time_steps
 
 
@@ -13,7 +12,7 @@ class ElvisResult:
     """
 
     def __init__(self, scenario=None, realisation_file_name=None):
-        self.power_connection_points = {}
+        self.power_charging_points = {}
         self.aggregated_load_profile = None
 
         if scenario is not None:
@@ -27,25 +26,25 @@ class ElvisResult:
                                               'ScenarioRealisation.'
             self.scenario.to_json(r'../data/realisations/' + str(realisation_file_name) + '.JSON')
 
-    def store_power_connection_points(self, power_connection_points, pos_current_time_stamp):
-        """Adds the key pos_current_time_stamp and the power assigned to the individual connection
-            point to self.power_connection_points if the assigned power is not 0.
+    def store_power_charging_points(self, power_charging_points, pos_current_time_stamp):
+        """Adds the key pos_current_time_stamp and the power assigned to the individual charging
+            point to self.power_charging_points if the assigned power is not 0.
 
             Args:
-                power_connection_points: (dict): Containing the connection points as keys as type
-                    :obj: `connection_point.ConnectionPoint`. Values are the powers to be assigned
+                power_charging_points: (dict): Containing the charging points as keys as type
+                    :obj: `cp.ChargingPoint`. Values are the powers to be assigned
                     as float.
                 pos_current_time_stamp: (int): Position of the current time stamp in the list
                     containing all time stamps.
         """
-        for connection_point in power_connection_points:
-            assert isinstance(connection_point, ConnectionPoint)
+        for cp in power_charging_points:
+            assert isinstance(cp, ChargingPoint)
 
-            power = power_connection_points[connection_point]
+            power = power_charging_points[cp]
             if power != 0:
-                if connection_point.id not in self.power_connection_points:
-                    self.power_connection_points[connection_point.id] = {}
-                self.power_connection_points[connection_point.id][pos_current_time_stamp] = power
+                if cp.id not in self.power_charging_points:
+                    self.power_charging_points[cp.id] = {}
+                self.power_charging_points[cp.id][pos_current_time_stamp] = power
 
     def to_yaml(self):
         """Serialize this ElvisResult to a yaml string."""
@@ -71,9 +70,9 @@ class ElvisResult:
 
         for time_step in range(num_simulation_steps):
             power = 0
-            for cp in self.power_connection_points:
-                if time_step in self.power_connection_points[cp].keys():
-                    power += self.power_connection_points[cp][time_step]
+            for cp in self.power_charging_points:
+                if time_step in self.power_charging_points[cp].keys():
+                    power += self.power_charging_points[cp][time_step]
 
             load_profile.append(power)
 
@@ -83,9 +82,9 @@ class ElvisResult:
 
     def total_energy_charged(self):
         power = 0
-        for cp in self.power_connection_points:
-            for time_step in self.power_connection_points[cp]:
-                power += self.power_connection_points[cp][time_step]
+        for cp in self.power_charging_points:
+            for time_step in self.power_charging_points[cp]:
+                power += self.power_charging_points[cp][time_step]
         return float(power)
 
     def max_load(self):
@@ -138,11 +137,11 @@ class ElvisResult:
                                                          'load profile must be calculated.'
 
         if bins is None:
-            power_hardware_max = self.get_power_connection_points(infrastructure)
+            power_hardware_max = self.get_power_charging_points(infrastructure)
             power_max = self.max_load()
             return power_max / power_hardware_max
         else:
-            power_hardware_max = self.get_power_connection_points(infrastructure)
+            power_hardware_max = self.get_power_charging_points(infrastructure)
             sim = [i / power_hardware_max for i in self.aggregated_load_profile]
             hist = histogram(sim, bins)
             return list(zip(hist[0], hist[1]))
@@ -169,26 +168,26 @@ class ElvisResult:
         pass
 
     @staticmethod
-    def get_power_connection_points(infrastructure):
-        """Sums over the power of all connection points in an Elvis conform infrastructure dict.
+    def get_power_charging_points(infrastructure):
+        """Sums over the power of all charging points in an Elvis conform infrastructure dict.
 
         Args:
             infrastructure: Elvis conform infrastructure dict.
 
         Returns:
-            power_sum: (float): Sum over the power of all connection points.
+            power_sum: (float): Sum over the power of all charging points.
         """
         msg_wrong_infrastructure = "Infrastructure must be Elvis conform."
         assert isinstance(infrastructure, dict), msg_wrong_infrastructure
         assert 'transformers' in infrastructure.keys(), msg_wrong_infrastructure
         power_sum = 0
         for transformer in infrastructure['transformers']:
-            assert 'charging_points' in transformer.keys(), msg_wrong_infrastructure
-            for charging_station in transformer['charging_points']:
-                assert 'connection_points' in charging_station.keys(), msg_wrong_infrastructure
-                for connection_point in charging_station['connection_points']:
-                    assert 'max_power' in connection_point.keys()
-                    assert isinstance(connection_point['max_power'], (float, int))
-                    power_sum += connection_point['max_power']
+            assert 'charging_stations' in transformer.keys(), msg_wrong_infrastructure
+            for charging_station in transformer['charging_stations']:
+                assert 'charging_points' in charging_station.keys(), msg_wrong_infrastructure
+                for cp in charging_station['charging_points']:
+                    assert 'max_power' in cp.keys()
+                    assert isinstance(cp['max_power'], (float, int))
+                    power_sum += cp['max_power']
 
         return power_sum

@@ -1,10 +1,10 @@
-"""Create infrastructure: connect charging points to transformer and connection points to
-    charging points."""
+"""Create infrastructure: connect charging points to transformer and charging points to
+    charging stations."""
 
 from copy import deepcopy
 
+from elvis.charging_station import ChargingStation
 from elvis.charging_point import ChargingPoint
-from elvis.connection_point import ConnectionPoint
 from elvis.infrastructure_node import Transformer
 
 
@@ -12,9 +12,9 @@ def set_up_infrastructure(infrastructure):
     """Reads in infrastructure layout as a dict and converts it into a tree shaped infrastructure
         design with nodes representing the hardware components:
             transformer: :obj: `infrastructure_node.Transformer`
+            charging station: :obj: `charging_station.ChargingStation`
             charging point: :obj: `charging_point.ChargingPoint`
-            connection point: :obj: `connection_point.ConnectionPoint`
-        Returns all connection points.
+        Returns all charging points.
 
     Args:
         infrastructure: (dict): Contains more nested dicts with the values to initialise the
@@ -22,38 +22,38 @@ def set_up_infrastructure(infrastructure):
             Dict design:
                 transformer: {min_power(float), max_power(float), infrastructure(list)}
 
-            For each instance of charging_point in infrastructure:
-                charging_point: {min_power(float), max_power(float), connection_points(list)}
+            For each instance of charging station in infrastructure:
+                charging sation: {min_power(float), max_power(float), charging_points(list)}
 
-            For each instance of connection_point in connection_points:
-                connection_point: {min_power(float), max_power(float)}
+            For each instance of charging_point in charging_stations:
+                charging_point: {min_power(float), max_power(float)}
 
     Returns:
-        connection_points: (list): Contains n instances of :obj: `connection_point.ConnectionPoint`.
+        charging_points: (list): Contains n instances of :obj: `charging_point.ChargingPoint`.
     """
-    connection_points = []
+    charging_points = []
     # build infrastructure and create node instances
     # Add transformer
     for __transformer in infrastructure['transformers']:
         transformer = Transformer(__transformer['min_power'], __transformer['max_power'])
-        # Add all charging points and their connection points
-        for __charging_point in __transformer['charging_points']:
-            charging_point = ChargingPoint(__charging_point['min_power'],
-                                           __charging_point['max_power'],
-                                           transformer)
-            transformer.add_child(charging_point)
-            # Add all connection points of current charging point
-            for __connection_point in __charging_point['connection_points']:
-                __connection_point = ConnectionPoint(__connection_point['min_power'],
-                                                     __connection_point['max_power'],
-                                                     charging_point)
-                charging_point.add_child(__connection_point)
-                connection_points.append(__connection_point)
+        # Add all charging points and their charging points
+        for __charging_station in __transformer['charging_stations']:
+            charging_station = ChargingStation(__charging_station['min_power'],
+                                             __charging_station['max_power'],
+                                             transformer)
+            transformer.add_child(charging_station)
+            # Add all charging points of current charging point
+            for __charging_point in __charging_station['charging_points']:
+                __charging_point = ChargingPoint(__charging_point['min_power'],
+                                                 __charging_point['max_power'],
+                                                 charging_station)
+                charging_station.add_child(__charging_point)
+                charging_points.append(__charging_point)
 
     transformer.set_up_leafs()
     # transformer.draw_infrastructure()
 
-    return connection_points
+    return charging_points
 
 
 def wallbox_infrastructure(num_cp, power_cp, num_cp_per_cs=1, power_cs=None,
@@ -76,7 +76,7 @@ def wallbox_infrastructure(num_cp, power_cp, num_cp_per_cs=1, power_cs=None,
     """
     # Validate Input
     assert isinstance(num_cp_per_cs, int), 'Only integers are allowed for the number of ' \
-                                           'connection points per charging station.'
+                                           'charging points per charging station.'
     num_cs = int(num_cp / num_cp_per_cs)
     assert num_cp%num_cp_per_cs == 0, 'Only integers are allowed for the number of charging ' \
                                       'stations. The passed number of charging points and the ' \
@@ -104,22 +104,22 @@ def wallbox_infrastructure(num_cp, power_cp, num_cp_per_cs=1, power_cs=None,
     assert power_cs >= min_power_cs, msg_min_max
     assert power_transformer >= min_power_transformer, msg_min_max
 
-    transformer = {'charging_points': [], 'id': 'transformer1',
+    transformer = {'charging_stations': [], 'id': 'transformer1',
                    'min_power': min_power_transformer, 'max_power': power_transformer}
 
-    connection_point = {'min_power': min_power_cp, 'max_power': power_cp}
+    charging_point = {'min_power': min_power_cp, 'max_power': power_cp}
 
     charging_station = {'min_power': min_power_cs, 'max_power': power_cs,
-                        'connection_points': []}
+                        'charging_points': []}
 
     for i in range(num_cs):
         charging_station_temp = deepcopy(charging_station)
-        charging_station_temp['id'] = 'charging_point' + str(i + 1)
+        charging_station_temp['id'] = 'cs' + str(i + 1)
         for j in range(num_cp_per_cs):
-            connection_point_temp = deepcopy(connection_point)
-            connection_point_temp['id'] = 'connection_point' + str(i * num_cp_per_cs + j+1)
-            charging_station_temp['connection_points'].append(connection_point_temp)
-        transformer['charging_points'].append(charging_station_temp)
+            charging_point_temp = deepcopy(charging_point)
+            charging_point_temp['id'] = 'cp' + str(i * num_cp_per_cs + j+1)
+            charging_station_temp['charging_points'].append(charging_point_temp)
+        transformer['charging_stations'].append(charging_station_temp)
 
     infrastructure = {'transformers': [transformer]}
 
