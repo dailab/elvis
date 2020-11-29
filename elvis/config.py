@@ -623,7 +623,12 @@ class ScenarioRealisation:
                     self.resolution = datetime.timedelta(hours=date.hour, minutes=date.minute,
                                                          seconds=date.second)
                 except ValueError:
-                    print('Incorrect timedelta format for resolution pls use: %H:%M:%S')
+                    try:
+                        seconds = pd.Timedelta(kwargs['resolution']).total_seconds()
+                        self.resolution = datetime.timedelta(seconds=seconds)
+                    except ValueError:
+                        print('Incorrect timedelta format for resolution pls use: %H:%M:%S or '
+                              'a pandas conform timedelta format.')
             # datetime.timedelta
             else:
                 self.resolution = kwargs['resolution']
