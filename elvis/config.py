@@ -17,6 +17,7 @@ from elvis.battery import EVBattery
 from elvis.vehicle import ElectricVehicle
 from elvis.charging_event import ChargingEvent
 from elvis.distribution import EquallySpacedInterpolatedDistribution
+from elvis.set_up_infrastructure import wallbox_infrastructure
 
 
 class ScenarioConfig:
@@ -347,10 +348,63 @@ class ScenarioConfig:
             self.scheduling_policy = schedulers.Uncontrolled()
         return self
 
-    def with_infrastructure(self, infrastructure):
-        """Update the charging points to use."""
-        assert type(infrastructure) is dict
-        self.infrastructure = infrastructure
+    def with_infrastructure(self, infrastructure=None, **kwargs):
+        """Update the infrastructure to use.
+        Args:
+            kwargs.num_cp: (int): Number of charging points.
+            kwargs.num_cp_per_cs: (int) Number of charging points per charging station.
+            kwargs.power_cp: (int or float): (optional) Max power per charging point.
+            kwargs.power_cs: (int or float): (optional) Max power of the charging station.
+            kwargs.power_transformer: (int or float): (optional) Max power of the transformer.
+            kwargs.min_power_cp: (int or float): (optional) Minimum power (if not 0) for the
+                charging point.
+            kwargs.min_power_cs: (int or float): (optional) Minimum power (if not 0) for the
+                charging station.
+            kwargs.min_power_transformer: (int or float) : (optional) Minimum power (if not 0) for
+                the charging station.
+        """
+        if infrastructure is not None:
+            assert type(infrastructure) is dict
+            self.infrastructure = infrastructure
+        else:
+            err_msg = '%s is a necessary key to initialise an elvis infrastructure as a wallbox ' \
+                      'infrastructure.'
+            keys = kwargs.keys()
+            assert 'num_cp' in keys, (err_msg, 'num_cp')
+            assert 'power_cp' in keys, (err_msg, 'power_cp')
+
+            num_cp = kwargs['num_cp']
+            power_cp = kwargs['power_cp']
+
+            if 'num_cp_per_cs' in keys:
+                num_cp_per_cs = kwargs['num_cp_per_cs']
+            else:
+                num_cp_per_cs = 1
+            if 'power_cs' in keys:
+                power_cs = kwargs['power_cs']
+            else:
+                power_cs = None
+            if 'power_transformer' in keys:
+                power_transformer = kwargs['power_transformer']
+            else:
+                power_transformer = None
+            if 'min_power_cp' in keys:
+                min_power_cp = kwargs['min_power_cp']
+            else:
+                min_power_cp = 0
+            if 'min_power_cs' in keys:
+                min_power_cs = kwargs['min_power_cs']
+            else:
+                min_power_cs = 0
+            if 'min_power_transformer' in keys:
+                min_power_transformer = kwargs['min_power_transformer']
+            else:
+                min_power_transformer = 0
+
+            self.infrastructure = wallbox_infrastructure(
+                num_cp, power_cp, num_cp_per_cs, power_cs, power_transformer, min_power_cp,
+                min_power_cs, min_power_transformer)
+
         return self
 
     def with_vehicle_types(self, vehicle_types=None, **kwargs):
