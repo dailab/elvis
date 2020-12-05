@@ -169,13 +169,13 @@ arrival_distribution:
 - 0.225108225
 disconnect_by_time: true
 mean_park: 12
-num_charging_events: 250
+num_charging_events: 125
 queue_length: 0
 resolution_preload: '1:00:00'
 repeat_preload: True
 scheduling_policy: Uncontrolled
-mean_soc: 0.6
-std_deviation_soc: 0.2
+mean_soc: 0.5
+std_deviation_soc: 0.1
 std_deviation_park: 2
 
 infrastructure:

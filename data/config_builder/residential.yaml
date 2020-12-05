@@ -39,14 +39,14 @@ infrastructure:
     max_power: 27.6
     min_power: 0
 mean_park: 12
-mean_soc: 0.6
+mean_soc: 0.5
 num_charging_events: 2
 queue_length: 0
 repeat_preload: true
 resolution_preload: '1:00:00'
 scheduling_policy: UC
 std_deviation_park: 2
-std_deviation_soc: 0.2
+std_deviation_soc: 0.1
 transformer_preload: [121.79899999999999, 113.03687214285715, 105.53364542857143,
   99.730503, 95.75874314285716, 93.28177671428571, 91.52936147619049, 90.0231689047619,
   88.14244466666668, 85.91244785714287, 83.71568599999998, 81.67754671428571, 79.92173623809524,

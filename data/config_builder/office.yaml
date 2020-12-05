@@ -119,12 +119,12 @@ infrastructure:
     min_power: 0
 mean_park: 8.5
 mean_soc: 0.6
-num_charging_events: 500
+num_charging_events: 250
 queue_length: 0
 repeat_preload: true
 scheduling_policy: UC
 std_deviation_park: 0.5
-std_deviation_soc: 0.15
+std_deviation_soc: 0.1
 transformer_preload: 0
 vehicle_types:
 - battery: {capacity: 17.6, efficiency: 1, max_charge_power: 150, min_charge_power: 0}
