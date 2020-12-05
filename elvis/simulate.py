@@ -125,7 +125,7 @@ def update_cps(free_cps, busy_cps,
     # if SOC limit is reached: disconnect vehicle
     # TODO: Test once power assignment is done.
     else:
-        for cp in busy_cps.copy():
+        for cp in busy_cps:
             connected_vehicle = cp.connected_vehicle
 
             soc = connected_vehicle['soc']
