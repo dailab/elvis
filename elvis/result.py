@@ -24,7 +24,7 @@ class ElvisResult:
             assert self.scenario is not None, 'To store the simulated ScenarioRealisation the ' \
                                               'scenario must be passed as type of ' \
                                               'ScenarioRealisation.'
-            self.scenario.to_json(r'../data/realisations/' + str(realisation_file_name) + '.JSON')
+            self.scenario.save_to_disk(r'../data/realisations/' + str(realisation_file_name))
 
     def store_power_charging_points(self, power_charging_points, pos_current_time_stamp):
         """Adds the key pos_current_time_stamp and the power assigned to the individual charging

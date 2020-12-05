@@ -231,12 +231,6 @@ class ScenarioConfig:
 
             assert type(self.num_charging_events) is int, \
                 'Builder.num_charging_events not initialised. ' + msg_params_missing
-            assert type(self.start_date) is not None, \
-                'Builder.start_date not initialised. ' + msg_params_missing
-            assert type(self.end_date) is not None, \
-                'Builder.end_date not initialised. ' + msg_params_missing
-            assert type(self.resolution) is not None, \
-                'Builder.resolution not initialised. ' + msg_params_missing
             assert type(self.mean_park) is not None, \
                 'Builder.mean_park not initialised. ' + msg_params_missing
             assert type(self.std_deviation_park) is not None, \
@@ -713,7 +707,7 @@ class ScenarioRealisation:
         return realisation
 
     # https://stackoverflow.com/questions/39450065/python-3-read-write-compressed-json-objects-from-to-gzip-file
-    def to_json(self, file_path):
+    def save_to_disk(self, file_path):
         data = self.to_dict()
 
         json_str = json.dumps(data)
@@ -725,7 +719,7 @@ class ScenarioRealisation:
         return
 
     @staticmethod
-    def from_json(json_file_name):
+    def from_disk(json_file_name):
         with gzip.GzipFile(json_file_name, 'r') as fin:
             json_bytes = fin.read()
 

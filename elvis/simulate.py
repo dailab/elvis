@@ -13,7 +13,7 @@ from elvis.result import ElvisResult
 from elvis.config import ScenarioRealisation, ScenarioConfig
 
 
-def handle_car_arrival(free_cps, busy_cps, event, waiting_queue):
+def handle_car_arrival(free_cps, busy_cps, event, waiting_queue, log):
     """Connects car to charging point, to the queue or send it off.
 
     Args:
@@ -30,7 +30,8 @@ def handle_car_arrival(free_cps, busy_cps, event, waiting_queue):
         # Get random free charging point and remove it from set
         cp = free_cps.pop()
         cp.connect_vehicle(event)
-        logging.info(' Connect: %s', cp)
+        if log:
+            logging.info(' Connect: %s', cp)
         # Put charging point to busy set
         busy_cps.add(cp)
         return waiting_queue
@@ -39,13 +40,15 @@ def handle_car_arrival(free_cps, busy_cps, event, waiting_queue):
     # if not full and queue is considered in simulation (maxsize > 0)
     if not waiting_queue.size() == waiting_queue.maxsize and waiting_queue.maxsize > 0:
         waiting_queue.enqueue(event)
-        logging.info(' Put %s to queue.', event)
+        if log:
+            logging.info(' Put %s to queue.', event)
     else:
-        logging.info(' WaitingQueue is full -> Reject: %s', event)
+        if log:
+            logging.info(' WaitingQueue is full -> Reject: %s', event)
     return waiting_queue
 
 
-def update_queue(waiting_queue, current_time_step, by_time):
+def update_queue(waiting_queue, current_time_step, by_time, log):
     """Removes cars that have spent their total parking time in the waiting queue and
         therefore must leave.
 
@@ -71,14 +74,15 @@ def update_queue(waiting_queue, current_time_step, by_time):
                 to_delete.insert(0, i)
 
         if len(to_delete) > 0:
-            for i in to_delete:
-                logging.info(' Remove: %s from queue.', waiting_queue.queue.pop(i))
+            if log:
+                for i in to_delete:
+                    logging.info(' Remove: %s from queue.', waiting_queue.queue.pop(i))
 
         waiting_queue.determine_next_leaving_time()
 
 
 def update_cps(free_cps, busy_cps,
-               waiting_queue, current_time_step, by_time):
+               waiting_queue, current_time_step, by_time, log):
     """Removes cars due to their parking time or their SOC limit and updates the charging points
     respectively.
 
@@ -92,12 +96,14 @@ def update_cps(free_cps, busy_cps,
         by_time: (bool): Configuration class instance.
     """
     # if parking time is overdue: disconnect vehicle
+    temp_switch_cps = []
     if by_time is True:
         for cp in busy_cps.copy():
             connected_vehicle = cp.connected_vehicle
 
             if connected_vehicle['leaving_time'] <= current_time_step:
-                logging.info(' Disconnect: %s', cp)
+                if log:
+                    logging.info(' Disconnect: %s', cp)
                 cp.disconnect_vehicle()
                 # Put charging point from busy list to available list
                 free_cps.add(cp)
@@ -106,11 +112,15 @@ def update_cps(free_cps, busy_cps,
                 # immediately connect next waiting car
                 if waiting_queue.size() > 0:
                     cp.connect_vehicle(waiting_queue.dequeue())
+                    # temporary store cps to switch later so busy_cp set does not change size
+                    temp_switch_cps.append(cp)
                     # Put charging point from available to busy
-                    busy_cps.add(cp)
-                    free_cps.remove(cp)
+                    if log:
+                        logging.info(' Connect: %s from queue.', cp)
 
-                    logging.info(' Connect: %s from queue.', cp)
+        for cp in temp_switch_cps:
+            busy_cps.add(cp)
+            free_cps.remove(cp)
 
     # if SOC limit is reached: disconnect vehicle
     # TODO: Test once power assignment is done.
@@ -122,7 +132,8 @@ def update_cps(free_cps, busy_cps,
             soc_target = connected_vehicle['soc_target']
 
             if soc >= soc_target:
-                logging.info(' Disconnect: %s', cp)
+                if log:
+                    logging.info(' Disconnect: %s', cp)
                 cp.disconnect_vehicle()
 
                 # Put charging point from busy list to available list
@@ -132,14 +143,17 @@ def update_cps(free_cps, busy_cps,
                 # immediately connect next waiting car
                 if waiting_queue.size() > 0:
                     cp.connect_vehicle(waiting_queue.dequeue())
-                    logging.info(' Connect: %s from queue.', cp)
+                    # temporary store cps to switch later so set does not change size
+                    temp_switch_cps.append(cp)
+                    if log:
+                        logging.info(' Connect: %s from queue.', cp)
+                # Put charging point from available to busy
+        for cp in temp_switch_cps:
+            busy_cps.add(cp)
+            free_cps.remove(cp)
 
-                    # Put charging point from available to busy
-                    busy_cps.add(cp)
-                    free_cps.remove(cp)
 
-
-def charge_connected_vehicles(assign_power, busy_cps, res):
+def charge_connected_vehicles(assign_power, busy_cps, res, log):
     """Change SOC of connected vehicles based on power assigned by scheduling policy.
 
     Args:
@@ -159,12 +173,14 @@ def charge_connected_vehicles(assign_power, busy_cps, res):
             raise TypeError
 
         cp.charge_vehicle(power, res)
-        logging.info('At charging point %s the vehicle SOC has been charged from %s to %s. '
-                     'The power assigned is: %s', cp, soc_before, vehicle['soc'],
-                     str(power))
+        if log:
+            logging.info('At charging point %s the vehicle SOC has been charged from %s to %s. '
+                        'The power assigned is: %s', cp, soc_before, vehicle['soc'],
+                        str(power))
 
 
-def simulate(scenario, start_date=None, end_date=None, resolution=None, realisation_file_name=None):
+def simulate(scenario, start_date=None, end_date=None, resolution=None, realisation_file_name=None,
+             log = False):
     """Main simulation loop.
     Iterates over simulation period and simulates the infrastructure.
 
@@ -189,7 +205,8 @@ def simulate(scenario, start_date=None, end_date=None, resolution=None, realisat
     # empty log file
     with open('log.log', 'w'):
         pass
-    logging.basicConfig(filename='log.log', level=logging.INFO)
+    if log:
+        logging.basicConfig(filename='log.log', level=logging.INFO)
     # get list with all time_steps as datetime.datetime
     time_steps = create_time_steps(scenario.start_date, scenario.end_date, scenario.resolution)
     # Initialize waiting queue for cars at the infrastructure
@@ -208,19 +225,23 @@ def simulate(scenario, start_date=None, end_date=None, resolution=None, realisat
 
     # ---------------------  Main Loop  ---------------------------
     # loop over every time step
+    total_time_steps = len(time_steps)
     for time_step_pos in range(len(time_steps)):
         time_step = time_steps[time_step_pos]
-        logging.info(' %s', time_step)
+        if log:
+            logging.info(' %s', time_step)
+        if time_step_pos % (0.05 * total_time_steps) == 0:
+            print(str(time_step_pos/total_time_steps * 100) + ' % done')
         # check if cars must be disconnected, if yes immediately connect car from queue if possible
-        update_queue(waiting_queue, time_step, scenario.disconnect_by_time)
+        update_queue(waiting_queue, time_step, scenario.disconnect_by_time, log)
 
         update_cps(free_cps, busy_cps, waiting_queue,
-                   time_step, scenario.disconnect_by_time)
+                   time_step, scenario.disconnect_by_time, log)
 
         # in case of multiple charging events in the same time step: handle one after the other
         while len(charging_events) > 0 and time_step == charging_events[0].arrival_time:
             waiting_queue = handle_car_arrival(free_cps, busy_cps,
-                                               charging_events[0], waiting_queue)
+                                               charging_events[0], waiting_queue, log)
             # remove the arrival from the list
             charging_events = charging_events[1:]
 
@@ -228,7 +249,7 @@ def simulate(scenario, start_date=None, end_date=None, resolution=None, realisat
         assign_power = scenario.scheduling_policy.schedule(scenario, free_cps,
                                                            busy_cps, time_step_pos)
 
-        charge_connected_vehicles(assign_power, busy_cps, scenario.resolution)
+        charge_connected_vehicles(assign_power, busy_cps, scenario.resolution, log)
         results.store_power_charging_points(assign_power, time_step_pos)
     return results
 
@@ -254,10 +275,6 @@ if __name__ == '__main__':
     # conf = ElvisConfig(arrival_distribution, None, None, infrastructure, None, scheduling_policy,
     #                    None, time_params, num_charging_events, queue_length, disconnect_by_time)
     # simulate(conf)
-
-    with open('log.log', 'w'):
-        pass
-    logging.basicConfig(filename='log.log', level=logging.INFO)
 
     config = ScenarioConfig()
     config.with_scheduling_policy('UC')
