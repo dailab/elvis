@@ -1,4 +1,5 @@
 from numpy import histogram
+import numpy as np
 from elvis.charging_point import ChargingPoint
 from elvis.config import ScenarioRealisation
 from elvis.utility.elvis_general import num_time_steps
@@ -96,7 +97,7 @@ class ElvisResult:
                                                          'load profile must be calculated.'
         return max(self.aggregated_load_profile)
 
-    def simultaneity_factor(self, infrastructure=None, bins=None):
+    def simultaneity_factor(self, infrastructure=None, bins=None, quantile=None):
         """Calculates the simultaneity factor of the infrastructure.
             If bins is specified a histogram is returned.
             If bins is None only the max value is returned.
@@ -136,10 +137,14 @@ class ElvisResult:
         assert self.aggregated_load_profile is not None, 'Before calculating KPIs the aggregated' \
                                                          'load profile must be calculated.'
 
-        if bins is None:
+        if (bins is None) and (quantile is None):
             power_hardware_max = self.get_power_charging_points(infrastructure)
             power_max = self.max_load()
             return power_max / power_hardware_max
+        elif (bins is None) and not (quantile is None):
+            power_hardware_max = self.get_power_charging_points(infrastructure)
+            cf = np.array(self.aggregated_load_profile)/power_hardware_max
+            return np.quantile(cf, q=quantile)
         else:
             power_hardware_max = self.get_power_charging_points(infrastructure)
             sim = [i / power_hardware_max for i in self.aggregated_load_profile]
