@@ -98,29 +98,27 @@ def update_cps(free_cps, busy_cps,
     # if parking time is overdue: disconnect vehicle
     temp_switch_cps = []
     if by_time is True:
-        for cp in busy_cps.copy():
+        for cp in busy_cps:
             connected_vehicle = cp.connected_vehicle
 
             if connected_vehicle['leaving_time'] <= current_time_step:
                 if log:
                     logging.info(' Disconnect: %s', cp)
                 cp.disconnect_vehicle()
-                # Put charging point from busy list to available list
-                free_cps.add(cp)
-                busy_cps.remove(cp)
+                temp_switch_cps.append(cp)
 
                 # immediately connect next waiting car
                 if waiting_queue.size() > 0:
                     cp.connect_vehicle(waiting_queue.dequeue())
                     # temporary store cps to switch later so busy_cp set does not change size
-                    temp_switch_cps.append(cp)
+                    temp_switch_cps = temp_switch_cps[:-1]
                     # Put charging point from available to busy
                     if log:
                         logging.info(' Connect: %s from queue.', cp)
 
         for cp in temp_switch_cps:
-            busy_cps.add(cp)
-            free_cps.remove(cp)
+            busy_cps.remove(cp)
+            free_cps.add(cp)
 
     # if SOC limit is reached: disconnect vehicle
     # TODO: Test once power assignment is done.
@@ -136,21 +134,19 @@ def update_cps(free_cps, busy_cps,
                     logging.info(' Disconnect: %s', cp)
                 cp.disconnect_vehicle()
 
-                # Put charging point from busy list to available list
-                free_cps.add(cp)
-                busy_cps.remove(cp)
+                temp_switch_cps.append(cp)
 
                 # immediately connect next waiting car
                 if waiting_queue.size() > 0:
                     cp.connect_vehicle(waiting_queue.dequeue())
                     # temporary store cps to switch later so set does not change size
-                    temp_switch_cps.append(cp)
+                    temp_switch_cps = temp_switch_cps[:-1]
                     if log:
                         logging.info(' Connect: %s from queue.', cp)
                 # Put charging point from available to busy
         for cp in temp_switch_cps:
-            busy_cps.add(cp)
-            free_cps.remove(cp)
+            busy_cps.remove(cp)
+            free_cps.add(cp)
 
 
 def charge_connected_vehicles(assign_power, busy_cps, res, log):
