@@ -138,7 +138,7 @@ queue_length: 0
 repeat_preload: true
 scheduling_policy: UC
 std_deviation_park: 2
-std_deviation_soc: 0.2
+std_deviation_soc: 0.15
 transformer_preload: 0
 vehicle_types:
 - battery: {capacity: 17.6, efficiency: 1, max_charge_power: 150, min_charge_power: 0}

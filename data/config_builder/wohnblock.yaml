@@ -174,9 +174,9 @@ queue_length: 0
 resolution_preload: '1:00:00'
 repeat_preload: True
 scheduling_policy: Uncontrolled
-mean_soc: 0.5
+mean_soc: 0.4
 std_deviation_soc: 0.1
-std_deviation_park: 2
+std_deviation_park: 2.5
 
 infrastructure:
   transformers:

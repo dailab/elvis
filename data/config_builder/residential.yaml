@@ -31,9 +31,9 @@ infrastructure:
   transformers:
   - charging_stations:
     - charging_points:
-      - {id: charging_point1, max_power: 3.7, min_power: 0}
+      - {id: charging_point1, max_power: 11, min_power: 0}
       id: charging_station1
-      max_power: 3.7
+      max_power: 11
       min_power: 0
     id: transformer1
     max_power: 27.6

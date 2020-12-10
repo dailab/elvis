@@ -68,13 +68,13 @@ infrastructure:
     id: transformer1
     max_power: 630.0
     min_power: 0
-mean_park: 9
+mean_park: 8.5
 mean_soc: 0.5
 num_charging_events: 125
 queue_length: 0
 repeat_preload: true
 scheduling_policy: UC
-std_deviation_park: 1
+std_deviation_park: 1.5
 std_deviation_soc: 0.1
 transformer_preload: 0
 vehicle_types:
