@@ -16,6 +16,9 @@ class ElvisResult:
         self.power_charging_points = {}
         self.aggregated_load_profile = None
 
+        # used to cache the last saved timestamp for each charging point
+        self._last_stored_cp_power = {}
+
         if scenario is not None:
             assert isinstance(scenario, ScenarioRealisation), 'Result.scenario must be of type ' \
                                                               'ScenarioRealisation'
@@ -27,7 +30,7 @@ class ElvisResult:
                                               'ScenarioRealisation.'
             self.scenario.save_to_disk(r'../data/realisations/' + str(realisation_file_name))
 
-    def store_power_charging_points(self, power_charging_points, pos_current_time_stamp):
+    def store_power_charging_points(self, power_charging_points, pos_current_time_stamp, is_last_step):
         """Adds the key pos_current_time_stamp and the power assigned to the individual charging
             point to self.power_charging_points if the assigned power is not 0.
 
@@ -42,10 +45,15 @@ class ElvisResult:
             assert isinstance(cp, ChargingPoint)
 
             power = power_charging_points[cp]
-            if power != 0:
-                if cp.id not in self.power_charging_points:
-                    self.power_charging_points[cp.id] = {}
-                self.power_charging_points[cp.id][pos_current_time_stamp] = power
+            
+            if cp.id not in self.power_charging_points:
+                self.power_charging_points[cp.id] = {}
+            elif not is_last_step and (cp.id in self._last_stored_cp_power):
+                if self._last_stored_cp_power[cp.id] == power:
+                    continue
+            
+            self._last_stored_cp_power[cp.id] = power
+            self.power_charging_points[cp.id][pos_current_time_stamp] = power
 
     def to_yaml(self):
         """Serialize this ElvisResult to a yaml string."""

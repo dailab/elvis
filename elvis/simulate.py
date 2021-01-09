@@ -246,7 +246,7 @@ def simulate(scenario, start_date=None, end_date=None, resolution=None, realisat
                                                            busy_cps, time_step_pos)
 
         charge_connected_vehicles(assign_power, busy_cps, scenario.resolution, log)
-        results.store_power_charging_points(assign_power, time_step_pos)
+        results.store_power_charging_points(assign_power, time_step_pos, time_step_pos == total_time_steps-1)
     return results
 
 
