@@ -171,8 +171,8 @@ def charge_connected_vehicles(assign_power, busy_cps, res, log):
         cp.charge_vehicle(power, res)
         if log:
             logging.info('At charging point %s the vehicle SOC has been charged from %s to %s. '
-                        'The power assigned is: %s', cp, soc_before, vehicle['soc'],
-                        str(power))
+                         'The power assigned is: %s', cp, soc_before, vehicle['soc'],
+                         str(power))
 
 
 def simulate(scenario, start_date=None, end_date=None, resolution=None, realisation_file_name=None,
@@ -226,8 +226,8 @@ def simulate(scenario, start_date=None, end_date=None, resolution=None, realisat
         time_step = time_steps[time_step_pos]
         if log:
             logging.info(' %s', time_step)
-        if time_step_pos % (0.05 * total_time_steps) == 0:
-            print(str(time_step_pos/total_time_steps * 100) + ' % done')
+        if time_step_pos % (int(0.05 * total_time_steps)) == 0:
+            print('Progress: ' + str(int(time_step_pos/total_time_steps * 100)) + ' %')
         # check if cars must be disconnected, if yes immediately connect car from queue if possible
         update_queue(waiting_queue, time_step, scenario.disconnect_by_time, log)
 

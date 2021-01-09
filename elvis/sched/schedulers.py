@@ -1,8 +1,12 @@
 """ """
 from elvis.infrastructure_node import Transformer
+from math import floor
 
 
 class SchedulingPolicy:
+    def __init__(self):
+        self.state = None
+
     def schedule(self, config, free_cps, busy_cps):
         """Subclasses should override this with their scheduling implementation."""
         raise NotImplementedError()
@@ -93,7 +97,7 @@ class WithStorage(SchedulingPolicy):
     def __str__(self):
         return 'With Storage'
 
-    def schedule(self, config):
+    def schedule(self, config, free_cps, busy_cps, time_step_pos=0):
         pass
 
 
@@ -103,8 +107,113 @@ class DiscriminationFree(SchedulingPolicy):
     def __str__(self):
         return 'Discrimination Free'
 
-    def schedule(self, config):
-        pass
+    def schedule(self, config, free_cps, busy_cps, time_step_pos=0):
+        assign_power = {cp: 0 for cp in set.union(free_cps, busy_cps)}
+        resolution = config.resolution
+        preload = config.transformer_preload[time_step_pos]
+
+        self.update_state(busy_cps, config)
+        sorted_busy_cps = self.sort_cps(config)
+
+        for cp in sorted_busy_cps:
+            # check what the max power possible from vehicle to grid is based on hardware
+            # and the already assigned power of every component (node)
+            max_hardware_power = cp.max_hardware_power()
+            parent = cp
+            go_on = True
+            while go_on is True:
+                if parent.parent is not None:
+                    parent = parent.parent
+                    # If the parent is the Transformer: Also pass preload
+                    if isinstance(parent, Transformer):
+                        max_hardware_power = min(max_hardware_power,
+                                                 parent.max_hardware_power(assign_power, preload))
+                    else:
+                        max_hardware_power = min(max_hardware_power,
+                                                 parent.max_hardware_power(assign_power))
+                else:
+                    go_on = False
+
+            power_to_charge_full = cp.power_to_charge_target(resolution, 1.0)
+            power = min(power_to_charge_full, max_hardware_power)
+
+            if power == power_to_charge_full:  # car is limiting factor: charged within time step
+                self.state[cp]['times_charged'] = self.state[cp]['times_charged'] + 1
+            elif power < cp.max_hardware_power():
+                pass  # infrastructure is limiting factor: handle as if not charged within time step
+            else:  # car or charging point is limiting factor: charged within time step
+                self.state[cp]['times_charged'] = self.state[cp]['times_charged'] + 1
+
+            assign_power[cp] = power
+
+        return assign_power
+
+    def sort_cps(self, config):
+        secs_to_charge_constantly = config.df_charging_period.total_seconds()
+        secs_per_step = config.resolution.total_seconds()
+        time_steps_to_charge_in_a_row = int(max(secs_to_charge_constantly/secs_per_step, 1))
+
+        state_list = list(self.state)
+        # sort: with priority if sth is still in a charging window (time_steps_to_charge_in_a_row)
+        # and secondly by the amount of times already charged
+        state_list.sort(key=lambda x: self.state[x]['times_charged'] /
+                        time_steps_to_charge_in_a_row)
+        state_list.sort(key=lambda x: round((self.state[x]['times_charged'] /
+                                             time_steps_to_charge_in_a_row) % 1, 2), reverse=True)
+
+        return state_list
+
+    def update_state(self, cps, config):
+        if self.state is not None:
+            state_keys = self.state.keys()
+
+            # min_times_charged necessary to ensure cars that got just connected are not always
+            # charged with priority
+            if len(self.state) > 0:
+                times_charged = [self.state[x]['times_charged'] for x in self.state]
+                min_times_charged = floor(min(times_charged))
+            else:
+                min_times_charged = 0
+
+            # update state
+            secs_to_charge_constantly = config.df_charging_period.total_seconds()
+            secs_per_step = config.resolution.total_seconds()
+            time_steps_to_charge_in_a_row = int(max(secs_to_charge_constantly / secs_per_step, 1))
+            for cp in self.state.copy():
+                # to make sure the values don't rise endlessly
+                sub = min_times_charged - min_times_charged % time_steps_to_charge_in_a_row
+                self.state[cp]['times_charged'] = self.state[cp]['times_charged'] - sub
+
+                # check that state has no cars that are not connected anymore
+                if cp not in cps:
+                    del self.state[cp]
+                # make sure that the connected car has not changed
+                else:
+                    state_id = self.state[cp]['id']
+                    look_up_cps = list(cps)
+                    vehicle_id = look_up_cps[look_up_cps.index(cp)].connected_vehicle['id']
+
+                    # update car if it changed
+                    if state_id is not vehicle_id:
+                        self.state[cp]['id'] = vehicle_id
+                        self.state[cp]['times_charged'] = 0
+
+            # check that state has all cars currently connected
+            for cp in cps:
+                if cp not in state_keys:
+                    self.state[cp] = {'id': cp.connected_vehicle['id'],
+                                      'times_charged': 0}
+
+        else:  # will only be called once for initialisation
+            self.state = dict()
+            for cp in cps:
+
+                self.state[cp] = {'id': cp.connected_vehicle['id'],
+                                  'times_charged': 0}
+
+        return
+
+
 
 
 class Optimized(SchedulingPolicy):

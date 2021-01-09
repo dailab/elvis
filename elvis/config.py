@@ -47,6 +47,7 @@ class ScenarioConfig:
         self.disconnect_by_time = None
         self.opening_hours = None
         self.scheduling_policy = None
+        self.df_charging_period = None
 
         if 'emissions_scenario' in kwargs:
             self.emissions_scenario = kwargs['emissions_scenario']
@@ -67,6 +68,11 @@ class ScenarioConfig:
             self.infrastructure = kwargs['infrastructure']
         if 'scheduling_policy' in kwargs:
             self.with_scheduling_policy(kwargs['scheduling_policy'])
+        if isinstance(self.scheduling_policy, schedulers.DiscriminationFree):
+            if 'df_charging_period' in kwargs:
+                self.with_df_charging_period(kwargs['df_charging_period'])
+            else:
+                self.with_df_charging_period(datetime.timedelta(minutes=15))
         if 'mean_park' in kwargs:
             self.mean_park = kwargs['mean_park']
         if 'std_deviation_park' in kwargs:
@@ -421,6 +427,32 @@ class ScenarioConfig:
             self.add_vehicle_types(**kwargs)
             return self
 
+    def with_df_charging_period(self, charging_period):
+
+        assert isinstance(charging_period, (str, datetime.timedelta)), (
+            'Charging period must either be a str in format: %H:%M:%S or an instance '
+            'of datetime.timedelta')
+
+        # str
+        if type(charging_period) is str:
+            try:
+                date = datetime.datetime.strptime(charging_period, '%H:%M:%S')
+                self.df_charging_period = datetime.timedelta(hours=date.hour,
+                                                             minutes=date.minute,
+                                                             seconds=date.second)
+            except ValueError:
+                try:
+                    seconds = pd.Timedelta(charging_period).total_seconds()
+                    self.df_charging_period = datetime.timedelta(seconds=seconds)
+                except ValueError:
+                    print('Incorrect timedelta format for resolution pls use: %H:%M:%S or '
+                          'a pandas conform timedelta format.')
+        # datetime.timedelta
+        else:
+            self.df_charging_period = charging_period
+
+        return self
+
     def add_vehicle_types(self, vehicle_type=None, **kwargs):
         """Add a supported vehicle type to this configuration or a list of vehicle types.
             If no instance of vehicle type is passed an instance of vehicle_type is created if
@@ -640,6 +672,11 @@ class ScenarioRealisation:
             self.opening_hours = config.opening_hours
             self.infrastructure = config.infrastructure
             self.with_scheduling_policy(config.scheduling_policy)
+            if isinstance(self.scheduling_policy, schedulers.DiscriminationFree):
+                if config.df_charging_period is not None:
+                    self.df_charging_period = config.df_charging_period
+                else:
+                    self.df_charging_period = datetime.timedelta(minutes=15)
             self.queue_length = config.queue_length
             self.disconnect_by_time = config.disconnect_by_time
             self.with_transformer_preload(config.transformer_preload,
@@ -664,6 +701,11 @@ class ScenarioRealisation:
             self.opening_hours = kwargs['opening_hours']
             self.infrastructure = kwargs['infrastructure']
             self.with_scheduling_policy(kwargs['scheduling_policy'])
+            if isinstance(self.scheduling_policy, schedulers.DiscriminationFree):
+                if 'df_charging_period' in kwargs.keys():
+                    self.with_df_charging_period(kwargs['df_chaging_period'])
+                else:
+                    self.df_charging_period = datetime.timedelta(minutes=15)
             self.queue_length = kwargs['queue_length']
             self.disconnect_by_time = kwargs['disconnect_by_time']
             self.start_date = kwargs['start_date']
@@ -698,6 +740,9 @@ class ScenarioRealisation:
         dictionary['start_date'] = str(self.start_date.isoformat())
         dictionary['end_date'] = str(self.end_date.isoformat())
         dictionary['resolution'] = str(self.resolution)
+
+        if 'df_charging_period' in dictionary.keys():
+            dictionary['df_charging_period'] = str(self.df_charging_period)
 
         return dictionary
 
@@ -932,5 +977,32 @@ class ScenarioRealisation:
 
             self.scheduling_policy = schedulers.Uncontrolled()
         return self
+
+    def with_df_charging_period(self, charging_period):
+
+        assert isinstance(charging_period, (str, datetime.timedelta)), (
+            'Charging period must either be a str in format: %H:%M:%S or an instance '
+            'of datetime.timedelta')
+
+        # str
+        if type(charging_period) is str:
+            try:
+                date = datetime.datetime.strptime(charging_period, '%H:%M:%S')
+                self.df_charging_period = datetime.timedelta(hours=date.hour,
+                                                             minutes=date.minute,
+                                                             seconds=date.second)
+            except ValueError:
+                try:
+                    seconds = pd.Timedelta(charging_period).total_seconds()
+                    self.df_charging_period = datetime.timedelta(seconds=seconds)
+                except ValueError:
+                    print('Incorrect timedelta format for resolution pls use: %H:%M:%S or '
+                          'a pandas conform timedelta format.')
+        # datetime.timedelta
+        else:
+            self.df_charging_period = charging_period
+
+        return self
+
 
 
