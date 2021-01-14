@@ -151,7 +151,7 @@ def create_vehicle_arrivals(arrival_distribution, num_charging_events, time_step
 
 def create_charging_events_from_weekly_distribution(
         arrival_distribution, time_steps, num_charging_events, mean_park, std_deviation_park,
-        mean_soc, std_deviation_soc, vehicle_types):
+        mean_soc, std_deviation_soc, vehicle_types, max_parking_time):
 
     """Create all charging events for the simulation period.
 
@@ -169,6 +169,8 @@ def create_charging_events_from_weekly_distribution(
         mean_soc: (float): Limits: [0, 1]. State of charge of the cars when arriving on average.
         std_deviation_soc: (float): Standard deviation of the arrival SOC.
         vehicle_types: (list): Containing all instances of :obj: `elvis.vehicle.ElectricVehicle`
+        max_parking_time: (float): Maximum time a car is allowed to stay at the charging
+            infrastructure in hours.
 
     Returns:
         (list): containing num_charging_events instances of `ChargingEvent`.
@@ -184,7 +186,8 @@ def create_charging_events_from_weekly_distribution(
 
     charging_events = []
     for arrival in arrivals:
-        parking_time = min(max(0, np.random.normal(mean_park, std_deviation_park)), 24)
+        parking_time = min(max(0, np.random.normal(mean_park, std_deviation_park)),
+                           max_parking_time)
         soc = min(max(0, np.random.normal(mean_soc, std_deviation_soc)), 1)
         vehicle_type = walker.random(count=1)[0]
         charging_events.append(charging_event.ChargingEvent(arrival, parking_time, soc,

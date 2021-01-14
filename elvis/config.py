@@ -38,6 +38,7 @@ class ScenarioConfig:
         self.std_deviation_park = None
         self.mean_soc = None
         self.std_deviation_soc = None
+        self.max_parking_time = 24
         self.num_charging_events = None
         self.charging_events = None
 
@@ -81,6 +82,8 @@ class ScenarioConfig:
             self.mean_soc = kwargs['mean_soc']
         if 'std_deviation_soc' in kwargs:
             self.std_deviation_soc = kwargs['std_deviation_soc']
+        if 'max_parking_time' in kwargs:
+            self.max_parking_time = kwargs['max_parking_time']
         if 'num_charging_events' in kwargs:
             self.num_charging_events = kwargs['num_charging_events']
         if 'queue_length' in kwargs:
@@ -103,7 +106,9 @@ class ScenarioConfig:
         printout += str('Std deviation of parking time: ' + str(self.std_deviation_park) + '\n')
         printout += str('Mean value of the SOC distribution: ' + str(self.mean_soc) + '\n')
         printout += str('Std deviation of the SOC distribution: ' +
-                        str(self.std_deviation_soc )+ '\n')
+                        str(self.std_deviation_soc ) + '\n')
+        printout += str('Max parking time: ' +
+                        str(self.max_parking_time ) + '\n')
         printout += str('Number of charging events per week: ' +
                         str(self.num_charging_events) + '\n')
 
@@ -153,6 +158,8 @@ class ScenarioConfig:
         config.with_queue_length(dictionary['queue_length'])
         config.with_disconnect_by_time(dictionary['disconnect_by_time'])
 
+        if 'parking_time' in dictionary:
+            config.max_parking_time = dictionary['max_parking_time']
         if 'resolution_preload' in dictionary:
             # if both macro parameter are in
             config.transformer_preload_res_dataresolution_preload = dictionary['resolution_preload']
@@ -249,10 +256,10 @@ class ScenarioConfig:
             time_steps = create_time_steps(self.start_date, self.end_date, self.resolution)
 
             # call elvis.charging_event_generator.create_charging_events_from_distribution
-            self.charging_events = events_from_week_arr_dist(charging_events, time_steps,
-                                                             self.num_charging_events, self.mean_park,
-                                                             self.std_deviation_park, self.mean_soc,
-                                                             self.std_deviation_soc, self.vehicle_types)
+            self.charging_events = events_from_week_arr_dist(
+                charging_events, time_steps, self.num_charging_events, self.mean_park,
+                self.std_deviation_park, self.mean_soc, self.std_deviation_soc, self.vehicle_types,
+                self.max_parking_time)
 
         return self
 
@@ -568,6 +575,16 @@ class ScenarioConfig:
         self.std_deviation_park = std_deviation_park
         return self
 
+    def with_max_parking_time(self, max_parking_time):
+        """Update decision variable on how to disconnect cars."""
+        assert isinstance(max_parking_time, (int, float)), 'The mean of the std deviation of ' \
+                                                           'the parking time must be of type ' \
+                                                           'float.'
+
+        assert 0 <= max_parking_time
+        self.max_parking_time = max_parking_time
+        return self
+
     def with_mean_soc(self, mean_soc):
         """Update decision variable on how to disconnect cars."""
         assert isinstance(mean_soc, (int, float)), 'The mean of the SOC must be of type float.'
@@ -692,7 +709,7 @@ class ScenarioRealisation:
                 self.charging_events = events_from_week_arr_dist(
                     config.arrival_distribution, time_steps, config.num_charging_events,
                     config.mean_park, config.std_deviation_park, config.mean_soc,
-                    config.std_deviation_soc, config.vehicle_types)
+                    config.std_deviation_soc, config.vehicle_types, config.max_parking_time)
 
         else:
             self.check_input(**kwargs)
@@ -720,7 +737,8 @@ class ScenarioRealisation:
                 self.charging_events = events_from_week_arr_dist(
                     kwargs['arrival_distribution'], time_steps, kwargs['num_charging_events'],
                     kwargs['mean_park'], kwargs['std_deviation_park'], kwargs['mean_soc'],
-                    kwargs['std_deviation_soc'], kwargs['vehicle_types'])
+                    kwargs['std_deviation_soc'], kwargs['vehicle_types'],
+                    kwargs['max_parking_time'])
 
         return
 
