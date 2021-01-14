@@ -237,6 +237,22 @@ class ElvisResult:
 
         return electricity_costs
 
+    def total_emissions(self):
+        assert self.scenario is not None, 'Scenario in result must be specified in order to ' \
+                                          'calculate the emissions.'
+        assert self.scenario.emissions_scenario is not None, 'There must be a emissions_scenario ' \
+                                                             'specified in order to calculate ' \
+                                                             'emissions.'
+
+        load_profile = self.aggregate_load_profile()
+        emissions = self.scenario.emissions_scenario
+
+        total_emissions = 0
+        for i in range(len(load_profile)):
+            total_emissions += load_profile[i] * emissions[i]
+
+        return total_emissions
+
     @staticmethod
     def from_yaml(yaml_str):
         """Create an ElvisResult from a yaml string."""
