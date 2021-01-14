@@ -2,7 +2,8 @@ from numpy import histogram
 import numpy as np
 from elvis.charging_point import ChargingPoint
 from elvis.config import ScenarioRealisation
-from elvis.utility.elvis_general import num_time_steps
+from elvis.utility.elvis_general import num_time_steps, create_time_steps
+from elvis.distribution import EquallySpacedInterpolatedDistribution
 
 
 class ElvisResult:
@@ -159,8 +160,82 @@ class ElvisResult:
             hist = histogram(sim, bins)
             return list(zip(hist[0], hist[1]))
 
+    def electricity_costs_fix(self, electricity_rate):
+        """Calculates the total electricity costs based on the electricity received from the grid
+        assuming a constant electricity rate.
 
+        Args:
+            electricity_rate: (float): Costs per kWh.
 
+        Returns:
+            electricity_costs: (float): Total costs of electricity.
+
+        TODO:
+            - Storage integration
+            - PV integration
+        """
+
+        total_energy = self.total_energy_charged()
+        electricity_costs = total_energy * electricity_rate
+
+        return electricity_costs
+
+    def electricity_costs_24_variable(self, variable_electricity_rate):
+        """Calculates the total electricity costs based on the electricity receives from the grid
+        assuming a variable electricity during a day. This intraday cost distribution is assumed to
+        be same for every day of the simulation.
+
+        Args:
+            variable_electricity_rate: (list): Containing floats representing the costs of
+            electricity during one day.
+
+        Returns:
+            electricity_costs: (float): Total costs of electricity.
+
+        TODO:
+            - Storage integration
+            - PV integration
+        """
+
+        assert type(variable_electricity_rate) == list, 'The variable electricity rate must be of '\
+                                                        'type list.'
+
+        msg_invalid_value_type = "Arrival distribution should be of type: pandas DataFrame or a " \
+                                 "list containing float or int."
+
+        # Check that all values in list are either float or int
+        assert all(isinstance(x, (float, int)) for x in variable_electricity_rate), \
+            msg_invalid_value_type
+
+        time_coeff = 24/len(variable_electricity_rate)
+        hour_stamps_costs = [x * time_coeff for x in range(len(variable_electricity_rate))]
+
+        # Repeat first cost value
+        hour_stamps_costs.append(24 + hour_stamps_costs[0])
+        variable_electricity_rate.append(variable_electricity_rate[0])
+        cost_distr = EquallySpacedInterpolatedDistribution.linear(
+            list(zip(hour_stamps_costs, variable_electricity_rate)), None)
+
+        time_stamps = create_time_steps(self.scenario.start_date, self.scenario.end_date,
+                                        self.scenario.resolution)
+
+        load_profile = self.aggregate_load_profile()
+
+        electricity_costs = 0
+        for i in list(range(len(load_profile))):
+            p = load_profile[i]
+            # get time stamp
+            current_time_stamp = time_stamps[i]
+            # calc the time in hours
+            seconds = current_time_stamp.hour * 3600 + current_time_stamp.minute * 60 + \
+                      current_time_stamp.second + current_time_stamp.microsecond / 1000000
+            x_pos_time_stamp = seconds / 3600
+            # lookup the price at the current time (linearly interpolated)
+            price = cost_distr[x_pos_time_stamp]
+            # add costs
+            electricity_costs += p * price
+
+        return electricity_costs
 
     @staticmethod
     def from_yaml(yaml_str):
