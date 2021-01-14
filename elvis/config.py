@@ -2,9 +2,9 @@
 by Elvis."""
 
 import logging
+import warnings
 import datetime
 import pandas as pd
-import math
 import yaml
 import gzip
 import json
@@ -12,11 +12,11 @@ import json
 import elvis.sched.schedulers as schedulers
 from elvis.charging_event_generator import create_charging_events_from_weekly_distribution as \
     events_from_week_arr_dist
-from elvis.utility.elvis_general import create_time_steps
+from elvis.utility.elvis_general import create_time_steps, num_time_steps, transform_data, \
+    adjust_resolution, repeat_data
 from elvis.battery import EVBattery
 from elvis.vehicle import ElectricVehicle
 from elvis.charging_event import ChargingEvent
-from elvis.distribution import EquallySpacedInterpolatedDistribution
 from elvis.set_up_infrastructure import wallbox_infrastructure
 
 
@@ -25,11 +25,15 @@ class ScenarioConfig:
     def __init__(self, **kwargs):
         # Time series data
         self.emissions_scenario = None
+        self.emissions_scenario_res_data = None
+        self.emissions_scenario_repeat = None
+        self.emissions_scenario_col_pos = 0
         self.renewables_scenario = None
 
         self.transformer_preload = None
         self.transformer_preload_res_data = None
         self.transformer_preload_repeat = False
+        self.transformer_preload_col_pos = 0
 
         # Event parameters
         self.arrival_distribution = None
@@ -51,7 +55,7 @@ class ScenarioConfig:
         self.df_charging_period = None
 
         if 'emissions_scenario' in kwargs:
-            self.emissions_scenario = kwargs['emissions_scenario']
+            self.with_emissions_scenario(kwargs['emissions_scenario'])
         if 'renewables_scenario' in kwargs:
             self.renewables_scenario = kwargs['renewables_scenario']
         if 'transformer_preload' in kwargs:
@@ -94,6 +98,14 @@ class ScenarioConfig:
             self.transformer_preload_res_data = kwargs['transformer_preload_res_data']
         if 'transformer_preload_repeat' in kwargs:
             self.transformer_preload_repeat = kwargs['transformer_preload_repeat']
+        if 'transformer_preload_col_pos' in kwargs:
+            self.transformer_preload_col_pos = kwargs['transformer_preload_col_pos']
+        if 'emissions_scenario_res_data' in kwargs:
+            self.emissions_scenario_res_data = kwargs['emissions_scenario_res_data']
+        if 'emissions_scenario_repeat' in kwargs:
+            self.emissions_scenario_repeat = kwargs['emissions_scenario_repeat']
+        if 'emissions_scenario_col_pos' in kwargs:
+            self.emissions_scenario_col_pos = kwargs['emissions_scenario_col_pos']
 
     def __str__(self):
         printout = ''
@@ -106,9 +118,9 @@ class ScenarioConfig:
         printout += str('Std deviation of parking time: ' + str(self.std_deviation_park) + '\n')
         printout += str('Mean value of the SOC distribution: ' + str(self.mean_soc) + '\n')
         printout += str('Std deviation of the SOC distribution: ' +
-                        str(self.std_deviation_soc ) + '\n')
+                        str(self.std_deviation_soc) + '\n')
         printout += str('Max parking time: ' +
-                        str(self.max_parking_time ) + '\n')
+                        str(self.max_parking_time) + '\n')
         printout += str('Number of charging events per week: ' +
                         str(self.num_charging_events) + '\n')
 
@@ -231,42 +243,69 @@ class ScenarioConfig:
     def with_charging_events(self, charging_events):
         """Update the arrival distribution to use.
         """
-
-        if isinstance(charging_events[0], ChargingEvent):
-            self.charging_events = charging_events
-
-        elif type(charging_events[0]) is float or type(charging_events[0]) is int:
-            msg_params_missing = 'Please assign scenario.num_charging_events and ' \
-                                 'scenario.time_params, scenario.mean_park, scenario.std_deviation_' \
-                                 'park, scenario.mean_soc, scenario.std_deviatoin_soc, ' \
-                                 'before using scenario.with_charging_events with an ' \
-                                 'arrival distribution.'
-
-            assert type(self.num_charging_events) is int, \
-                'Builder.num_charging_events not initialised. ' + msg_params_missing
-            assert type(self.mean_park) is not None, \
-                'Builder.mean_park not initialised. ' + msg_params_missing
-            assert type(self.std_deviation_park) is not None, \
-                'Builder.std_deviation not initialised. ' + msg_params_missing
-            assert type(self.mean_soc) is not None, \
-                'Builder.mean_soc not initialised. ' + msg_params_missing
-            assert type(self.std_deviation_soc) is not None, \
-                'Builder.std_deviation_soc not initialised. ' + msg_params_missing
-
-            time_steps = create_time_steps(self.start_date, self.end_date, self.resolution)
-
-            # call elvis.charging_event_generator.create_charging_events_from_distribution
-            self.charging_events = events_from_week_arr_dist(
-                charging_events, time_steps, self.num_charging_events, self.mean_park,
-                self.std_deviation_park, self.mean_soc, self.std_deviation_soc, self.vehicle_types,
-                self.max_parking_time)
+        assert isinstance(charging_events, list), 'charging_events must be of type list'
+        assert all(isinstance(x, ChargingEvent) for x in charging_events), \
+            'All elements of charging_events must be of type ChargingEvent'
+        self.charging_events = charging_events
 
         return self
 
-    def with_emissions_scenario(self, emissions_scenario):
-        """Update the emissions scenario to use."""
+    def with_emissions_scenario(self, emissions_scenario, col_pos=0, res_data=None, repeat=False):
+        """Assigns values regarding the emissions scenario to config.
 
-        self.emissions_scenario = emissions_scenario
+        Args:
+            emissions_scenario: Either of type int/float, list, or pandas DataFrame/Series.
+            col_pos: (int): If emissions scenario is of type pandas DataFrame: col_pos refers to
+                the column the emissions scenario is stored.
+            res_data: (datetime.timedelta): If emissions scenario is of type list and does not align
+                with the simulation period: res_data states the time difference in between two
+                adjacent values of emissions scenario.
+            repeat: (bool): If emissions scenario is of type list and does not align with the
+                simulation period: repeat=True indicates that the list shall be repeated until
+                the whole simulation period is covered.
+        """
+        if isinstance(emissions_scenario, (pd.Series, pd.DataFrame)):
+            self.emissions_scenario = emissions_scenario
+        else:
+            assert isinstance(emissions_scenario, (int, float, list)), \
+                'Emissions scenario must be of type list or pandas DataFrame.'
+
+            msg_invalid_value_type = "Emissions scenario should be of type: pandas DataFrame or" \
+                                     " a list containing float or int."
+            # Check if all values in list are either float or int
+            if type(emissions_scenario) is list:
+                assert all(isinstance(x, (float, int)) for x in emissions_scenario), \
+                    msg_invalid_value_type
+
+            self.emissions_scenario = emissions_scenario
+
+        if res_data is not None:
+            assert isinstance(res_data, (str, datetime.timedelta))
+            if type(res_data) is str:
+                try:
+                    date = datetime.datetime.strptime(res_data, '%H:%M:%S')
+                    self.emissions_scenario_res_data = datetime.timedelta(hours=date.hour,
+                                                                          minutes=date.minute,
+                                                                          seconds=date.second)
+                except ValueError:
+                    try:
+                        seconds = pd.Timedelta(res_data).total_seconds()
+                        self.emissions_scenario_res_data = datetime.timedelta(seconds=seconds)
+                    except ValueError:
+                        print('Incorrect timedelta format for resolution pls use: %H:%M:%S or '
+                              'a pandas conform timedelta format.')
+            # datetime.timedelta
+            else:
+                self.emissions_scenario_res_data = res_data
+
+        if repeat is not False:
+            assert type(repeat) is bool, 'Repeat can only be True or False.'
+            self.emissions_scenario = True
+
+        if col_pos != 0:
+            assert isinstance(col_pos, int), 'Column position (col_pos) must be a positive integer'
+            assert col_pos >= 0, 'Column position (col_pos) must be a positive integer'
+            self.emissions_scenario_col_pos = col_pos
         return self
 
     def with_renewables_scenario(self, renewables_scenario):
@@ -275,10 +314,22 @@ class ScenarioConfig:
         self.renewables_scenario = renewables_scenario
         return self
 
-    def with_transformer_preload(self, transformer_preload, res_data=None, repeat=False):
-        # TODO: Add pandas
-        if type(transformer_preload) is pd.DataFrame:
-            NotImplementedError()
+    def with_transformer_preload(self, transformer_preload, col_pos=0, res_data=None, repeat=False):
+        """Assigns values regarding the transformer preload to config.
+
+        Args:
+            transformer_preload: Either of type int/float, list, or pandas DataFrame/Series.
+            col_pos: (int): If transformer_preload is of type pandas DataFrame: col_pos refers to
+                the column the transformer preload is stored.
+            res_data: (datetime.timedelta): If transfomer preload is of type list and does not align
+                with the simulation period: res_data states the time difference in between two
+                adjacent values of transformer preload.
+            repeat: (bool): If transformer preload is of type list and does not align with the
+                simulation period: repeat=True indicates that the list shall be repeated until
+                the whole simulation period is covered.
+        """
+        if isinstance(transformer_preload, (pd.Series, pd.DataFrame)):
+            self.transformer_preload = transformer_preload
         else:
             assert isinstance(transformer_preload, (int, float, list)), \
                 'Transformer preload must be of type list or pandas DataFrame.'
@@ -289,20 +340,37 @@ class ScenarioConfig:
             if type(transformer_preload) is list:
                 assert all(isinstance(x, (float, int)) for x in transformer_preload), \
                     msg_invalid_value_type
-            #print(transformer_preload)
+
             self.transformer_preload = transformer_preload
 
         if res_data is not None:
-            # TODO: Add pandas time strings
-            assert type(res_data) is datetime.timedelta, 'The data resolution must be of type ' \
-                                                         'datetime.datetime.'
-            self.transformer_preload_res_data = res_data
+            assert isinstance(res_data, (str, datetime.timedelta))
+            if type(res_data) is str:
+                try:
+                    date = datetime.datetime.strptime(res_data, '%H:%M:%S')
+                    self.transformer_preload_res_data = datetime.timedelta(hours=date.hour,
+                                                                           minutes=date.minute,
+                                                                           seconds=date.second)
+                except ValueError:
+                    try:
+                        seconds = pd.Timedelta(res_data).total_seconds()
+                        self.transformer_preload_res_data = datetime.timedelta(seconds=seconds)
+                    except ValueError:
+                        print('Incorrect timedelta format for resolution pls use: %H:%M:%S or '
+                              'a pandas conform timedelta format.')
+            # datetime.timedelta
+            else:
+                self.transformer_preload_res_data = res_data
 
         if repeat is not False:
             assert type(repeat) is bool, 'Repeat can only be True or False.'
             self.transformer_preload_repeat = True
 
-            return
+        if col_pos != 0:
+            assert isinstance(col_pos, int), 'Column position (col_pos) must be a positive integer'
+            assert col_pos > 0, 'Column position (col_pos) must be a positive integer'
+            self.transformer_preload_col_pos = col_pos
+        return self
 
     def with_scheduling_policy(self, scheduling_policy_input):
         """Update the scheduling policy to use.
@@ -621,6 +689,9 @@ class ScenarioRealisation:
         necessary parameters."""
 
         self.charging_events = None
+        self.emissions_scenario = None
+        self.transformer_preload = None
+        self.scheduling_policy = None
 
         # Time parameters
         try:
@@ -684,7 +755,8 @@ class ScenarioRealisation:
 
         # With ScenarioConfig instance
         if isinstance(config, ScenarioConfig):
-            self.emissions_scenario = config.emissions_scenario
+            self.with_emissions_scenario(config.emissions_scenario,
+                                         self.start_date, self.end_date, self.resolution)
             self.renewables_scenario = config.emissions_scenario
             self.opening_hours = config.opening_hours
             self.infrastructure = config.infrastructure
@@ -697,6 +769,8 @@ class ScenarioRealisation:
             self.queue_length = config.queue_length
             self.disconnect_by_time = config.disconnect_by_time
             self.with_transformer_preload(config.transformer_preload,
+                                          self.start_date, self.end_date, self.resolution,
+                                          config.transformer_preload_col_pos,
                                           config.transformer_preload_res_data,
                                           config.transformer_preload_repeat)
 
@@ -713,7 +787,8 @@ class ScenarioRealisation:
 
         else:
             self.check_input(**kwargs)
-            self.emissions_scenario = kwargs['emissions_scenario']
+            self.with_emissions_scenario(kwargs['emissions_scenario'],
+                                         self.start_date, self.end_date, self.resolution)
             self.renewables_scenario = kwargs['renewables_scenario']
             self.opening_hours = kwargs['opening_hours']
             self.infrastructure = kwargs['infrastructure']
@@ -739,6 +814,20 @@ class ScenarioRealisation:
                     kwargs['mean_park'], kwargs['std_deviation_park'], kwargs['mean_soc'],
                     kwargs['std_deviation_soc'], kwargs['vehicle_types'],
                     kwargs['max_parking_time'])
+            if 'transformer_preload' in kwargs:
+                res_data = None
+                repeat = None
+                col_pos = 0
+                if 'transformer_preload_res_data' in kwargs:
+                    res_data = kwargs['transformer_preload_res_data']
+                if 'transformer_preload_repeat' in kwargs:
+                    repeat = kwargs['transformer_preload_repeat']
+                if 'transformer_preload_col_pos' in kwargs:
+                    col_pos = kwargs['transformer_preload_col_pos']
+
+                self.with_transformer_preload(kwargs['transformer_preload'],
+                                              self.start_date, self.end_date, self.resolution,
+                                              col_pos, res_data, repeat)
 
         return
 
@@ -794,94 +883,25 @@ class ScenarioRealisation:
     def transform_arrival_distribution(self):
         pass
 
-    def with_transformer_preload(self, transformer_preload, res_data=None, repeat=False):
+    def with_transformer_preload(self, transformer_preload, start_date, end_date, resolution,
+                                 col_pos=0, res_data=None, repeat=False):
         """Update the renewable energy scenario to use.
-        Simulation time parameter must be set before transformer preload can be initialised."""
-        # TODO: if trafo preload has another res_data than simulation or an offset a correct list
-        # must be created
+        Simulation time parameter must be set before transformer preload can be initialised.
 
-        """List possible cases:
-        Case 1:
-            List has n=simulationSteps entries.
-            Meta info: None
-            To Do: Nothing just pass.
-        Case 2:
-            List has n=simulationSteps entries.
-            Meta info: Resolution. Repeat.
-        Case 3:
-            List has n!=simulation step entries.
-            Meta info: None.
-            To Do: Raise error
-        Case 4:
-            List has n!=simulationSteps entries.
-            Meta info: Resolution.
-            To Do: Adjust res_data as stated. Check if there are enough values. If not raise error
+        Args:
+            transformer_preload: Either of type int/float, list, or pandas Series/DataFrame.
+            start_date: (:obj: `datetime.datetime`): First time stamp.
+            end_date: (:obj: `datetime.datetime`): Upper bound for time stamps.
+            resolution: (:obj: `datetime.timedelta`): Time in between two adjacent time stamps.
+            col_pos: (int): If pandas DataFrame is passed indicates the column in which the
+                emission values are stored.
+            res_data: (datetime.timedelta): If list is passed that does not align with the
+                simulation period, res_data displays the period inbetween two adjacent list entries.
+            repeat: (bool): If list is passed that does not align with the
+                simulation period and repeat is True the list is repeated until enough data points
+                are available for the simulation period.
 
-        Case 5:
-            List has n!=simulationSteps entries.
-            Meta info: Resolution. Repeat.
-            To Do: Adjust Resolution. Repeat until n equals simulaiton steps.
-
-        Case 7:
-            DF has n=simulationSteps rows.
-            Index of DF aligns with simulationSteps.
-            To Do: Nothing just pass.
-        Case 8:
-            DF has n=simulationSteps rows.
-            Index of DF does not align with simulationSteps."""
-
-        def adjust_resolution(preload, res_data, res_simulation):
-            """Adjusts res_data of the transformer preload to the simulation res_data.
-
-            Args:
-                preload: (list): Containing the transformer preload in "wrong"
-                    res_data.
-                res_data: (datetime.timedelta): Time in between two adjacent data points of
-                    transformer preload with "wrong" res_data.
-                res_simulation: (datetime.timedelta): Time in between two adjacent time steps in
-                    the simulation.
-
-            Returns:
-                transformer_preload_new_res: (list): Transformer preload with linearly interpolated data
-                    points having the res_data of the simulation.
-                """
-
-            x_values = list(range(len(preload)))
-            distribution = EquallySpacedInterpolatedDistribution.linear(
-                list(zip(x_values, preload)), None)
-
-            coefficient = res_simulation / res_data
-            x_values_new_res = list(range(math.ceil(len(preload) * 1 / coefficient)))
-            x_values_new_res = [x * coefficient for x in x_values_new_res]
-
-            transformer_preload_new_res = []
-            for x in x_values_new_res:
-                transformer_preload_new_res.append(distribution[x])
-
-            return transformer_preload_new_res
-
-        def repeat_data(preload, num_simulation_steps):
-            """Repeats the transformer preload data until there are as many values as there are
-            simulation steps.
-
-            Args:
-                preload: (list): Containing the data (floats) to be repeated.
-                num_simulation_steps: (int): Number of simulation steps and expected length of
-                    the transformer preload after it is repeated.
-
-            Returns:
-                transformer_preload_repeated: (list): Repeated values. len() = num_simulation_steps.
-                """
-
-            n = math.floor(num_simulation_steps / len(preload))
-
-            transformer_preload_repeated = preload * n
-
-            values_to_add = num_simulation_steps - len(transformer_preload_repeated)
-
-            transformer_preload_repeated += preload[:values_to_add]
-
-            return transformer_preload_repeated
+        """
 
         # Error messages
         msg_wrong_resolution_type = "If the transformer preload is passed as list and the" \
@@ -900,7 +920,13 @@ class ScenarioRealisation:
         # Check whether passed value is a DataFrame or a list
         if isinstance(transformer_preload, pd.DataFrame):  # DataFrame
             # Make sure length is aligned to simulation period and resolution
-            num_values = len(transformer_preload)
+            # num_values = len(transformer_preload)
+            transformer_preload = transformer_preload.iloc[:, col_pos]
+            transformer_preload = transform_data(transformer_preload,
+                                                 resolution, start_date, end_date)
+        elif isinstance(transformer_preload, pd.Series):
+            transformer_preload = transform_data(transformer_preload,
+                                                 resolution, start_date, end_date)
         else:  # list or numeric
             num_simulation_steps = int((self.end_date - self.start_date) / self.resolution) + 1
 
@@ -1022,5 +1048,98 @@ class ScenarioRealisation:
 
         return self
 
+    def with_emissions_scenario(self, emissions_scenario, start_date, end_date, resolution,
+                                col_pos=0, res_data=None, repeat=None):
+        """Update emissions scenario variable representing the CO2-emissions per kWh at a given
+        time.
 
+        Args:
+            emissions_scenario: Can be either of type int, float, list or pandas Series or
+            DataFrame.
+            start_date: (:obj: `datetime.datetime`): First time stamp.
+            end_date: (:obj: `datetime.datetime`): Upper bound for time stamps.
+            resolution: (:obj: `datetime.timedelta`): Time in between two adjacent time stamps.
+            col_pos: (int): If pandas DataFrame is passed indicates the column in which the
+                emission values are stored.
+            res_data: (datetime.timedelta): If list is passed that does not align with the
+                simulation period, res_data displays the period inbetween two adjacent list entries.
+            repeat: (bool): If list is passed that does not align with the
+                simulation period and repeat is True the list is repeated until enough data points
+                are available for the simulation period.
+            """
+        if emissions_scenario is None:
+            return self
 
+        assert isinstance(start_date, datetime.datetime), 'Start date must be datetime.datetime.'
+        assert isinstance(end_date, datetime.datetime), 'End date must be datetime.datetime.'
+        assert isinstance(resolution, datetime.timedelta), 'Resolution must be datetime.timedelta'
+        assert isinstance(col_pos, int), 'Column must be a positive integer.'
+        assert col_pos >= 0, 'Column must be a positive integer.'
+
+        # Error messages
+        msg_wrong_resolution_type = "If the transformer preload is passed as list and the" \
+                                    "resolution is supposed to be of adjusted please" \
+                                    "use type datetime.timedelta."
+        msg_alignment_unsuccessful = "Transformer preload could not be aligned to simulation" \
+                                     "steps."
+        msg_invalid_value_type = "Transformer preload should be of type: pandas DataFrame, " \
+                                 "list containing float or int, int, float."
+        msg_not_enough_data_points = "There are less values for the transformer preload than " \
+                                     "simulation steps. Please adjust the data."
+
+        emissions_scenario_aligned = []
+
+        # Constant value
+        if isinstance(emissions_scenario, (float, int)):
+            self.emissions_scenario = [emissions_scenario] * \
+                                         num_time_steps(start_date, end_date, resolution)
+
+        # pandas DataFrame
+        elif isinstance(emissions_scenario, pd.DataFrame):
+            emissions_scenario = emissions_scenario.iloc[:, col_pos]
+
+            emissions_scenario_aligned = transform_data(emissions_scenario,
+                                                        resolution, start_date, end_date)
+        elif isinstance(emissions_scenario, pd.Series):
+            emissions_scenario_aligned = transform_data(emissions_scenario,
+                                                        resolution, start_date, end_date)
+        elif isinstance(emissions_scenario, list):
+            num_simulation_steps = num_time_steps(start_date, end_date, resolution)
+
+            # Check if all values in list are either float or int
+            assert all(isinstance(x, (float, int)) for x in emissions_scenario), \
+                msg_invalid_value_type
+
+            # Check whether the length of the list alignes with the simulation period and resolution
+            # If num_values don't fit simulation period and no action is wanted return error
+            num_values = len(emissions_scenario)
+
+            assert num_simulation_steps < num_values or res_data is not None or repeat, \
+                msg_not_enough_data_points
+
+            if res_data is not None:
+                if type(res_data) is str:
+                    try:
+                        date = datetime.datetime.strptime(res_data, '%H:%M:%S')
+                        res_data = datetime.timedelta(hours=date.hour, minutes=date.minute,
+                                                      seconds=date.second)
+                    except ValueError:
+                        logging.error('%s is of incorrect format. Please use %s',
+                                      res_data, '%H:%M:%S')
+                        raise ValueError
+                assert isinstance(res_data, datetime.timedelta), msg_wrong_resolution_type
+
+                emissions_scenario = adjust_resolution(emissions_scenario, res_data,
+                                                       self.resolution)
+
+            if repeat is True:
+                emissions_scenario = repeat_data(emissions_scenario, num_simulation_steps)
+
+            # Should it be ==?
+            assert len(emissions_scenario) >= num_simulation_steps, msg_alignment_unsuccessful
+        else:
+            warnings.warn('Emissions are passed in an non convertible type. Please either use:'
+                          'Float/int, list or pandas Series or DataFrame. The simulation is carried'
+                          ' on without assigning emission values.')
+
+        return emissions_scenario_aligned
