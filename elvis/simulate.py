@@ -13,7 +13,7 @@ from elvis.result import ElvisResult
 from elvis.config import ScenarioRealisation, ScenarioConfig
 
 
-def handle_car_arrival(free_cps, busy_cps, event, waiting_queue, log):
+def handle_car_arrival(free_cps, busy_cps, event, waiting_queue, counter_rejections, log):
     """Connects car to charging point, to the queue or send it off.
 
     Args:
@@ -23,6 +23,8 @@ def handle_car_arrival(free_cps, busy_cps, event, waiting_queue, log):
             of the infrastructure that are currently busy.
         event: (:obj: `charging_event.ChargingEvent`): Arriving charging event.
         waiting_queue: (:obj: `queue.WaitingQueue`): Containing the waiting vehicles
+        counter_rejections: (int): Counts how many cars can not connect to a charging point nor to
+            the waiting_queue.
     """
 
     # connect the arrival to an available charging point if possible
@@ -34,7 +36,7 @@ def handle_car_arrival(free_cps, busy_cps, event, waiting_queue, log):
             logging.info(' Connect: %s', cp)
         # Put charging point to busy set
         busy_cps.add(cp)
-        return waiting_queue
+        return waiting_queue, counter_rejections
 
     # if no free charging point available put arrival to queue
     # if not full and queue is considered in simulation (maxsize > 0)
@@ -45,7 +47,8 @@ def handle_car_arrival(free_cps, busy_cps, event, waiting_queue, log):
     else:
         if log:
             logging.info(' WaitingQueue is full -> Reject: %s', event)
-    return waiting_queue
+        counter_rejections += 1
+    return waiting_queue, counter_rejections
 
 
 def update_queue(waiting_queue, current_time_step, by_time, log):
@@ -55,7 +58,7 @@ def update_queue(waiting_queue, current_time_step, by_time, log):
     Args:
         waiting_queue: (:obj: `queue.WaitingQueue`): Charging events waiting for available
         charging point.
-        current_time_step (:obj: `datetime.datetime`): current time step of the simulation.
+        current_time_step: (:obj: `datetime.datetime`): current time step of the simulation.
         by_time: (bool): True if cars shall be disconnected with respect to their parking time.
         False if cars shall be disconnected due to their SOC target.
 
@@ -121,7 +124,6 @@ def update_cps(free_cps, busy_cps,
             free_cps.add(cp)
 
     # if SOC limit is reached: disconnect vehicle
-    # TODO: Test once power assignment is done.
     else:
         for cp in busy_cps:
             connected_vehicle = cp.connected_vehicle
@@ -169,10 +171,41 @@ def charge_connected_vehicles(assign_power, busy_cps, res, log):
             raise TypeError
 
         cp.charge_vehicle(power, res)
+
         if log:
             logging.info('At charging point %s the vehicle SOC has been charged from %s to %s. '
                          'The power assigned is: %s', cp, soc_before, vehicle['soc'],
                          str(power))
+
+
+def update_last_charged(charging_times, assign_power, time_step):
+    """
+    Updates the dict containing parking events with their start time and the last time they were
+    charged based on the currently assigned power.
+
+    Args:
+        charging_times: (dict): Containing each car as keys and their connection time and the last
+            time they were charged.
+        assign_power: (dict): Containing the powers assigned to each busy charging point at the
+            current time step.
+        time_step: (:obj: `datetime.datetime`): Current time step.
+
+    Returns:
+        charging_times_updated: (dict): Added cars that have not been charged before and updates
+            last charged if car has been charged again.
+    """
+
+    cps_with_power = {k: v for k, v in assign_power.items() if v > 0}
+
+    charging_times_updated = charging_times
+    for cp in cps_with_power:
+        ce = cp.connected_vehicle['id']
+        if ce not in charging_times_updated:
+            charging_times_updated[ce] = {'arrival': time_step, 'last_charged': time_step}
+        else:
+            charging_times_updated[ce]['last_charged'] = time_step
+
+    return charging_times_updated
 
 
 def simulate(scenario, start_date=None, end_date=None, resolution=None, realisation_file_name=None,
@@ -212,6 +245,10 @@ def simulate(scenario, start_date=None, end_date=None, resolution=None, realisat
     # set up infrastructure and get all charging points
     free_cps = set(set_up_infrastructure(scenario.infrastructure))
     busy_cps = set()
+    # Rejections counter
+    counter_rejections = 0
+    # Charging times tracker
+    charging_periods = {}
 
     # set up charging points in result to store assigned powers
     if realisation_file_name is None:
@@ -237,18 +274,27 @@ def simulate(scenario, start_date=None, end_date=None, resolution=None, realisat
 
         # in case of multiple charging events in the same time step: handle one after the other
         while len(charging_events) > 0 and time_step == charging_events[0].arrival_time:
-            waiting_queue = handle_car_arrival(free_cps, busy_cps,
-                                               charging_events[0], waiting_queue, log)
+            waiting_queue, counter_rejections = handle_car_arrival(
+                                                free_cps, busy_cps,
+                                                charging_events[0], waiting_queue,
+                                                counter_rejections, log)
             # remove the arrival from the list
             charging_events = charging_events[1:]
 
         # assign power
         assign_power = scenario.scheduling_policy.schedule(scenario, free_cps,
                                                            busy_cps, time_step_pos)
+        if len(busy_cps) > 0:
+            charging_periods = update_last_charged(charging_periods, assign_power, time_step)
 
         charge_connected_vehicles(assign_power, busy_cps, scenario.resolution, log)
-        results.store_power_charging_points(assign_power, time_step_pos, time_step_pos == total_time_steps-1)
+        results.store_power_charging_points(assign_power, time_step_pos,
+                                            time_step_pos == total_time_steps-1)
+
+    results.counter_rejections = counter_rejections
+    results.charging_periods = charging_periods
     return results
+
 
 def simulate_async(scenario, results, start_date=None, end_date=None, resolution=None, log = False):
     """Main simulation loop.
@@ -286,6 +332,10 @@ def simulate_async(scenario, results, start_date=None, end_date=None, resolution
     # set up infrastructure and get all charging points
     free_cps = set(set_up_infrastructure(scenario.infrastructure))
     busy_cps = set()
+    # Rejection counter
+    counter_rejections = 0
+    # Charging times tracker
+    charging_periods = {}
 
     # ---------------------  Main Loop  ---------------------------
     # loop over every time step
@@ -306,17 +356,22 @@ def simulate_async(scenario, results, start_date=None, end_date=None, resolution
 
         # in case of multiple charging events in the same time step: handle one after the other
         while len(charging_events) > 0 and time_step == charging_events[0].arrival_time:
-            waiting_queue = handle_car_arrival(free_cps, busy_cps,
-                                               charging_events[0], waiting_queue, log)
+            waiting_queue, counter_rejections = handle_car_arrival(free_cps, busy_cps,
+                                                charging_events[0], waiting_queue,
+                                                counter_rejections, log)
             # remove the arrival from the list
             charging_events = charging_events[1:]
 
         # assign power
         assign_power = scenario.scheduling_policy.schedule(scenario, free_cps,
                                                            busy_cps, time_step_pos)
+        if len(busy_cps) > 0:
+            charging_periods = update_last_charged(charging_periods, assign_power, time_step)
 
         charge_connected_vehicles(assign_power, busy_cps, scenario.resolution, log)
         results.store_power_charging_points(assign_power, time_step_pos, time_step_pos == total_time_steps-1)
+    results.counter_rejections = counter_rejections
+    results.charging_periods = charging_periods
 
 
 if __name__ == '__main__':

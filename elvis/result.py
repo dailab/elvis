@@ -1,4 +1,5 @@
 from numpy import histogram
+from datetime import timedelta
 import numpy as np
 from elvis.charging_point import ChargingPoint
 from elvis.config import ScenarioRealisation
@@ -16,6 +17,8 @@ class ElvisResult:
     def __init__(self, scenario=None, realisation_file_name=None):
         self.power_charging_points = {}
         self.aggregated_load_profile = None
+        self.counter_rejections = 0
+        self.charging_periods = None
 
         # used to cache the last saved timestamp for each charging point
         self._last_stored_cp_power = {}
@@ -252,6 +255,33 @@ class ElvisResult:
             total_emissions += load_profile[i] * emissions[i]
 
         return total_emissions
+
+    def average_charging_time(self, in_hours=False):
+        """Calculated the average parking time.
+        Definition: The average time between the first time the car is charged and the last time.
+
+        Args:
+            in_hours: (bool): If true return average charging time as hours (float).
+        Returns:
+            average_charging_time: (datetime.timedelta): Mean time needed to charge a car.
+        """
+
+        assert self.charging_periods is not None, 'Charging periods must be assigned.'
+        assert isinstance(self.charging_periods, dict), 'Charging periods should be of type dict.'
+
+        event_counter = 0
+        seconds = 0
+        for event in self.charging_periods:
+            event_counter += 1
+            end = self.charging_periods[event]['last_charged']
+            start = self.charging_periods[event]['arrival']
+            seconds += (end - start).total_seconds()
+
+        if in_hours is True:
+            return seconds/3600/event_counter
+
+        return timedelta(seconds=seconds/event_counter)
+
 
     @staticmethod
     def from_yaml(yaml_str):
