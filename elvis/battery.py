@@ -134,7 +134,9 @@ class StationaryBattery(Battery):
 
         # Power that leads to SOC = min_soc at the end of time step
         step_length_hours = step_length.total_seconds() / 3600
-        power_to_empty = (self.soc - self.min_soc) * self.capacity / step_length_hours
+        soc_cur_ass_power = cur_ass_power / self.capacity * step_length_hours
+        power_to_empty = (self.soc - soc_cur_ass_power - self.min_soc) * \
+                         self.capacity / step_length_hours
 
         # Max power possible based on energy level and power limits
         max_power = max(min(max_power_theo, power_to_empty), 0)
