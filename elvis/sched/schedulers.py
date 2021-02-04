@@ -1,5 +1,5 @@
 """ """
-from elvis.infrastructure_node import Transformer
+from elvis.infrastructure_node import Transformer, Storage
 from math import floor
 
 
@@ -108,13 +108,31 @@ class DiscriminationFree(SchedulingPolicy):
         return 'Discrimination Free'
 
     def schedule(self, config, free_cps, busy_cps, time_step_pos=0):
-        assign_power = {cp: 0 for cp in set.union(free_cps, busy_cps)}
+        assign_power = {'cps': {cp: 0 for cp in set.union(free_cps, busy_cps)}}
+        assign_power['storage'] = {}
         resolution = config.resolution
         preload = config.transformer_preload[time_step_pos]
 
         self.update_state(busy_cps, config)
         sorted_busy_cps = self.sort_cps(config)
 
+        # Find storage system in infrastructure
+        if len(free_cps) > 0:
+            rand_cp = free_cps.copy().pop()
+            transformer = rand_cp.get_transformer()
+        else:
+            rand_cp = busy_cps.copy().pop()
+            transformer = rand_cp.get_transformer()
+
+        storage_system = None
+        for child in transformer.children:
+            if isinstance(child, Storage):
+                storage_system = child
+                assign_power['storage'][storage_system] = 0
+
+        total_power_assigned = 0
+        max_power_transformer_0 = transformer.max_hardware_power(assign_power['cps'], preload)
+        power_storage = 0
         for cp in sorted_busy_cps:
             # check what the max power possible from vehicle to grid is based on hardware
             # and the already assigned power of every component (node)
@@ -126,17 +144,28 @@ class DiscriminationFree(SchedulingPolicy):
                     parent = parent.parent
                     # If the parent is the Transformer: Also pass preload
                     if isinstance(parent, Transformer):
-                        max_hardware_power = min(max_hardware_power,
-                                                 parent.max_hardware_power(assign_power, preload))
+                        max_power_transformer = parent.max_hardware_power(assign_power['cps'],
+                                                                          preload)
+                        if storage_system is not None:
+                            max_power_storage = \
+                                storage_system.storage.max_discharge_power(power_storage,
+                                                                           resolution)
+                            power_available = max_power_transformer + max_power_storage
+                        else:
+                            power_available = max_power_transformer
+
+                        max_hardware_power = min(max_hardware_power, power_available)
                     else:
                         max_hardware_power = min(max_hardware_power,
-                                                 parent.max_hardware_power(assign_power))
+                                                 parent.max_hardware_power(assign_power['cps']))
                 else:
                     go_on = False
 
             power_to_charge_full = cp.power_to_charge_target(resolution, 1.0)
             power = min(power_to_charge_full, max_hardware_power)
-
+            total_power_assigned += power
+            if total_power_assigned > max_power_transformer_0 and max_power_storage != 0:
+                power_storage = total_power_assigned - max_power_transformer_0
             if power == power_to_charge_full:  # car is limiting factor: charged within time step
                 self.state[cp]['times_charged'] = self.state[cp]['times_charged'] + 1
             elif power < cp.max_hardware_power():
@@ -144,7 +173,9 @@ class DiscriminationFree(SchedulingPolicy):
             else:  # car or charging point is limiting factor: charged within time step
                 self.state[cp]['times_charged'] = self.state[cp]['times_charged'] + 1
 
-            assign_power[cp] = power
+            assign_power['cps'][cp] = power
+
+        assign_power['storage'][storage_system] = -power_storage
 
         return assign_power
 

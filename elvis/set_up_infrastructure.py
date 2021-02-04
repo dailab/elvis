@@ -5,7 +5,8 @@ from copy import deepcopy
 
 from elvis.charging_station import ChargingStation
 from elvis.charging_point import ChargingPoint
-from elvis.infrastructure_node import Transformer
+from elvis.infrastructure_node import Transformer, Storage
+from elvis.battery import StationaryBattery
 
 
 def set_up_infrastructure(infrastructure):
@@ -32,6 +33,7 @@ def set_up_infrastructure(infrastructure):
         charging_points: (list): Contains n instances of :obj: `charging_point.ChargingPoint`.
     """
     charging_points = []
+    transformer = None
     # build infrastructure and create node instances
     # Add transformer
     for __transformer in infrastructure['transformers']:
@@ -39,17 +41,30 @@ def set_up_infrastructure(infrastructure):
         # Add all charging points and their charging points
         for __charging_station in __transformer['charging_stations']:
             charging_station = ChargingStation(__charging_station['min_power'],
-                                             __charging_station['max_power'],
-                                             transformer)
-            transformer.add_child(charging_station)
+                                               __charging_station['max_power'],
+                                               transformer)
+
             # Add all charging points of current charging point
             for __charging_point in __charging_station['charging_points']:
                 __charging_point = ChargingPoint(__charging_point['min_power'],
                                                  __charging_point['max_power'],
                                                  charging_station)
-                charging_station.add_child(__charging_point)
-                charging_points.append(__charging_point)
 
+                charging_points.append(__charging_point)
+        if 'storage' in __transformer.keys():
+            __battery = __transformer['storage']
+            if 'efficiency' in __battery.keys():
+                bat_eff = __battery['efficiency']
+            else:
+                bat_eff = 1
+            battery = StationaryBattery(capacity=__battery['capacity'],
+                                        max_charge_power=__battery['max_power'],
+                                        min_charge_power=__battery['min_power'],
+                                        efficiency=bat_eff)
+            storage = Storage(battery, transformer)
+
+
+    assert isinstance(transformer, Transformer), 'Invalid infrastructure dict.'
     transformer.set_up_leafs()
     # transformer.draw_infrastructure()
 

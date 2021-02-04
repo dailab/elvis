@@ -11,6 +11,7 @@ from elvis.sched.schedulers import Uncontrolled, FCFS
 from elvis.waiting_queue import WaitingQueue
 from elvis.result import ElvisResult
 from elvis.config import ScenarioRealisation, ScenarioConfig
+from elvis.infrastructure_node import Storage
 
 
 def handle_car_arrival(free_cps, busy_cps, event, waiting_queue, counter_rejections, log):
@@ -151,20 +152,21 @@ def update_cps(free_cps, busy_cps,
             free_cps.add(cp)
 
 
-def charge_connected_vehicles(assign_power, busy_cps, res, log):
+def charge_connected_vehicles(assign_power_cps, busy_cps, res, log):
     """Change SOC of connected vehicles based on power assigned by scheduling policy.
 
     Args:
-        assign_power: (dict): keys=charging points, values=power to be assigned.
+        assign_power_cps: (dict): keys=charging points, values=power to be assigned.
         busy_cps: list of all charging points that currently have a connected
             vehicle.
         res: (:obj: `datetime.timedelta`): Time in between two adjacent time stamps.
+        log: (bool): Flag denoting whether a logging entry is supposed to take place.
 
     Returns: None
     """
 
     for cp in busy_cps:
-        power = assign_power[cp]
+        power = assign_power_cps[cp]
         vehicle = cp.connected_vehicle
         soc_before = vehicle['soc']
         if vehicle is None:
@@ -178,7 +180,40 @@ def charge_connected_vehicles(assign_power, busy_cps, res, log):
                          str(power))
 
 
-def update_last_charged(charging_times, assign_power, time_step):
+def charge_storage(assign_power, preload, step_length):
+    """Charges/discharges the storage and returns the realised (dis)charging power.
+
+    Args:
+        assign_power: (dict): power assigned to storage and cps
+        preload: (float): Preload at current time step.
+        step_length: (:obj: `datetime.timedelta`): Resolution of the simulation denoting the
+                time in between two adjacent time steps.
+    Returns:
+        assign_power: (dict): keys=storage, value=realised power
+
+    """
+    assign_power_storage = assign_power['storage']
+    assign_power_cps = assign_power['cps']
+    for storage_system in assign_power_storage:
+        power_to_storage = assign_power_storage[storage_system]
+        storage = storage_system.storage
+
+        # Storage is not needed to charge cps so see if charging is possible
+        if power_to_storage == 0:
+            transformer = storage_system.get_transformer()
+            power_available = transformer.max_hardware_power(assign_power_cps, preload)
+            # Charge storage depending on available power and its limits
+            power_charged = storage.charge(power_available, step_length)
+            # Update assigned power
+            assign_power['storage'][storage_system] = power_charged
+        # Try to discharge with assigned power
+        else:
+            storage.discharge(abs(power_to_storage), step_length)
+
+    return assign_power
+
+
+def update_last_charged(charging_times, assign_power_cps, time_step):
     """
     Updates the dict containing parking events with their start time and the last time they were
     charged based on the currently assigned power.
@@ -186,7 +221,7 @@ def update_last_charged(charging_times, assign_power, time_step):
     Args:
         charging_times: (dict): Containing each car as keys and their connection time and the last
             time they were charged.
-        assign_power: (dict): Containing the powers assigned to each busy charging point at the
+        assign_power_cps: (dict): Containing the powers assigned to each busy charging point at the
             current time step.
         time_step: (:obj: `datetime.datetime`): Current time step.
 
@@ -195,7 +230,7 @@ def update_last_charged(charging_times, assign_power, time_step):
             last charged if car has been charged again.
     """
 
-    cps_with_power = {k: v for k, v in assign_power.items() if v > 0}
+    cps_with_power = {k: v for k, v in assign_power_cps.items() if v > 0}
 
     charging_times_updated = charging_times
     for cp in cps_with_power:
@@ -285,10 +320,14 @@ def simulate(scenario, start_date=None, end_date=None, resolution=None, realisat
         assign_power = scenario.scheduling_policy.schedule(scenario, free_cps,
                                                            busy_cps, time_step_pos)
         if len(busy_cps) > 0:
-            charging_periods = update_last_charged(charging_periods, assign_power, time_step)
+            charging_periods = update_last_charged(charging_periods, assign_power['cps'], time_step)
 
-        charge_connected_vehicles(assign_power, busy_cps, scenario.resolution, log)
-        results.store_power_charging_points(assign_power, time_step_pos,
+        charge_connected_vehicles(assign_power['cps'], busy_cps, scenario.resolution, log)
+        charge_storage(assign_power, scenario.transformer_preload[time_step_pos],
+                       scenario.resolution)
+        results.store_power_charging_points(assign_power['cps'], time_step_pos,
+                                            time_step_pos == total_time_steps-1)
+        results.store_power_storage_systems(assign_power['storage'], time_step_pos,
                                             time_step_pos == total_time_steps-1)
 
     results.counter_rejections = counter_rejections
