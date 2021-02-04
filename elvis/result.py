@@ -80,14 +80,13 @@ class ElvisResult:
             num_simulation_steps = num_time_steps(self.scenario.start_date, self.scenario.end_date,
                                                   self.scenario.resolution)
         load_profile = []
-
+        power = {}
         for time_step in range(num_simulation_steps):
-            power = 0
             for cp in self.power_charging_points:
                 if time_step in self.power_charging_points[cp].keys():
-                    power += self.power_charging_points[cp][time_step]
+                    power[cp] = self.power_charging_points[cp][time_step]
 
-            load_profile.append(power)
+            load_profile.append(sum(power.values()))
 
         self.aggregated_load_profile = load_profile
 
