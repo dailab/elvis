@@ -133,6 +133,7 @@ class DiscriminationFree(SchedulingPolicy):
         total_power_assigned = 0
         max_power_transformer_0 = transformer.max_hardware_power(assign_power['cps'], preload)
         power_storage = 0
+        max_power_storage = 0
         for cp in sorted_busy_cps:
             # check what the max power possible from vehicle to grid is based on hardware
             # and the already assigned power of every component (node)
@@ -174,8 +175,8 @@ class DiscriminationFree(SchedulingPolicy):
                 self.state[cp]['times_charged'] = self.state[cp]['times_charged'] + 1
 
             assign_power['cps'][cp] = power
-
-        assign_power['storage'][storage_system] = -power_storage
+        if storage_system is not None:
+            assign_power['storage'][storage_system] = -power_storage
 
         return assign_power
 

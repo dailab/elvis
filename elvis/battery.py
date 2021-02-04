@@ -161,7 +161,7 @@ class StationaryBattery(Battery):
         assert available_power >= 0, 'The max charge power must be >= 0.'
         # Power needed to charge to SOC = 1 at the end of time step
         step_length_hours = step_length.total_seconds() / 3600
-        max_power_to_full = self.soc * self.capacity / step_length_hours
+        max_power_to_full = (1 - self.soc) * self.capacity / step_length_hours
 
         # Max power possible considering all limits (available, power limits, energy level)
         power_charged = min(max_power_to_full, self.max_charge_power, available_power)
