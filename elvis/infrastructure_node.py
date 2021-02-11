@@ -3,6 +3,7 @@ TODO: Add node busbar."""
 
 import networkx as nx
 import matplotlib.pyplot as plt
+from math import floor
 from elvis.battery import StationaryBattery
 
 
@@ -149,6 +150,7 @@ class Transformer(InfrastructureNode):
                 power_already_assigned += power_assigned[leaf]
 
         max_power = max(self.max_power - power_already_assigned, 0)
+        max_power = floor(max_power * 1000) / 1000
 
         return max_power
 

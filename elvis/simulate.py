@@ -132,7 +132,7 @@ def update_cps(free_cps, busy_cps,
             soc = connected_vehicle['soc']
             soc_target = connected_vehicle['soc_target']
 
-            if soc >= soc_target:
+            if round(soc, 3) >= soc_target:
                 if log:
                     logging.info(' Disconnect: %s', cp)
                 cp.disconnect_vehicle()

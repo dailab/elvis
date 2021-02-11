@@ -1,3 +1,4 @@
+from elvis.utility.elvis_general import floor
 from elvis.units import Energy
 from elvis.units import Power
 
@@ -110,6 +111,7 @@ class StationaryBattery(Battery):
             self.min_soc = 0
 
         self.power = 0
+        self.soc_time = []
 
         super(StationaryBattery, self).__init__(*args, **kwargs)
 
@@ -140,7 +142,8 @@ class StationaryBattery(Battery):
 
         # Max power possible based on energy level and power limits
         max_power = max(min(max_power_theo, power_to_empty), 0)
-
+        # Round down to 3 decimals
+        max_power = floor(max_power)
         return max_power
 
     def charge(self, available_power, step_length):
@@ -174,7 +177,7 @@ class StationaryBattery(Battery):
         # Make sure SOC is within limits
         self.check_soc()
         self.power = power_charged
-
+        self.soc_time.append(self.soc)
         return power_charged
 
     def discharge(self, power_to_discharge, step_length):
@@ -208,7 +211,7 @@ class StationaryBattery(Battery):
         self.soc -= delta_soc
         # Make sure SOC is within limits
         self.check_soc()
-
+        self.soc_time.append(self.soc)
         return
 
     def check_soc(self):

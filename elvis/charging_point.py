@@ -5,7 +5,7 @@ It is limited by its power limits where as the lower limit has to be understood 
 lower limit or zero.
 
 """
-
+from elvis.utility.elvis_general import floor
 from elvis.infrastructure_node import InfrastructureNode
 from elvis.charging_station import ChargingStation
 
@@ -84,6 +84,7 @@ class ChargingPoint(InfrastructureNode):
             battery = vehicle_type.battery
 
             max_power = min(self.max_power, battery.max_power_possible(soc))
+            max_power = floor(max_power)
             return max_power
         return 0
 
