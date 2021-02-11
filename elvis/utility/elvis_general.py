@@ -243,3 +243,14 @@ def repeat_data(preload, num_simulation_steps):
     transformer_preload_repeated += preload[:values_to_add]
 
     return transformer_preload_repeated
+
+
+def floor(value, decimals=3):
+    """Floors a value to 3 decimals."""
+
+    assert isinstance(decimals, int), 'Decimals must be of type int'
+
+    coeff = 10**decimals
+    value = math.floor(value * coeff) / coeff
+
+    return value
