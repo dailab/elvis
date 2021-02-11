@@ -108,18 +108,38 @@ class ElvisResult:
             num_simulation_steps = num_time_steps(self.scenario.start_date, self.scenario.end_date,
                                                   self.scenario.resolution)
         load_profile = []
-
+        power = {}
         for time_step in range(num_simulation_steps):
-            power = 0
             for cp in self.power_charging_points:
                 if time_step in self.power_charging_points[cp].keys():
-                    power += self.power_charging_points[cp][time_step]
+                    power[cp] = self.power_charging_points[cp][time_step]
 
-            load_profile.append(power)
+            load_profile.append(sum(power.values()))
 
         self.aggregated_load_profile = load_profile
 
         return load_profile
+
+    def get_storage_profile(self, num_simulation_steps=None):
+
+        if num_simulation_steps is None:
+            assert self.scenario is not None, 'If using result.get_storage_profile without ' \
+                                              'passing the number of simulation steps the ' \
+                                              'field result.scenario must be set to the scenario ' \
+                                              'realisation.'
+
+            num_simulation_steps = num_time_steps(self.scenario.start_date, self.scenario.end_date,
+                                                  self.scenario.resolution)
+        storage_profile = []
+        power = {}
+        for time_step in range(num_simulation_steps):
+            for stor in self.power_storage_systems:
+                if time_step in self.power_storage_systems[stor].keys():
+                    power[stor] = self.power_storage_systems[stor][time_step]
+
+            storage_profile.append(sum(power.values()))
+
+        return storage_profile
 
     def total_energy_charged(self):
         power = 0
