@@ -257,81 +257,15 @@ def simulate(scenario, start_date=None, end_date=None, resolution=None, realisat
     Returns:
         result: (:obj: `elvis.result.ElvisResult`): Contains the results of the simulation.
     """
-    # ---------------------Initialisation---------------------------
-    # if input is instance of ScenarioConfig transform to ScenarioRealisation
-
-    if isinstance(scenario, ScenarioConfig):
-        scenario = scenario.create_realisation(start_date, end_date, resolution)
-
-    assert isinstance(scenario, ScenarioRealisation), 'Realisation must be of type ' \
-                                                      'ScenarioRealisation or ScenarioConfig.'
-
-    # empty log file
-    with open('log.log', 'w'):
-        pass
-    if log:
-        logging.basicConfig(filename='log.log', level=logging.INFO)
-    # get list with all time_steps as datetime.datetime
-    time_steps = create_time_steps(scenario.start_date, scenario.end_date, scenario.resolution)
-    # Initialize waiting queue for cars at the infrastructure
-    waiting_queue = WaitingQueue(maxsize=scenario.queue_length)
-    # copy charging_events from scenario
-    charging_events = scenario.charging_events
-    # set up infrastructure and get all charging points
-    free_cps = set(set_up_infrastructure(scenario.infrastructure))
-    busy_cps = set()
-    # Rejections counter
-    counter_rejections = 0
-    # Charging times tracker
-    charging_periods = {}
-
     # set up charging points in result to store assigned powers
     if realisation_file_name is None:
         results = ElvisResult()
     else:
         results = ElvisResult(scenario, realisation_file_name)
 
-    # ---------------------  Main Loop  ---------------------------
-    # loop over every time step
-    total_time_steps = len(time_steps)
-    for time_step_pos in range(len(time_steps)):
-        time_step = time_steps[time_step_pos]
-        if log:
-            logging.info(' %s', time_step)
-        if time_step_pos % (int(0.05 * total_time_steps)) == 1:
-            print('Progress: ' + str(int(time_step_pos/total_time_steps * 100)) + ' %')
+    for progress in simulate_async(scenario, results, start_date, end_date, resolution, log):
+        print('Progress: ' + str(progress*100) + ' %')
 
-        # check if cars must be disconnected, if yes immediately connect car from queue if possible
-        update_queue(waiting_queue, time_step, scenario.disconnect_by_time, log)
-
-        update_cps(free_cps, busy_cps, waiting_queue,
-                   time_step, scenario.disconnect_by_time, log)
-
-        # in case of multiple charging events in the same time step: handle one after the other
-        while len(charging_events) > 0 and time_step == charging_events[0].arrival_time:
-            waiting_queue, counter_rejections = handle_car_arrival(
-                                                free_cps, busy_cps,
-                                                charging_events[0], waiting_queue,
-                                                counter_rejections, log)
-            # remove the arrival from the list
-            charging_events = charging_events[1:]
-
-        # assign power
-        assign_power = scenario.scheduling_policy.schedule(scenario, free_cps,
-                                                           busy_cps, time_step_pos)
-        if len(busy_cps) > 0:
-            charging_periods = update_last_charged(charging_periods, assign_power['cps'], time_step)
-
-        charge_connected_vehicles(assign_power['cps'], busy_cps, scenario.resolution, log)
-        charge_storage(assign_power, scenario.transformer_preload[time_step_pos],
-                       scenario.resolution)
-        results.store_power_charging_points(assign_power['cps'], time_step_pos,
-                                            time_step_pos == total_time_steps-1)
-        results.store_power_storage_systems(assign_power['storage'], time_step_pos,
-                                            time_step_pos == total_time_steps-1)
-
-    results.counter_rejections = counter_rejections
-    results.charging_periods = charging_periods
     return results
 
 
@@ -371,7 +305,7 @@ def simulate_async(scenario, results, start_date=None, end_date=None, resolution
     # set up infrastructure and get all charging points
     free_cps = set(set_up_infrastructure(scenario.infrastructure))
     busy_cps = set()
-    # Rejection counter
+    # Rejections counter
     counter_rejections = 0
     # Charging times tracker
     charging_periods = {}
@@ -395,7 +329,8 @@ def simulate_async(scenario, results, start_date=None, end_date=None, resolution
 
         # in case of multiple charging events in the same time step: handle one after the other
         while len(charging_events) > 0 and time_step == charging_events[0].arrival_time:
-            waiting_queue, counter_rejections = handle_car_arrival(free_cps, busy_cps,
+            waiting_queue, counter_rejections = handle_car_arrival(
+                                                free_cps, busy_cps,
                                                 charging_events[0], waiting_queue,
                                                 counter_rejections, log)
             # remove the arrival from the list
@@ -405,13 +340,18 @@ def simulate_async(scenario, results, start_date=None, end_date=None, resolution
         assign_power = scenario.scheduling_policy.schedule(scenario, free_cps,
                                                            busy_cps, time_step_pos)
         if len(busy_cps) > 0:
-            charging_periods = update_last_charged(charging_periods, assign_power, time_step)
+            charging_periods = update_last_charged(charging_periods, assign_power['cps'], time_step)
 
-        charge_connected_vehicles(assign_power, busy_cps, scenario.resolution, log)
-        results.store_power_charging_points(assign_power, time_step_pos, time_step_pos == total_time_steps-1)
+        charge_connected_vehicles(assign_power['cps'], busy_cps, scenario.resolution, log)
+        charge_storage(assign_power, scenario.transformer_preload[time_step_pos],
+                       scenario.resolution)
+        results.store_power_charging_points(assign_power['cps'], time_step_pos,
+                                            time_step_pos == total_time_steps-1)
+        results.store_power_storage_systems(assign_power['storage'], time_step_pos,
+                                            time_step_pos == total_time_steps-1)
+
     results.counter_rejections = counter_rejections
     results.charging_periods = charging_periods
-
 
 if __name__ == '__main__':
 
