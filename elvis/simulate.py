@@ -264,7 +264,7 @@ def simulate(scenario, start_date=None, end_date=None, resolution=None, realisat
         results = ElvisResult(scenario, realisation_file_name)
 
     for progress in simulate_async(scenario, results, start_date, end_date, resolution, log):
-        print('Progress: ' + str(progress*100) + ' %')
+        print('Progress: ' + str(round(progress*100, 0)) + ' %')
 
     return results
 
@@ -318,7 +318,6 @@ def simulate_async(scenario, results, start_date=None, end_date=None, resolution
         if log:
             logging.info(' %s', time_step)
         if time_step_pos % (int(0.05 * total_time_steps)) == 1:
-            print('Progress: ' + str(int(time_step_pos/total_time_steps * 100)) + ' %')
             yield time_step_pos/total_time_steps
 
         # check if cars must be disconnected, if yes immediately connect car from queue if possible
