@@ -77,18 +77,19 @@ class Uncontrolled(SchedulingPolicy):
             total_power += power
 
         # If power assigned is higher than transformer limit
-        if total_power > transformer.max_power:
-            max_storage = storage_system.storage.max_discharge_power(0, resolution)
-            # The power from the storage system is not able to cover the whole transformer overhead
-            if max_storage < total_power - transformer.max_power:
-                assign_power['storage'][storage_system] = - max_storage
-            # Storage covers the transformer overhead
+        if storage_system is not None:
+            if total_power > transformer.max_power:
+                max_storage = storage_system.storage.max_discharge_power(0, resolution)
+                # The power from the storage system is not able to cover the whole transformer overhead
+                if max_storage < total_power - transformer.max_power:
+                    assign_power['storage'][storage_system] = - max_storage
+                # Storage covers the transformer overhead
+                else:
+                    storage_discharge_load = - floor(total_power - transformer.max_power)
+                    assign_power['storage'][storage_system] = storage_discharge_load
+            # Transformer is able to cover load by itself
             else:
-                storage_discharge_load = - floor(total_power - transformer.max_power)
-                assign_power['storage'][storage_system] = storage_discharge_load
-        # Transformer is able to cover load by itself
-        else:
-            assign_power['storage'][storage_system] = 0
+                assign_power['storage'][storage_system] = 0
 
         return assign_power
 
