@@ -9,7 +9,8 @@ class Battery:
     def __init__(self, capacity: Energy, max_charge_power: Power,
                  min_charge_power: Power, efficiency: float):
         """Create instance of Battery given all parameters."""
-        assert isinstance(capacity, (float, int))
+        assert isinstance(capacity, (float, int)) and capacity > 0, \
+            'Battery capacity must be greater than 0'
         assert isinstance(max_charge_power, (float, int))
         assert isinstance(min_charge_power, (float, int))
         assert isinstance(efficiency, (float, int)) and (0 <= efficiency <= 1)
