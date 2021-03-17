@@ -2,6 +2,7 @@
 
 import datetime
 import math
+import pandas as pd
 
 from elvis.distribution import EquallySpacedInterpolatedDistribution
 
@@ -47,12 +48,16 @@ def num_time_steps(start_date, end_date, resolution):
 
 def transform_data(input_df, resolution, start_date, end_date):
     assert len(input_df) >= 2, "must provide more than two datapoints"
-    assert resolution.seconds <= 60, "resolutions lower than one minute not supported"
+    assert resolution.seconds >= 60, "resolutions lower than one minute not supported"
 
     # convert to a list of dates and corresponding values
-    input_data = []
-    for idx, value in input_df.iteritems():
-        input_data.append((idx, value))
+    if isinstance(input_df, pd.DataFrame):
+        input_data = []
+        for idx, value in input_df.iteritems():
+            input_data.append((idx, value))
+    else:
+        assert isinstance(input_df, list), "input must be list or pandas.DataFrame"
+        input_data = input_df
 
     # get resolution and time frame of input data
     input_start_date = input_data[0][0]
@@ -77,10 +82,11 @@ def transform_data(input_df, resolution, start_date, end_date):
             raise Exception("inconsistent distance between data points")
 
         steps = math.floor(dist.seconds / input_resolution_seconds)
-        step = (curr[1] - prev[1]) / steps
+        if steps > 0:
+            step = (curr[1] - prev[1]) / steps
 
-        for j in range(1, steps):
-            interp_input_data.append((prev[0] + (j * input_resolution), prev[1] + (j * step)))
+            for j in range(1, steps):
+                interp_input_data.append((prev[0] + (j * input_resolution), prev[1] + (j * step)))
 
         interp_input_data.append(curr)
 
