@@ -14,7 +14,8 @@ from elvis.config import ScenarioRealisation, ScenarioConfig
 from elvis.infrastructure_node import Storage
 
 
-def handle_car_arrival(free_cps, busy_cps, event, waiting_queue, counter_rejections, log):
+def handle_car_arrival(free_cps, busy_cps, event, waiting_queue, counter_rejections,
+                       within_opening_hours, log):
     """Connects car to charging point, to the queue or send it off.
 
     Args:
@@ -26,10 +27,13 @@ def handle_car_arrival(free_cps, busy_cps, event, waiting_queue, counter_rejecti
         waiting_queue: (:obj: `queue.WaitingQueue`): Containing the waiting vehicles
         counter_rejections: (int): Counts how many cars can not connect to a charging point nor to
             the waiting_queue.
+        within_opening_hours: (bool): True if currently within opening hours.
+        log: (bool): True if actions taken shall be logged.
+
     """
 
     # connect the arrival to an available charging point if possible
-    if len(free_cps) > 0:
+    if len(free_cps) > 0 and within_opening_hours:
         # Get random free charging point and remove it from set
         cp = free_cps.pop()
         cp.connect_vehicle(event)
@@ -41,18 +45,21 @@ def handle_car_arrival(free_cps, busy_cps, event, waiting_queue, counter_rejecti
 
     # if no free charging point available put arrival to queue
     # if not full and queue is considered in simulation (maxsize > 0)
-    if not waiting_queue.size() == waiting_queue.maxsize and waiting_queue.maxsize > 0:
+    if not waiting_queue.size() == waiting_queue.maxsize and waiting_queue.maxsize > 0 and \
+            within_opening_hours:
         waiting_queue.enqueue(event)
         if log:
             logging.info(' Put %s to queue.', event)
     else:
-        if log:
+        if log and within_opening_hours:
             logging.info(' WaitingQueue is full -> Reject: %s', event)
+        elif log and not within_opening_hours:
+            logging.info('Out of opening hours.')
         counter_rejections += 1
     return waiting_queue, counter_rejections
 
 
-def update_queue(waiting_queue, current_time_step, by_time, log):
+def update_queue(waiting_queue, current_time_step, by_time, within_opening_hours, log):
     """Removes cars that have spent their total parking time in the waiting queue and
         therefore must leave.
 
@@ -62,12 +69,16 @@ def update_queue(waiting_queue, current_time_step, by_time, log):
         current_time_step: (:obj: `datetime.datetime`): current time step of the simulation.
         by_time: (bool): True if cars shall be disconnected with respect to their parking time.
         False if cars shall be disconnected due to their SOC target.
+        within_opening_hours: (bool): True if currently within opening hours.
+        log: (bool): True if actions taken shall be logged.
 
     Returns:
         updated_queue: (:obj: `queue.WaitingQueue`): WaitingQueue without removed cars
             that are overdue.
     """
-
+    if not within_opening_hours:
+        waiting_queue.empty()
+        logging.info(' Remove all vehicles from queue -> out of opening hours.')
     if by_time is True and current_time_step >= waiting_queue.next_leave:
         to_delete = []
         for i in range(waiting_queue.size()):
@@ -86,7 +97,7 @@ def update_queue(waiting_queue, current_time_step, by_time, log):
 
 
 def update_cps(free_cps, busy_cps,
-               waiting_queue, current_time_step, by_time, log):
+               waiting_queue, current_time_step, by_time, within_opening_hours, log):
     """Removes cars due to their parking time or their SOC limit and updates the charging points
     respectively.
 
@@ -98,9 +109,24 @@ def update_cps(free_cps, busy_cps,
         waiting_queue: (:obj: `queue.WaitingQueue`): waiting vehicles/charging events.
         current_time_step: (:obj: `datetime.datetime`): current time step.
         by_time: (bool): Configuration class instance.
+        within_opening_hours: (bool): True if currently within opening hours.
+        log: (bool): True if actions taken shall be logged.
     """
-    # if parking time is overdue: disconnect vehicle
+    # if outside of opening hours disconnect all vehicles
+    if not within_opening_hours:
+        cps_to_remove = []
+        for cp in busy_cps:
+            cp.disconnect_vehicle()
+            cps_to_remove.append(cp)
+            if log:
+                logging.info(' Disconnect: %s', cp)
+        for cp in cps_to_remove:
+            busy_cps.remove(cp)
+            free_cps.add(cp)
+        return
+
     temp_switch_cps = []
+    # if parking time is overdue: disconnect vehicle
     if by_time is True:
         for cp in busy_cps:
             connected_vehicle = cp.connected_vehicle
@@ -309,6 +335,8 @@ def simulate_async(scenario, results, start_date=None, end_date=None, resolution
     counter_rejections = 0
     # Charging times tracker
     charging_periods = {}
+    # Opening hours
+    opening_hours = scenario.opening_hours
 
     # ---------------------  Main Loop  ---------------------------
     # loop over every time step
@@ -319,19 +347,25 @@ def simulate_async(scenario, results, start_date=None, end_date=None, resolution
             logging.info(' %s', time_step)
         if time_step_pos % (int(0.05 * total_time_steps)) == 1:
             yield time_step_pos/total_time_steps
+        if opening_hours is None:
+            within_opening_hours = True
+        else:
+            cur_time_hours = time_step.hour + time_step.minute/60 + time_step.second/60/60
+            within_opening_hours = opening_hours[0] <= cur_time_hours <= opening_hours[1]
 
         # check if cars must be disconnected, if yes immediately connect car from queue if possible
-        update_queue(waiting_queue, time_step, scenario.disconnect_by_time, log)
+        update_queue(waiting_queue, time_step, scenario.disconnect_by_time,
+                     within_opening_hours, log)
 
-        update_cps(free_cps, busy_cps, waiting_queue,
-                   time_step, scenario.disconnect_by_time, log)
+        update_cps(free_cps, busy_cps, waiting_queue, time_step,
+                   scenario.disconnect_by_time, within_opening_hours, log)
 
         # in case of multiple charging events in the same time step: handle one after the other
         while len(charging_events) > 0 and time_step == charging_events[0].arrival_time:
             waiting_queue, counter_rejections = handle_car_arrival(
                                                 free_cps, busy_cps,
                                                 charging_events[0], waiting_queue,
-                                                counter_rejections, log)
+                                                counter_rejections, within_opening_hours, log)
             # remove the arrival from the list
             charging_events = charging_events[1:]
 

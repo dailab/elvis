@@ -50,3 +50,7 @@ class WaitingQueue:
         else:
             # if len = 0: Set next leave to be large enough date
             self.next_leave = datetime.datetime(9999, 1, 1)
+
+    def empty(self):
+        """Disconnect all vehicles currently enqueued"""
+        self.queue = []

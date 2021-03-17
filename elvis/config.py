@@ -65,7 +65,7 @@ class ScenarioConfig:
             self.vehicle_types = kwargs['vehicle_types']
 
         if 'opening_hours' in kwargs:
-            self.opening_hours = kwargs['opening_hours']
+            self.with_opening_hours(kwargs['opening_hours'])
 
         if 'charging_events' in kwargs:
             self.arrival_distribution = kwargs['arrival_distribution']
@@ -178,6 +178,9 @@ class ScenarioConfig:
 
         if 'repeat_preload' in dictionary:
             config.transformer_preload_repeat = dictionary['repeat_preload']
+
+        if 'opening_hours' in dictionary:
+            config.with_opening_hours(dictionary['opening_hours'])
 
         config.transformer_preload = dictionary['transformer_preload']
 
@@ -604,6 +607,24 @@ class ScenarioConfig:
     def with_opening_hours(self, opening_hours):
         """Update the opening hours to use."""
 
+        if opening_hours is None:
+            self.opening_hours = opening_hours
+            return self
+
+        assert isinstance(opening_hours, tuple), 'Opening hours is expected to be a tuple.'
+        assert len(opening_hours) == 2, 'Opening hours is expected to be a tuple with 2 values'
+        _open = opening_hours[0]
+        _close = opening_hours[1]
+        assert isinstance(_open, (float, int)), 'Values in opening hours must be of type int or ' \
+                                                'float representing the hours of the day.'
+        assert isinstance(_open, (float, int)), 'Values in opening hours must be of type int or ' \
+                                                'float representing the hours of the day.'
+
+        assert _open <= _close, 'The first value (opening hour) is expected to be smaller than ' \
+                                'the 2nd value (closing hour).'
+        assert _close <= 24, 'The last value(closing hour) is expected to be smaller or equal to 24'
+        assert _open >= 0, 'The first value(opening hour) is expected to be bigger or equal to 0'
+
         self.opening_hours = opening_hours
         return self
 
@@ -758,7 +779,7 @@ class ScenarioRealisation:
             self.with_emissions_scenario(config.emissions_scenario,
                                          self.start_date, self.end_date, self.resolution)
             self.renewables_scenario = config.emissions_scenario
-            self.opening_hours = config.opening_hours
+            self.with_opening_hours(config.opening_hours)
             self.infrastructure = config.infrastructure
             self.with_scheduling_policy(config.scheduling_policy)
             if isinstance(self.scheduling_policy, schedulers.DiscriminationFree):
@@ -790,7 +811,7 @@ class ScenarioRealisation:
             self.with_emissions_scenario(kwargs['emissions_scenario'],
                                          self.start_date, self.end_date, self.resolution)
             self.renewables_scenario = kwargs['renewables_scenario']
-            self.opening_hours = kwargs['opening_hours']
+            self.with_opening_hours(kwargs['opening_hours'])
             self.infrastructure = kwargs['infrastructure']
             self.with_scheduling_policy(kwargs['scheduling_policy'])
             if isinstance(self.scheduling_policy, schedulers.DiscriminationFree):
@@ -840,7 +861,6 @@ class ScenarioRealisation:
         dictionary['renewables_scenario'] = self.renewables_scenario
         dictionary['renewables_scenario'] = self.renewables_scenario
 
-        # TODO: Once opening hours data format is determined convert it properly
         dictionary['opening_hours'] = self.opening_hours
         dictionary['charging_events'] = [ce.to_dict(deep=True) for ce in self.charging_events]
 
@@ -1143,3 +1163,29 @@ class ScenarioRealisation:
                           ' on without assigning emission values.')
 
         return emissions_scenario_aligned
+
+    def with_opening_hours(self, opening_hours):
+        """Update the opening hours to use."""
+
+        if opening_hours is None:
+            self.opening_hours = opening_hours
+            return self
+
+        assert isinstance(opening_hours, tuple), 'Opening hours is expected to be a tuple.'
+        assert len(opening_hours) == 2, 'Opening hours is expected to be a tuple with 2 values'
+        _open = opening_hours[0]
+        _close = opening_hours[1]
+        assert isinstance(_open,
+                          (float, int)), 'Values in opening hours must be of type int or ' \
+                                         'float representing the hours of the day.'
+        assert isinstance(_open,
+                          (float, int)), 'Values in opening hours must be of type int or ' \
+                                         'float representing the hours of the day.'
+
+        assert _open <= _close, 'The first value (opening hour) is expected to be smaller than ' \
+                                'the 2nd value (closing hour).'
+        assert _close <= 24, 'The last value(closing hour) is expected to be smaller or equal to 24'
+        assert _open >= 0, 'The first value(opening hour) is expected to be bigger or equal to 0'
+
+        self.opening_hours = opening_hours
+        return self
