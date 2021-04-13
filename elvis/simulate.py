@@ -338,6 +338,8 @@ def simulate_async(scenario, results, start_date=None, end_date=None, resolution
     # Opening hours
     opening_hours = scenario.opening_hours
 
+    charging_event_counter = 0
+
     # ---------------------  Main Loop  ---------------------------
     # loop over every time step
     total_time_steps = len(time_steps)
@@ -361,13 +363,13 @@ def simulate_async(scenario, results, start_date=None, end_date=None, resolution
                    scenario.disconnect_by_time, within_opening_hours, log)
 
         # in case of multiple charging events in the same time step: handle one after the other
-        while len(charging_events) > 0 and time_step == charging_events[0].arrival_time:
+        while len(charging_events) > charging_event_counter and time_step == charging_events[0].arrival_time:
+            current_charging_event = charging_events[charging_event_counter]
             waiting_queue, counter_rejections = handle_car_arrival(
                                                 free_cps, busy_cps,
-                                                charging_events[0], waiting_queue,
+                                                current_charging_event, waiting_queue,
                                                 counter_rejections, within_opening_hours, log)
-            # remove the arrival from the list
-            charging_events = charging_events[1:]
+            charging_event_counter += 1
 
         # assign power
         assign_power = scenario.scheduling_policy.schedule(scenario, free_cps,

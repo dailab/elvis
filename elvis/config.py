@@ -181,10 +181,14 @@ class ScenarioConfig:
         config = ScenarioConfig()
         config.with_infrastructure(dictionary['infrastructure'])
         config.with_scheduling_policy(dictionary['scheduling_policy'])
-        config.with_mean_park(dictionary['mean_park'])
-        config.with_std_deviation_park(dictionary['std_deviation_park'])
-        config.with_mean_soc(dictionary['mean_soc'])
-        config.with_std_deviation_soc(dictionary['std_deviation_soc'])
+        if 'mean_park' in dictionary:
+            config.with_mean_park(dictionary['mean_park'])
+        if 'std_deviation_park' in dictionary:
+            config.with_std_deviation_park(dictionary['std_deviation_park'])
+        if 'mean_soc' in dictionary:
+            config.with_mean_soc(dictionary['mean_soc'])
+        if 'std_deviation_soc' in dictionary:
+            config.with_std_deviation_soc(dictionary['std_deviation_soc'])
         config.with_num_charging_events(dictionary['num_charging_events'])
         config.with_queue_length(dictionary['queue_length'])
         config.with_disconnect_by_time(dictionary['disconnect_by_time'])

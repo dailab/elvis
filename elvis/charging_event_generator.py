@@ -186,11 +186,13 @@ def create_charging_events_from_weekly_distribution(
     walker = WalkerRandomSampling(weights, keys=vehicle_types)
 
     charging_events = []
+    parking_time_samples = np.random.normal(mean_park, std_deviation_park, len(arrivals)).tolist()
+    soc_samples = np.random.normal(mean_soc, std_deviation_soc, len(arrivals)).tolist()
+    vehicle_type_samples = walker.random(count=len(arrivals)).tolist()
     for arrival in arrivals:
-        parking_time = min(max(0, np.random.normal(mean_park, std_deviation_park)),
-                           max_parking_time)
-        soc = min(max(0, np.random.normal(mean_soc, std_deviation_soc)), 1)
-        vehicle_type = walker.random(count=1)[0]
+        parking_time = min(max(0, parking_time_samples.pop()), max_parking_time)
+        soc = min(max(0, soc_samples.pop()), 1)
+        vehicle_type = vehicle_type_samples.pop()
         charging_events.append(charging_event.ChargingEvent(arrival, parking_time, soc,
                                                             vehicle_type))
 
@@ -347,9 +349,11 @@ def create_charging_events_from_gmm(time_steps, num_charging_events, means, weig
     walker = WalkerRandomSampling(walker_weights, keys=vehicle_types)
 
     charging_events = []
+    soc_samples = np.random.normal(mean_soc, std_deviation_soc, len(samples)).tolist()
+    vehicle_type_samples = walker.random(count=len(samples)).tolist()
     for sample in samples:
-        soc = min(max(0, np.random.normal(mean_soc, std_deviation_soc)), 1)
-        vehicle_type = walker.random(count=1)[0]
+        soc = min(max(0, soc_samples.pop()), 1)
+        vehicle_type = vehicle_type_samples.pop()
         charging_events.append(charging_event.ChargingEvent(sample[0], sample[1], soc,
                                                             vehicle_type))
 
