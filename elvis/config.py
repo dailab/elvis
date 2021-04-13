@@ -12,6 +12,7 @@ import json
 import elvis.sched.schedulers as schedulers
 from elvis.charging_event_generator import create_charging_events_from_weekly_distribution as \
     events_from_week_arr_dist
+from elvis.charging_event_generator import create_charging_events_from_gmm as events_from_gmm
 from elvis.utility.elvis_general import create_time_steps, num_time_steps, transform_data, \
     adjust_resolution, repeat_data
 from elvis.battery import EVBattery
@@ -36,6 +37,7 @@ class ScenarioConfig:
         self.transformer_preload_col_pos = 0
 
         # Event parameters
+        self.sample_method = 'independent_normal_dist'  # or GMM
         self.arrival_distribution = None
         self.vehicle_types = []
         self.mean_park = None
@@ -45,6 +47,9 @@ class ScenarioConfig:
         self.max_parking_time = 24
         self.num_charging_events = None
         self.charging_events = None
+        self.gmm_means = None
+        self.gmm_weights = None
+        self.gmm_covariances = None
 
         # Infrastructure (behaviour)
         self.infrastructure = None
@@ -67,10 +72,15 @@ class ScenarioConfig:
         if 'opening_hours' in kwargs:
             self.with_opening_hours(kwargs['opening_hours'])
 
+        if 'sample_method' in kwargs:
+            self.sample_method = kwargs['sample_method']
+
         if 'charging_events' in kwargs:
-            self.arrival_distribution = kwargs['arrival_distribution']
+            self.charging_events = kwargs['charging_events']
+        if 'arrival_distribution' in kwargs:
+            self.with_arrival_distribution(kwargs['arrival_distribution'])
         if 'infrastructure' in kwargs:
-            self.infrastructure = kwargs['infrastructure']
+            self.with_infrastructure(kwargs['infrastructure'])
         if 'scheduling_policy' in kwargs:
             self.with_scheduling_policy(kwargs['scheduling_policy'])
         if isinstance(self.scheduling_policy, schedulers.DiscriminationFree):
@@ -79,21 +89,30 @@ class ScenarioConfig:
             else:
                 self.with_df_charging_period(datetime.timedelta(minutes=15))
         if 'mean_park' in kwargs:
-            self.mean_park = kwargs['mean_park']
+            self.with_mean_park(kwargs['mean_park'])
         if 'std_deviation_park' in kwargs:
-            self.std_deviation_park = kwargs['std_deviation_park']
+            self.with_std_deviation_park(kwargs['std_deviation_park'])
         if 'mean_soc' in kwargs:
-            self.mean_soc = kwargs['mean_soc']
+            self.with_mean_soc(kwargs['mean_soc'])
         if 'std_deviation_soc' in kwargs:
-            self.std_deviation_soc = kwargs['std_deviation_soc']
+            self.with_std_deviation_soc(kwargs['std_deviation_soc'])
+
+        # Gaussian Mixture Model params
+        if 'gmm_means' in kwargs:
+            self.gmm_means = kwargs['gmm_means']
+        if 'gmm_weights' in kwargs:
+            self.gmm_weights = kwargs['gmm_weights']
+        if 'gmm_covariances' in kwargs:
+            self.gmm_covariances = kwargs['gmm_covariances']
+
         if 'max_parking_time' in kwargs:
             self.max_parking_time = kwargs['max_parking_time']
         if 'num_charging_events' in kwargs:
-            self.num_charging_events = kwargs['num_charging_events']
+            self.with_num_charging_events(kwargs['num_charging_events'])
         if 'queue_length' in kwargs:
-            self.queue_length = kwargs['queue_length']
+            self.with_queue_length(kwargs['queue_length'])
         if 'disconnect_by_time' in kwargs:
-            self.disconnect_by_time = kwargs['disconnect_by_time']
+            self.with_disconnect_by_time(kwargs['disconnect_by_time'])
         if 'transformer_preload_res_data' in kwargs:
             self.transformer_preload_res_data = kwargs['transformer_preload_res_data']
         if 'transformer_preload_repeat' in kwargs:
@@ -170,23 +189,48 @@ class ScenarioConfig:
         config.with_queue_length(dictionary['queue_length'])
         config.with_disconnect_by_time(dictionary['disconnect_by_time'])
 
-        if 'parking_time' in dictionary:
-            config.max_parking_time = dictionary['max_parking_time']
-        if 'resolution_preload' in dictionary:
-            # if both macro parameter are in
-            config.transformer_preload_res_dataresolution_preload = dictionary['resolution_preload']
+        if isinstance(config.scheduling_policy, schedulers.DiscriminationFree):
+            if 'df_charging_period' in dictionary:
+                config.with_df_charging_period(dictionary['df_charging_period'])
+            else:
+                config.with_df_charging_period(datetime.timedelta(minutes=15))
 
-        if 'repeat_preload' in dictionary:
-            config.transformer_preload_repeat = dictionary['repeat_preload']
+        if 'sample_method' in dictionary:
+            config.sample_method = dictionary['sample_method']
+        if 'max_parking_time' in dictionary:
+            config.max_parking_time = dictionary['max_parking_time']
 
         if 'opening_hours' in dictionary:
             config.with_opening_hours(dictionary['opening_hours'])
 
-        config.transformer_preload = dictionary['transformer_preload']
+        if 'transformer_preload' in dictionary:
+            config.transformer_preload = dictionary['transformer_preload']
 
         config.with_vehicle_types(vehicle_types=dictionary['vehicle_types'])
-        # TODO: Adjust with_arrival_distribution method
-        config.with_arrival_distribution(dictionary['arrival_distribution'])
+        if 'arrival_distribution' in dictionary:
+            config.with_arrival_distribution(dictionary['arrival_distribution'])
+        if 'charging_events' in dictionary:
+            config.charging_events = dictionary['charging_events']
+
+        if 'gmm_means' in dictionary:
+            config.gmm_means = dictionary['gmm_means']
+        if 'gmm_weights' in dictionary:
+            config.gmm_weights = dictionary['gmm_weights']
+        if 'gmm_covariances' in dictionary:
+            config.gmm_covariances = dictionary['gmm_covariances']
+
+        if 'transformer_preload_res_data' in dictionary:
+            config.transformer_preload_res_data = dictionary['transformer_preload_res_data']
+        if 'transformer_preload_repeat' in dictionary:
+            config.transformer_preload_repeat = dictionary['transformer_preload_repeat']
+        if 'transformer_preload_col_pos' in dictionary:
+            config.transformer_preload_col_pos = dictionary['transformer_preload_col_pos']
+        if 'emissions_scenario_res_data' in dictionary:
+            config.emissions_scenario_res_data = dictionary['emissions_scenario_res_data']
+        if 'emissions_scenario_repeat' in dictionary:
+            config.emissions_scenario_repeat = dictionary['emissions_scenario_repeat']
+        if 'emissions_scenario_col_pos' in dictionary:
+            config.emissions_scenario_col_pos = dictionary['emissions_scenario_col_pos']
 
         return config
 
@@ -782,6 +826,8 @@ class ScenarioRealisation:
             self.with_opening_hours(config.opening_hours)
             self.infrastructure = config.infrastructure
             self.with_scheduling_policy(config.scheduling_policy)
+            self.sample_method = config.sample_method
+
             if isinstance(self.scheduling_policy, schedulers.DiscriminationFree):
                 if config.df_charging_period is not None:
                     self.df_charging_period = config.df_charging_period
@@ -798,13 +844,22 @@ class ScenarioRealisation:
             if config.charging_events is not None:
                 self.charging_events = config.charging_events
             else:
-                self.transform_arrival_distribution()
-                # TODO: Differentiation needed. What if other than a one week period data is passed.
-                time_steps = create_time_steps(self.start_date, self.end_date, self.resolution)
-                self.charging_events = events_from_week_arr_dist(
-                    config.arrival_distribution, time_steps, config.num_charging_events,
-                    config.mean_park, config.std_deviation_park, config.mean_soc,
-                    config.std_deviation_soc, config.vehicle_types, config.max_parking_time)
+                if self.sample_method is None or self.sample_method == 'independent_normal_dist':
+                    self.transform_arrival_distribution()
+                    time_steps = create_time_steps(self.start_date, self.end_date, self.resolution)
+                    self.charging_events = events_from_week_arr_dist(
+                        config.arrival_distribution, time_steps, config.num_charging_events,
+                        config.mean_park, config.std_deviation_park, config.mean_soc,
+                        config.std_deviation_soc, config.vehicle_types, config.max_parking_time)
+                elif self.sample_method in ['GMM', 'gmm']:
+                    time_steps = create_time_steps(self.start_date, self.end_date, self.resolution)
+                    self.charging_events = events_from_gmm(
+                        time_steps, config.num_charging_events, config.gmm_means,
+                        config.gmm_weights, config.gmm_covariances, config.vehicle_types,
+                        config.max_parking_time, config.mean_soc, config.std_deviation_soc)
+                else:
+                    ValueError('Events can only be sampled from independent weekly arrival '
+                               'distributions ar a weekly GMM (gaussian mixture model)')
 
         else:
             self.check_input(**kwargs)
@@ -829,12 +884,22 @@ class ScenarioRealisation:
                 self.charging_events = [ChargingEvent.from_dict(**ce)
                                         for ce in kwargs['charging_events']]
             else:
-                time_steps = create_time_steps(self.start_date, self.end_date, self.resolution)
-                self.charging_events = events_from_week_arr_dist(
-                    kwargs['arrival_distribution'], time_steps, kwargs['num_charging_events'],
-                    kwargs['mean_park'], kwargs['std_deviation_park'], kwargs['mean_soc'],
-                    kwargs['std_deviation_soc'], kwargs['vehicle_types'],
-                    kwargs['max_parking_time'])
+                if self.sample_method is None or self.sample_method == 'independent_normal_dist':
+                    time_steps = create_time_steps(self.start_date, self.end_date, self.resolution)
+                    self.charging_events = events_from_week_arr_dist(
+                        kwargs['arrival_distribution'], time_steps, kwargs['num_charging_events'],
+                        kwargs['mean_park'], kwargs['std_deviation_park'], kwargs['mean_soc'],
+                        kwargs['std_deviation_soc'], kwargs['vehicle_types'],
+                        kwargs['max_parking_time'])
+                elif self.sample_method in ['GMM', 'gmm']:
+                    time_steps = create_time_steps(self.start_date, self.end_date, self.resolution)
+                    self.charging_events = events_from_gmm(
+                        time_steps, kwargs['num_charging_events'], kwargs['gmm_means'],
+                        kwargs['gmm_weights'], kwargs['gmm_covariances'], kwargs['vehicle_types'],
+                        kwargs['max_parking_time'], kwargs['mean_soc'], kwargs['std_deviation_soc'])
+                else:
+                    ValueError('Events can only be sampled from independent weekly arrival '
+                               'distributions ar a weekly GMM (gaussian mixture model)')
             if 'transformer_preload' in kwargs:
                 res_data = None
                 repeat = None
@@ -951,7 +1016,7 @@ class ScenarioRealisation:
             num_simulation_steps = int((self.end_date - self.start_date) / self.resolution) + 1
 
             if isinstance(transformer_preload, (int, float)):
-                transformer_preload = [transformer_preload]
+                transformer_preload = [transformer_preload] * num_simulation_steps
 
             assert type(transformer_preload) is list, msg_wrong_transformer_preload_type
 
@@ -963,7 +1028,7 @@ class ScenarioRealisation:
             # If num_values don't fit simulation period and no action is wanted return error
             num_values = len(transformer_preload)
 
-            assert num_simulation_steps < num_values or res_data is not None or repeat, \
+            assert num_simulation_steps <= num_values or res_data is not None or repeat, \
                 msg_not_enough_data_points
 
             if res_data is not None:

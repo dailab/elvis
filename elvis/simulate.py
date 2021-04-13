@@ -19,9 +19,9 @@ def handle_car_arrival(free_cps, busy_cps, event, waiting_queue, counter_rejecti
     """Connects car to charging point, to the queue or send it off.
 
     Args:
-        free_cps: (set): Containing all :obj: `charging_poitns.ChargingPoint`
+        free_cps: (set): Containing all :obj: `charging_points.ChargingPoint`
             of the infrastructure that are currently available.
-        busy_cps: (set): Containing all :obj: `charging_poitns.ChargingPoint`
+        busy_cps: (set): Containing all :obj: `charging_points.ChargingPoint`
             of the infrastructure that are currently busy.
         event: (:obj: `charging_event.ChargingEvent`): Arriving charging event.
         waiting_queue: (:obj: `queue.WaitingQueue`): Containing the waiting vehicles

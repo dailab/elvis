@@ -63,7 +63,6 @@ def set_up_infrastructure(infrastructure):
                                         efficiency=bat_eff)
             storage = Storage(battery, transformer)
 
-
     assert isinstance(transformer, Transformer), 'Invalid infrastructure dict.'
     transformer.set_up_leafs()
     # transformer.draw_infrastructure()
