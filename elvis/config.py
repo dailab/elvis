@@ -644,9 +644,21 @@ class ScenarioConfig:
         min_charge_power = kwargs['battery']['min_charge_power']
         efficiency = kwargs['battery']['efficiency']
 
-        # get instance of battery
-        battery = EVBattery(capacity=capacity, max_charge_power=max_charge_power,
-                            min_charge_power=min_charge_power, efficiency=efficiency, )
+        # Power degradations when battery reaches certain SOC level shall be considered
+        if 'start_power_degradation' and 'max_degradation_level' in kwargs['battery']:
+            start_power_degradation = kwargs['battery']['start_power_degradation']
+            max_degradation_level = kwargs['battery']['max_degradation_level']
+
+            battery = EVBattery(capacity=capacity,
+                                max_charge_power=max_charge_power,
+                                min_charge_power=min_charge_power,
+                                efficiency=efficiency,
+                                start_power_degradation=start_power_degradation,
+                                max_degradation_level=max_degradation_level)
+        # No SOC-dependent power degradations considered
+        else:
+            battery = EVBattery(capacity=capacity, max_charge_power=max_charge_power,
+                                min_charge_power=min_charge_power, efficiency=efficiency, )
 
         # get instance of ElectricVehicle with initialized battery
         self.vehicle_types.append(ElectricVehicle(brand, model, battery, probability))

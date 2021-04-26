@@ -7,13 +7,18 @@ class Battery:
     """Models a generic battery."""
 
     def __init__(self, capacity: Energy, max_charge_power: Power,
-                 min_charge_power: Power, efficiency: float):
+                 min_charge_power: Power, efficiency: float, start_power_degradation: float=1,
+                 max_degradation_level: float=0):
         """Create instance of Battery given all parameters."""
         assert isinstance(capacity, (float, int)) and capacity > 0, \
             'Battery capacity must be greater than 0'
         assert isinstance(max_charge_power, (float, int))
         assert isinstance(min_charge_power, (float, int))
         assert isinstance(efficiency, (float, int)) and (0 <= efficiency <= 1)
+        assert isinstance(start_power_degradation, (float, int)) and (0 <= start_power_degradation <= 1)
+        assert isinstance(max_degradation_level, (float, int)) and (0 <= max_degradation_level <= 1)
+        assert max_degradation_level * max_charge_power >= min_charge_power
+
         # battery capacity (kWh)
         self.capacity = capacity
 
@@ -23,8 +28,16 @@ class Battery:
         # minimum supported charging power (W)
         self.min_charge_power = min_charge_power
 
-        # battery efficiency (%)
+        # battery efficiency ([0,1])
         self.efficiency = efficiency
+
+        # SOC level at which the max power start degrading ([0,1])
+        self.start_power_degradation = start_power_degradation
+
+        # Remaining fraction of initial max_power at SOC = 1 (max degradation) ([0,1])
+        # smaller max_degradation_level -> power degrades more:
+        # max_power_possible * max_degradation_level
+        self.max_degradation_level = max_degradation_level
 
     def to_dict(self):
         dictionary = self.__dict__.copy()
@@ -42,7 +55,16 @@ class Battery:
         Return:
             max_power_possible: (float): Max assignable power.
 
-        TODO: Implement SOC dependence."""
+        """
+        if current_soc > self.start_power_degradation:
+
+            power_degradation = (current_soc - self.start_power_degradation) / \
+                                (1-self.start_power_degradation) * \
+                                self.max_charge_power * (1 - self.max_degradation_level)
+
+            max_power_possible = self.max_charge_power - power_degradation
+            return max_power_possible
+
         return self.max_charge_power
 
     def min_power_possible(self, current_soc):
@@ -79,6 +101,13 @@ class Battery:
         min_charge_power = kwargs['min_charge_power']
 
         efficiency = kwargs['efficiency']
+
+        if 'start_power_degradation' and 'max_degradation_level' in kwargs:
+            start_power_degradation = kwargs['start_power_degradation']
+            max_degradation_level = kwargs['max_degradation_level']
+
+            return EVBattery(capacity, max_charge_power, min_charge_power, efficiency,
+                             start_power_degradation, max_degradation_level)
 
         return EVBattery(capacity, max_charge_power, min_charge_power, efficiency)
 
