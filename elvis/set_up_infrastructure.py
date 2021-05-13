@@ -92,10 +92,10 @@ def wallbox_infrastructure(num_cp, power_cp, num_cp_per_cs=1, power_cs=None,
     assert isinstance(num_cp_per_cs, int), 'Only integers are allowed for the number of ' \
                                            'charging points per charging station.'
     num_cs = int(num_cp / num_cp_per_cs)
-    assert num_cp%num_cp_per_cs == 0, 'Only integers are allowed for the number of charging ' \
-                                      'stations. The passed number of charging points and the ' \
-                                      'number of charging points per charging station are not ' \
-                                      'realisable.'
+    assert num_cp % num_cp_per_cs == 0, 'Only integers are allowed for the number of charging ' \
+                                        'stations. The passed number of charging points and the ' \
+                                        'number of charging points per charging station are not ' \
+                                        'realisable.'
     num_cs = int(num_cp / num_cp_per_cs)
 
     msg_power_numeric = 'The power assigned to the infrastructure elements must be of type int or' \
