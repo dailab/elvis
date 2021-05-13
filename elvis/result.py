@@ -5,6 +5,7 @@ from elvis.charging_point import ChargingPoint
 from elvis.config import ScenarioRealisation
 from elvis.utility.elvis_general import num_time_steps, create_time_steps
 from elvis.distribution import EquallySpacedInterpolatedDistribution
+from elvis.infrastructure_node import Storage
 
 
 class ElvisResult:
@@ -16,12 +17,15 @@ class ElvisResult:
 
     def __init__(self, scenario=None, realisation_file_name=None):
         self.power_charging_points = {}
+        self.power_storage_systems = {}
         self.aggregated_load_profile = None
         self.counter_rejections = 0
         self.charging_periods = None
 
         # used to cache the last saved timestamp for each charging point
         self._last_stored_cp_power = {}
+        # used to cache the last save timestamp for the storage system
+        self._last_stored_storage_power = {}
 
         if scenario is not None:
             assert isinstance(scenario, ScenarioRealisation), 'Result.scenario must be of type ' \
@@ -59,6 +63,30 @@ class ElvisResult:
             self._last_stored_cp_power[cp.id] = power
             self.power_charging_points[cp.id][pos_current_time_stamp] = power
 
+    def store_power_storage_systems(self, power_storage_systems, pos_current_time_stamp, is_last_step):
+        """Saves the power assigned to the storage system in each time step.
+
+        Args:
+            power_storage_systems: (dict)): Power assigned to all storage systems.
+            pos_current_time_stamp: (int): Current time step.
+            is_last_step: (bool): Denotes whether the end of the simulation is reached.
+
+        """
+
+        for storage_system in power_storage_systems:
+            assert isinstance(storage_system, Storage)
+
+            power = power_storage_systems[storage_system]
+
+            if storage_system.id not in self.power_storage_systems:
+                self.power_storage_systems[storage_system.id] = {}
+            elif not is_last_step and (storage_system.id in self._last_stored_storage_power):
+                if self._last_stored_storage_power[storage_system.id] == power:
+                    continue
+
+            self._last_stored_storage_power[storage_system.id] = power
+            self.power_storage_systems[storage_system.id][pos_current_time_stamp] = power
+
     def to_yaml(self):
         """Serialize this ElvisResult to a yaml string."""
 
@@ -91,6 +119,27 @@ class ElvisResult:
         self.aggregated_load_profile = load_profile
 
         return load_profile
+
+    def get_storage_profile(self, num_simulation_steps=None):
+
+        if num_simulation_steps is None:
+            assert self.scenario is not None, 'If using result.get_storage_profile without ' \
+                                              'passing the number of simulation steps the ' \
+                                              'field result.scenario must be set to the scenario ' \
+                                              'realisation.'
+
+            num_simulation_steps = num_time_steps(self.scenario.start_date, self.scenario.end_date,
+                                                  self.scenario.resolution)
+        storage_profile = []
+        power = {}
+        for time_step in range(num_simulation_steps):
+            for stor in self.power_storage_systems:
+                if time_step in self.power_storage_systems[stor].keys():
+                    power[stor] = self.power_storage_systems[stor][time_step]
+
+            storage_profile.append(sum(power.values()))
+
+        return storage_profile
 
     def total_energy_charged(self):
         power = 0

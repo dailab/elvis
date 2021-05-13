@@ -1,6 +1,7 @@
 """ """
-from elvis.infrastructure_node import Transformer
-from math import floor
+from elvis.infrastructure_node import Transformer, Storage
+from elvis.charging_point import ChargingPoint
+from elvis.utility.elvis_general import floor
 
 
 class SchedulingPolicy:
@@ -10,6 +11,35 @@ class SchedulingPolicy:
     def schedule(self, config, free_cps, busy_cps):
         """Subclasses should override this with their scheduling implementation."""
         raise NotImplementedError()
+
+    @staticmethod
+    def get_storage_system(free_cps, busy_cps):
+        """Returns the storage_system from the infrastructure by accessing a charging point.
+        Free cps and busy cps necessary since both (not at the same time) could be empty sets."""
+
+        transformer = SchedulingPolicy.get_transformer(free_cps, busy_cps)
+
+        storage_system = None
+        for child in transformer.children:
+            if isinstance(child, Storage):
+                storage_system = child
+        return storage_system
+
+    @staticmethod
+    def get_transformer(free_cps, busy_cps):
+        """Returns the transformer from the infrastructure by accessing a charging point.
+        Free cps and busy cps necessary since both (not at the same time) could be empty sets."""
+
+        if len(free_cps) > 0:
+            rand_cp = free_cps.copy().pop()
+            assert isinstance(rand_cp, ChargingPoint), 'Sets should contain cps.'
+            transformer = rand_cp.get_transformer()
+        else:
+            rand_cp = busy_cps.copy().pop()
+            assert isinstance(rand_cp, ChargingPoint), 'Sets should contain cps.'
+            transformer = rand_cp.get_transformer()
+
+        return transformer
 
 
 class Uncontrolled(SchedulingPolicy):
@@ -22,11 +52,14 @@ class Uncontrolled(SchedulingPolicy):
         """Assign maximum power to all vehicles possible in disregard of available power from
         grid. Infrastructure limits will be disregarded."""
 
-        assign_power = {}
+        assign_power = {'cps': {cp: 0 for cp in set.union(free_cps, busy_cps)}}
+        assign_power['storage'] = {}
         resolution = config.resolution
-        # All charging points without vehicle get 0 power.
-        for cp in free_cps:
-            assign_power[cp] = 0
+
+        transformer = SchedulingPolicy.get_transformer(free_cps, busy_cps)
+        storage_system = SchedulingPolicy.get_storage_system(free_cps, busy_cps)
+
+        total_power = 0
 
         # For all charging points with a connected vehicle assign max possible power
         for cp in busy_cps:
@@ -40,7 +73,23 @@ class Uncontrolled(SchedulingPolicy):
             power_to_charge_full = cp.power_to_charge_target(resolution, 1.0)
             # Get the stricter constraint
             power = (min(max_power_battery, power_to_charge_full, power_cp))
-            assign_power[cp] = power
+            assign_power['cps'][cp] = power
+            total_power += power
+
+        # If power assigned is higher than transformer limit
+        if storage_system is not None:
+            if total_power > transformer.max_power:
+                max_storage = storage_system.storage.max_discharge_power(0, resolution)
+                # The power from the storage system is not able to cover the whole transformer overhead
+                if max_storage < total_power - transformer.max_power:
+                    assign_power['storage'][storage_system] = - max_storage
+                # Storage covers the transformer overhead
+                else:
+                    storage_discharge_load = - floor(total_power - transformer.max_power)
+                    assign_power['storage'][storage_system] = storage_discharge_load
+            # Transformer is able to cover load by itself
+            else:
+                assign_power['storage'][storage_system] = 0
 
         return assign_power
 
@@ -56,14 +105,28 @@ class FCFS(SchedulingPolicy):
             boundaries have to be met. The power is distributed in order of arrival time.
             """
 
-        assign_power = {cp: 0 for cp in set.union(free_cps, busy_cps)}
+        assign_power = {'cps': {cp: 0 for cp in set.union(free_cps, busy_cps)}}
+        assign_power['storage'] = {}
         resolution = config.resolution
         preload = config.transformer_preload[time_step_pos]
 
         # All charging points with a connected vehicle assign max possible power
         sorted_busy_cps = list(busy_cps)
-        # TODO: Does only work if there is a connected vehicle (do we need an error handling here?)
         sorted_busy_cps.sort(key=lambda x: x.connected_vehicle['leaving_time'])
+
+        # Get transformer and storage system
+        storage_system = SchedulingPolicy.get_storage_system(free_cps, busy_cps)
+        if storage_system is not None:
+            assign_power['storage'][storage_system] = 0
+        transformer = SchedulingPolicy.get_transformer(free_cps, busy_cps)
+
+        # Sum all power that is assigned in order to identify which power must be delivered by
+        # the storage based on the initial transformer maximum
+        total_power_assigned = 0
+        max_power_transformer_0 = transformer.max_hardware_power(assign_power['cps'], preload)
+        power_storage = 0
+        max_power_storage = 0
+
         for cp in sorted_busy_cps:
             # check what the max power possible from vehicle to grid is based on hardware
             # and the already assigned power of every component (node)
@@ -75,18 +138,33 @@ class FCFS(SchedulingPolicy):
                     parent = parent.parent
                     # If the parent is the Transformer: Also pass preload
                     if isinstance(parent, Transformer):
-                        max_hardware_power = min(max_hardware_power,
-                                                 parent.max_hardware_power(assign_power, preload))
+                        max_power_transformer = parent.max_hardware_power(assign_power['cps'],
+                                                                          preload)
+                        if storage_system is not None:
+                            max_power_storage = \
+                                storage_system.storage.max_discharge_power(power_storage,
+                                                                           resolution)
+                            power_available = max_power_transformer + max_power_storage
+                        else:
+                            power_available = max_power_transformer
+                        power_available = floor(power_available)
+                        max_hardware_power = min(max_hardware_power, power_available)
                     else:
                         max_hardware_power = min(max_hardware_power,
-                                                 parent.max_hardware_power(assign_power))
+                                                 parent.max_hardware_power(assign_power['cps']))
                 else:
                     go_on = False
 
-            power_to_charge_full = cp.power_to_charge_target(resolution, 1.0)
+            power_to_charge_full = floor(cp.power_to_charge_target(resolution, 1.0))
             power = min(power_to_charge_full, max_hardware_power)
+            total_power_assigned += power
+            if total_power_assigned > max_power_transformer_0 and max_power_storage != 0:
+                power_storage = total_power_assigned - max_power_transformer_0
+                power_storage = floor(power_storage)
 
-            assign_power[cp] = power
+            assign_power['cps'][cp] = power
+        if storage_system is not None:
+            assign_power['storage'][storage_system] = -power_storage
 
         return assign_power
 
@@ -108,12 +186,25 @@ class DiscriminationFree(SchedulingPolicy):
         return 'Discrimination Free'
 
     def schedule(self, config, free_cps, busy_cps, time_step_pos=0):
-        assign_power = {cp: 0 for cp in set.union(free_cps, busy_cps)}
+        assign_power = {'cps': {cp: 0 for cp in set.union(free_cps, busy_cps)}}
+        assign_power['storage'] = {}
         resolution = config.resolution
         preload = config.transformer_preload[time_step_pos]
 
         self.update_state(busy_cps, config)
         sorted_busy_cps = self.sort_cps(config)
+
+        storage_system = SchedulingPolicy.get_storage_system(free_cps, busy_cps)
+        if storage_system is not None:
+            assign_power['storage'][storage_system] = 0
+        transformer = SchedulingPolicy.get_transformer(free_cps, busy_cps)
+
+        # Sum all power that is assigned in order to identify which power must be delivered by
+        # the storage based on the initial transformer maximum
+        total_power_assigned = 0
+        max_power_transformer_0 = transformer.max_hardware_power(assign_power['cps'], preload)
+        power_storage = 0
+        max_power_storage = 0
 
         for cp in sorted_busy_cps:
             # check what the max power possible from vehicle to grid is based on hardware
@@ -126,17 +217,29 @@ class DiscriminationFree(SchedulingPolicy):
                     parent = parent.parent
                     # If the parent is the Transformer: Also pass preload
                     if isinstance(parent, Transformer):
-                        max_hardware_power = min(max_hardware_power,
-                                                 parent.max_hardware_power(assign_power, preload))
+                        max_power_transformer = parent.max_hardware_power(assign_power['cps'],
+                                                                          preload)
+                        if storage_system is not None:
+                            max_power_storage = \
+                                storage_system.storage.max_discharge_power(power_storage,
+                                                                           resolution)
+                            power_available = max_power_transformer + max_power_storage
+                        else:
+                            power_available = max_power_transformer
+                        power_available = floor(power_available)
+                        max_hardware_power = min(max_hardware_power, power_available)
                     else:
                         max_hardware_power = min(max_hardware_power,
-                                                 parent.max_hardware_power(assign_power))
+                                                 parent.max_hardware_power(assign_power['cps']))
                 else:
                     go_on = False
 
-            power_to_charge_full = cp.power_to_charge_target(resolution, 1.0)
+            power_to_charge_full = floor(cp.power_to_charge_target(resolution, 1.0))
             power = min(power_to_charge_full, max_hardware_power)
-
+            total_power_assigned += power
+            if total_power_assigned > max_power_transformer_0 and max_power_storage != 0:
+                power_storage = total_power_assigned - max_power_transformer_0
+                power_storage = floor(power_storage)
             if power == power_to_charge_full:  # car is limiting factor: charged within time step
                 self.state[cp]['times_charged'] = self.state[cp]['times_charged'] + 1
             elif power < cp.max_hardware_power():
@@ -144,7 +247,9 @@ class DiscriminationFree(SchedulingPolicy):
             else:  # car or charging point is limiting factor: charged within time step
                 self.state[cp]['times_charged'] = self.state[cp]['times_charged'] + 1
 
-            assign_power[cp] = power
+            assign_power['cps'][cp] = power
+        if storage_system is not None:
+            assign_power['storage'][storage_system] = -power_storage
 
         return assign_power
 
@@ -171,7 +276,7 @@ class DiscriminationFree(SchedulingPolicy):
             # charged with priority
             if len(self.state) > 0:
                 times_charged = [self.state[x]['times_charged'] for x in self.state]
-                min_times_charged = floor(min(times_charged))
+                min_times_charged = floor(min(times_charged), 0)  # floor to integer
             else:
                 min_times_charged = 0
 

@@ -3,6 +3,8 @@ TODO: Add node busbar."""
 
 import networkx as nx
 import matplotlib.pyplot as plt
+from math import floor
+from elvis.battery import StationaryBattery
 
 
 class InfrastructureNode:
@@ -36,13 +38,16 @@ class InfrastructureNode:
 
         assert parent is None or isinstance(parent, InfrastructureNode)
         self.parent = parent
+        if parent is not None:
+            parent.add_child(self)
         self.children = []
         self.leafs = None
 
     def add_child(self, child):
         """Add child to list of all children."""
         assert isinstance(child, InfrastructureNode)
-        self.children.append(child)
+        if child not in self.children:
+            self.children.append(child)
 
     def draw_infrastructure(self):
         """Displays a window with a graph of the infrastructure."""
@@ -97,6 +102,20 @@ class InfrastructureNode:
                 _set_up_leafs(n)
         _set_up_leafs(self)
 
+    def get_transformer(self):
+        parent = self
+        go_on = True
+        while go_on is True:
+            if parent.parent is not None:
+                parent = parent.parent
+                # If the parent is the Transformer return it
+                if isinstance(parent, Transformer):
+                    return parent
+            else:
+                go_on = False
+
+        return None
+
 
 class Transformer(InfrastructureNode):
     """Represents a transformer. No usability besides having a max and min power.
@@ -127,8 +146,29 @@ class Transformer(InfrastructureNode):
         """
         power_already_assigned = preload
         for leaf in self.leafs:
-            power_already_assigned += power_assigned[leaf]
+            if not isinstance(leaf, Storage):
+                power_already_assigned += power_assigned[leaf]
 
         max_power = max(self.max_power - power_already_assigned, 0)
+        max_power = floor(max_power * 1000) / 1000
 
         return max_power
+
+
+class Storage(InfrastructureNode):
+    # ID counter
+    counter = 1
+
+    def __init__(self, stationary_battery, transformer):
+        assert isinstance(stationary_battery, StationaryBattery)
+        self.storage = stationary_battery
+
+        # Power limits
+        max_power = self.storage.max_charge_power
+        min_power = self.storage.min_charge_power
+
+        # ID
+        identification = 'Storage_System ' + str(Storage.counter)
+        Storage.counter += 1
+
+        super().__init__(identification, max_power, min_power, parent=transformer)

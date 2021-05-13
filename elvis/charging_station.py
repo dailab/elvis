@@ -18,6 +18,7 @@ TODO:
     lower limit or zero.
 """
 
+from elvis.utility.elvis_general import floor
 from elvis.infrastructure_node import InfrastructureNode
 
 
@@ -64,7 +65,6 @@ class ChargingStation(InfrastructureNode):
             power_cps += power_assigned[leaf]
 
         max_power = self.max_power - power_cps
+        max_power = floor(max_power)
 
         return max_power
-
-
