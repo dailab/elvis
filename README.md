@@ -18,7 +18,8 @@ This installs the package locally using pip and installs required packages, if n
 
 This may be useful if you want to add changes to the package. Then download or checkout this repository and in the top level that contains the `setup.py` file, run
 ```bash
-pip install .
+pip install -r requirements.txt
+python setup.py install
 ```
 This installs the package locally using pip and installs required packages, if not available. 
 
