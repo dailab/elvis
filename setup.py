@@ -12,10 +12,10 @@ except OSError:
     REQUIREMENTS = []
 
 setuptools.setup(
-    name="elvis",
+    name="py-elvis",
     version="0.1.0",
     author="Moritz Markschläger, Jonas Zell, Marcus Voss, Izgh Hadachi",
-    author_email="jonas.zell@dai-labor.de",
+    author_email="moritz.markschlaeger@dai-labor.de",
     description="A planning and management tool for electric vehicles charging infrastructure",
     long_description=long_description,
     long_description_content_type="text/markdown",

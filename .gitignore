@@ -9,3 +9,15 @@ elvis/utility/__pycache__
 *.DS_Store
 *.log
 elvis/*.log
+
+.installed.cfg
+bin
+develop-eggs
+dist
+downloads
+eggs
+parts
+src/*.egg-info
+*.egg-info
+lib
+lib64
