@@ -27,20 +27,17 @@ This installs the package locally using pip and installs required packages, if n
 
 Following, a simple example using one of the pre-defined scenario configurations
 ```python
-import pandas as pd
-import yaml
-from elvis.config import ScenarioConfig
-from elvis.simulate import simulate
-from elvis.utility.elvis_general import num_time_steps
+from elvis import simulate, ScenarioConfig
 
+import yaml
 with open("elvis/data/config_builder/office.yaml", 'r') as f:
     yaml_str = yaml.safe_load(f)
-	
 config_from_yaml = ScenarioConfig.from_yaml(yaml_str)
 
 results = simulate(config_from_yaml, start_date='2020-01-01 00:00:00', end_date='2020-12-31 23:00:00', resolution='01:00:00')
-
 load_profile = results.aggregate_load_profile()
+
+import pandas as pd
 df = pd.DataFrame(load_profile)
 df.head(24).plot()
 ```
