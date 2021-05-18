@@ -18,12 +18,24 @@ This installs the package locally using pip and installs required packages, if n
 
 This may be useful if you want to add changes to the package. Then download or checkout this repository and in the top level that contains the `setup.py` file, run
 ```bash
-pip install .
+pip install -r requirements.txt
+python setup.py install
 ```
 This installs the package locally using pip and installs required packages, if not available. 
 
 ## Usage
-TODO
+
+Following, a simple example using one of the pre-defined scenario configurations
+```python
+from elvis import simulate, ScenarioConfig
+
+config_from_yaml = ScenarioConfig.from_yaml("elvis/data/config_builder/office.yaml")
+results = simulate(config_from_yaml, start_date='2020-01-01 00:00:00', end_date='2020-12-31 23:00:00', resolution='01:00:00')
+load_profile = results.aggregate_load_profile()
+
+import matplotlib.pyplot as plt
+plt.plot(load_profile)
+```
 
 ## Acknowledgement
 
