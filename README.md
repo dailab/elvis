@@ -29,17 +29,12 @@ Following, a simple example using one of the pre-defined scenario configurations
 ```python
 from elvis import simulate, ScenarioConfig
 
-import yaml
-with open("elvis/data/config_builder/office.yaml", 'r') as f:
-    yaml_str = yaml.safe_load(f)
-config_from_yaml = ScenarioConfig.from_yaml(yaml_str)
-
+config_from_yaml = ScenarioConfig.from_yaml("elvis/data/config_builder/office.yaml")
 results = simulate(config_from_yaml, start_date='2020-01-01 00:00:00', end_date='2020-12-31 23:00:00', resolution='01:00:00')
 load_profile = results.aggregate_load_profile()
 
-import pandas as pd
-df = pd.DataFrame(load_profile)
-df.head(24).plot()
+import matplotlib.pyplot as plt
+plt.plot(load_profile)
 ```
 
 ## Acknowledgement
