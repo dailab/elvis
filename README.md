@@ -42,7 +42,6 @@ results = simulate(config_from_yaml, start_date='2020-01-01 00:00:00', end_date=
 
 load_profile = results.aggregate_load_profile()
 df = pd.DataFrame(load_profile)
-
 df.head(24).plot()
 ```
 
