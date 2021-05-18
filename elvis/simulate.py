@@ -363,7 +363,9 @@ def simulate_async(scenario, results, start_date=None, end_date=None, resolution
                    scenario.disconnect_by_time, within_opening_hours, log)
 
         # in case of multiple charging events in the same time step: handle one after the other
-        while len(charging_events) > charging_event_counter and time_step == charging_events[0].arrival_time:
+        while len(charging_events) > charging_event_counter and \
+                time_step == charging_events[charging_event_counter].arrival_time:
+
             current_charging_event = charging_events[charging_event_counter]
             waiting_queue, counter_rejections = handle_car_arrival(
                                                 free_cps, busy_cps,
