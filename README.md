@@ -38,7 +38,7 @@ with open("elvis/data/config_builder/office.yaml", 'r') as f:
 	
 config_from_yaml = ScenarioConfig.from_yaml(yaml_str)
 
-results = simulate(config_from_yaml, '2020-01-01 00:00:00', 2020-12-31 23:00:00', '01:00:00')
+results = simulate(config_from_yaml, start_date='2020-01-01 00:00:00', end_date='2020-12-31 23:00:00', resolution='01:00:00')
 
 load_profile = results.aggregate_load_profile(num_time_steps(realisation.start_date, realisation.end_date, realisation.resolution))
 df = pd.DataFrame(load_profile)
