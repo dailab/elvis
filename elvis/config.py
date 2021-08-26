@@ -193,11 +193,10 @@ class ScenarioConfig:
         config.with_queue_length(dictionary['queue_length'])
         config.with_disconnect_by_time(dictionary['disconnect_by_time'])
 
-        if isinstance(config.scheduling_policy, schedulers.DiscriminationFree):
-            if 'df_charging_period' in dictionary:
-                config.with_df_charging_period(dictionary['df_charging_period'])
-            else:
-                config.with_df_charging_period(datetime.timedelta(minutes=15))
+        if 'df_charging_period' in dictionary:
+            config.with_df_charging_period(dictionary['df_charging_period'])
+        else:
+            config.with_df_charging_period(datetime.timedelta(minutes=15))
 
         if 'sample_method' in dictionary:
             config.sample_method = dictionary['sample_method']
@@ -844,11 +843,10 @@ class ScenarioRealisation:
             self.with_scheduling_policy(config.scheduling_policy)
             self.sample_method = config.sample_method
 
-            if isinstance(self.scheduling_policy, schedulers.DiscriminationFree):
-                if config.df_charging_period is not None:
-                    self.df_charging_period = config.df_charging_period
-                else:
-                    self.df_charging_period = datetime.timedelta(minutes=15)
+            if config.df_charging_period is not None:
+                self.df_charging_period = config.df_charging_period
+            else:
+                self.df_charging_period = datetime.timedelta(minutes=15)
             self.queue_length = config.queue_length
             self.disconnect_by_time = config.disconnect_by_time
             self.with_transformer_preload(config.transformer_preload,
@@ -885,11 +883,11 @@ class ScenarioRealisation:
             self.with_opening_hours(kwargs['opening_hours'])
             self.infrastructure = kwargs['infrastructure']
             self.with_scheduling_policy(kwargs['scheduling_policy'])
-            if isinstance(self.scheduling_policy, schedulers.DiscriminationFree):
-                if 'df_charging_period' in kwargs.keys():
-                    self.with_df_charging_period(kwargs['df_chaging_period'])
-                else:
-                    self.df_charging_period = datetime.timedelta(minutes=15)
+
+            if 'df_charging_period' in kwargs.keys():
+                self.with_df_charging_period(kwargs['df_chaging_period'])
+            else:
+                self.df_charging_period = datetime.timedelta(minutes=15)
             self.queue_length = kwargs['queue_length']
             self.disconnect_by_time = kwargs['disconnect_by_time']
             self.start_date = kwargs['start_date']

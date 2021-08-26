@@ -68,7 +68,7 @@ class ChargingPoint(InfrastructureNode):
         # specific losses
         delta = power * hours / battery.capacity
 
-        self.connected_vehicle['soc'] += delta
+        self.connected_vehicle['soc'] = min(1, self.connected_vehicle['soc'] + delta)
 
     def max_hardware_power(self):
         """Calculate dependent on currently connected car the maximum power possible. Solely based

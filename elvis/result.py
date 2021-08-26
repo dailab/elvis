@@ -141,12 +141,21 @@ class ElvisResult:
 
         return storage_profile
 
-    def total_energy_charged(self):
-        power = 0
-        for cp in self.power_charging_points:
-            for time_step in self.power_charging_points[cp]:
-                power += self.power_charging_points[cp][time_step]
-        return float(power)
+
+    def total_energy_charged(self, resolution, num_simulation_steps=None):
+
+        assert isinstance(resolution, timedelta)
+        if self.aggregated_load_profile is not None:
+            self.aggregate_load_profile(num_simulation_steps)
+
+        load_profile = self.aggregated_load_profile
+
+        energy = sum(load_profile)
+
+        # convert to kWh
+        energy /= 3600 / resolution.total_seconds()
+
+        return energy
 
     def max_load(self):
         """Calculates the max load of an aggregated load profile:
@@ -330,6 +339,25 @@ class ElvisResult:
 
         return timedelta(seconds=seconds/event_counter)
 
+    def charging_time_histogram(self, bins=None):
+        """Returns data for a charging time histogram"""
+
+        assert self.charging_periods is not None, 'Charging periods must be assigned.'
+        assert isinstance(self.charging_periods, dict), 'Charging periods should be of type dict.'
+
+        charging_times = []
+        for event in self.charging_periods:
+            end = self.charging_periods[event]['last_charged']
+            start = self.charging_periods[event]['arrival']
+            minutes = (end - start).total_seconds() / 60
+            charging_times.append(minutes)
+
+        if bins is not None:
+            hist = histogram(charging_times, bins)
+        else:
+            hist = histogram(charging_times)
+
+        return list(zip(hist[0], hist[1]))
 
     @staticmethod
     def from_yaml(yaml_str):

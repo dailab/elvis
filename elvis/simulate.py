@@ -270,7 +270,7 @@ def update_last_charged(charging_times, assign_power_cps, time_step):
 
 
 def simulate(scenario, start_date=None, end_date=None, resolution=None, realisation_file_name=None,
-             log = False):
+             log=False, print_progress=True):
     """Main simulation loop.
     Iterates over simulation period and simulates the infrastructure.
 
@@ -290,7 +290,8 @@ def simulate(scenario, start_date=None, end_date=None, resolution=None, realisat
         results = ElvisResult(scenario, realisation_file_name)
 
     for progress in simulate_async(scenario, results, start_date, end_date, resolution, log):
-        print('Progress: ' + str(round(progress*100, 0)) + ' %')
+        if print_progress:
+            print('Progress: ' + str(round(progress*100, 0)) + ' %')
 
     return results
 

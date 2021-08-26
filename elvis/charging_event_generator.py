@@ -268,6 +268,53 @@ def weeks_to_sample(time_steps):
     return num_weeks
 
 
+def reset_offset_hours(samples, cut_off_hour):
+    assert isinstance(samples, np.ndarray)
+    for sample in samples:
+        time = sample[0]
+        for i in range(7):
+            if (i + 1) * 24 > time > ((i + 1) * 24 - cut_off_hour):
+                time -= 24 - cut_off_hour
+                sample[0] = time
+                break
+            elif (i + 1) * 24 > time < ((i + 1) * 24 - cut_off_hour):
+                time += cut_off_hour
+                sample[0] = time
+                break
+
+    return samples
+
+def resample(gmm, min_parking_time, num_resamples, hour_offset=0):
+    """If a sample is out of accepted range resample until a valid sample is found.
+
+    Args:
+        gmm: (:obj:): scikit-learn gaussian mixture model
+        min_parking_time: (float): Parking time that is required as a minimum
+        num_resamples: (int): Number of resamples to create
+        hour_offset: (float): Used in case an offset of hours within the gmm model is used.
+    Returns:
+        sample: Sample of the gaussian mixture model
+        """
+    assert isinstance(num_resamples, int)
+    parking_time = 0
+    resamples, _ = gmm.sample(num_resamples)
+    resamples = reset_offset_hours(resamples, hour_offset)
+    resamples = resamples.tolist()
+
+    to_delete = []
+    for i in range(len(resamples)):
+        sample = resamples[i]
+        if sample[1] < min_parking_time:
+            to_delete.append(i)
+
+    to_delete.sort(reverse=True)
+
+    for i in to_delete:
+        del resamples[i]
+
+    return resamples
+
+
 def create_charging_events_from_gmm(time_steps, num_charging_events, means, weights,
                                     covariances, vehicle_types, max_parking_time, mean_soc,
                                     std_deviation_soc):
@@ -297,19 +344,30 @@ def create_charging_events_from_gmm(time_steps, num_charging_events, means, weig
     week_offset = 0
     samples = []
     rounding_const = 1/((time_steps[1] - time_steps[0]).total_seconds() / 3600)
+    min_parking_time = 0.167
+    num_resamples = 100
+    resamples = resample(gmm, min_parking_time, num_resamples, hour_offset=5)
+    resample_counter = 0
+
     while num_weeks > week_offset / 168:
-        temp = gmm.sample(num_charging_events)
-        # Discard cluster assignments
-        temp = temp[0]
+        temp, _ = gmm.sample(num_charging_events)
+        temp = reset_offset_hours(temp, 5)
         temp = temp.tolist()
-        temp.sort()
         for sample in temp:
+            if sample[1] < min_parking_time:  # parking time < 1 min
+                sample = resamples[resample_counter]
+                resample_counter += 1
+                if resample_counter == len(resamples):
+                    resamples = resample(gmm, min_parking_time, num_resamples, hour_offset=5)
+                    resample_counter = 0
+
             sample[0] += week_offset
             # to ensure arrivals fall on time stamps
             sample[0] = math.ceil(sample[0] * rounding_const) / rounding_const
             samples.append(sample)
         week_offset += 168
 
+    samples.sort()
     # hours from monday of the first week until the beginning of the simulation
     day_offset = time_steps[0].weekday() * 24
     first_step_hours = day_offset + time_steps[0].hour + time_steps[0].minute / 60 + \
@@ -343,7 +401,7 @@ def create_charging_events_from_gmm(time_steps, num_charging_events, means, weig
         sample_hour = sample[0]
         sample[0] = ref_date + datetime.timedelta(hours=sample_hour)
         # ensure 1 min < parking time < max_parking_time
-        sample[1] = max(min(sample[1], max_parking_time), 0.0167)
+        sample[1] = min(sample[1], max_parking_time)
 
     walker_weights = [vehicle_type.probability for vehicle_type in vehicle_types]
     walker = WalkerRandomSampling(walker_weights, keys=vehicle_types)

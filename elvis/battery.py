@@ -57,10 +57,9 @@ class Battery:
 
         """
         if current_soc > self.start_power_degradation:
-
             power_degradation = (current_soc - self.start_power_degradation) / \
                                 (1-self.start_power_degradation) * \
-                                self.max_charge_power * (1 - self.max_degradation_level)
+                                 self.max_charge_power * (1 - self.max_degradation_level)
 
             max_power_possible = self.max_charge_power - power_degradation
             return max_power_possible
