@@ -1,0 +1,547 @@
+disconnect_by_time: true
+gmm_covariances:
+- - - 16.99865592668439
+    - -3.185957487935224
+  - - -3.1859574879352244
+    - 19.203708910299856
+- - - 9.163783768881485
+    - -1.782788337380871
+  - - -1.782788337380871
+    - 3.4929815443429333
+- - - 16.99865592668439
+    - -3.185957487935224
+  - - -3.1859574879352244
+    - 19.203708910299856
+- - - 9.163783768881485
+    - -1.782788337380871
+  - - -1.782788337380871
+    - 3.4929815443429333
+- - - 16.99865592668439
+    - -3.185957487935224
+  - - -3.1859574879352244
+    - 19.203708910299856
+- - - 9.163783768881485
+    - -1.782788337380871
+  - - -1.782788337380871
+    - 3.4929815443429333
+- - - 16.99865592668439
+    - -3.185957487935224
+  - - -3.1859574879352244
+    - 19.203708910299856
+- - - 9.163783768881485
+    - -1.782788337380871
+  - - -1.782788337380871
+    - 3.4929815443429333
+- - - 16.99865592668439
+    - -3.185957487935224
+  - - -3.1859574879352244
+    - 19.203708910299856
+- - - 9.163783768881485
+    - -1.782788337380871
+  - - -1.782788337380871
+    - 3.4929815443429333
+- - - 21.973843592592598
+    - -26.568094328703705
+  - - -26.568094328703705
+    - 40.339569891326946
+- - - 24.81450923373817
+    - -2.0932361433686544
+  - - -2.0932361433686544
+    - 3.098990930045932
+- - - 21.973843592592598
+    - -26.568094328703705
+  - - -26.568094328703705
+    - 40.339569891326946
+- - - 24.81450923373817
+    - -2.0932361433686544
+  - - -2.0932361433686544
+    - 3.098990930045932
+gmm_means:
+- - 16.747934389366154
+  - 3.9754662486336882
+- - 5.851808337667644
+  - 3.141707279148557
+- - 40.74793438936615
+  - 3.9754662486336882
+- - 29.851808337667645
+  - 3.141707279148557
+- - 64.74793438936615
+  - 3.9754662486336882
+- - 53.85180833766764
+  - 3.141707279148557
+- - 88.74793438936615
+  - 3.9754662486336882
+- - 77.85180833766765
+  - 3.141707279148557
+- - 112.74793438936615
+  - 3.9754662486336882
+- - 101.85180833766765
+  - 3.141707279148557
+- - 140.33333333333331
+  - 7.042002314814813
+- - 130.96184738955824
+  - 2.0811044176706828
+- - 164.33333333333331
+  - 7.042002314814813
+- - 154.96184738955824
+  - 2.0811044176706828
+gmm_weights:
+- 0.030619767371488704
+- 0.14492308977136886
+- 0.030619767371488704
+- 0.14492308977136886
+- 0.030619767371488704
+- 0.14492308977136886
+- 0.030619767371488704
+- 0.14492308977136886
+- 0.030619767371488704
+- 0.14492308977136886
+- 0.013714285714285717
+- 0.04742857142857143
+- 0.013714285714285717
+- 0.04742857142857143
+infrastructure:
+  transformers:
+  - charging_stations:
+    - charging_points:
+      - id: cp1
+        max_power: 3.7
+        min_power: 0
+      id: cs1
+      max_power: 3.7
+      min_power: 0
+    - charging_points:
+      - id: cp2
+        max_power: 3.7
+        min_power: 0
+      id: cs2
+      max_power: 3.7
+      min_power: 0
+    - charging_points:
+      - id: cp3
+        max_power: 3.7
+        min_power: 0
+      id: cs3
+      max_power: 3.7
+      min_power: 0
+    - charging_points:
+      - id: cp4
+        max_power: 3.7
+        min_power: 0
+      id: cs4
+      max_power: 3.7
+      min_power: 0
+    - charging_points:
+      - id: cp5
+        max_power: 3.7
+        min_power: 0
+      id: cs5
+      max_power: 3.7
+      min_power: 0
+    - charging_points:
+      - id: cp6
+        max_power: 3.7
+        min_power: 0
+      id: cs6
+      max_power: 3.7
+      min_power: 0
+    - charging_points:
+      - id: cp7
+        max_power: 3.7
+        min_power: 0
+      id: cs7
+      max_power: 3.7
+      min_power: 0
+    - charging_points:
+      - id: cp8
+        max_power: 3.7
+        min_power: 0
+      id: cs8
+      max_power: 3.7
+      min_power: 0
+    - charging_points:
+      - id: cp9
+        max_power: 3.7
+        min_power: 0
+      id: cs9
+      max_power: 3.7
+      min_power: 0
+    - charging_points:
+      - id: cp10
+        max_power: 3.7
+        min_power: 0
+      id: cs10
+      max_power: 3.7
+      min_power: 0
+    - charging_points:
+      - id: cp11
+        max_power: 3.7
+        min_power: 0
+      id: cs11
+      max_power: 3.7
+      min_power: 0
+    - charging_points:
+      - id: cp12
+        max_power: 3.7
+        min_power: 0
+      id: cs12
+      max_power: 3.7
+      min_power: 0
+    - charging_points:
+      - id: cp13
+        max_power: 3.7
+        min_power: 0
+      id: cs13
+      max_power: 3.7
+      min_power: 0
+    - charging_points:
+      - id: cp14
+        max_power: 3.7
+        min_power: 0
+      id: cs14
+      max_power: 3.7
+      min_power: 0
+    - charging_points:
+      - id: cp15
+        max_power: 3.7
+        min_power: 0
+      id: cs15
+      max_power: 3.7
+      min_power: 0
+    - charging_points:
+      - id: cp16
+        max_power: 3.7
+        min_power: 0
+      id: cs16
+      max_power: 3.7
+      min_power: 0
+    - charging_points:
+      - id: cp17
+        max_power: 3.7
+        min_power: 0
+      id: cs17
+      max_power: 3.7
+      min_power: 0
+    - charging_points:
+      - id: cp18
+        max_power: 3.7
+        min_power: 0
+      id: cs18
+      max_power: 3.7
+      min_power: 0
+    - charging_points:
+      - id: cp19
+        max_power: 3.7
+        min_power: 0
+      id: cs19
+      max_power: 3.7
+      min_power: 0
+    - charging_points:
+      - id: cp20
+        max_power: 3.7
+        min_power: 0
+      id: cs20
+      max_power: 3.7
+      min_power: 0
+    id: transformer1
+    max_power: 74.0
+    min_power: 0
+mean_soc: 0.5
+num_charging_events: 2000
+queue_length: 0
+repeat_preload: true
+sample_method: gmm
+scheduling_policy: UC
+std_deviation_soc: 0.2
+transformer_preload: 0
+vehicle_types:
+- battery:
+    capacity: 52.0
+    efficiency: 1
+    max_charge_power: 150
+    max_power_degredation: 0.3
+    min_charge_power: 0
+    start_power_degradation: 0.8
+  brand: Renault
+  model: "Zo\xE9"
+  probability: 0.1437716019458256
+- battery:
+    capacity: 35.8
+    efficiency: 1
+    max_charge_power: 150
+    max_power_degredation: 0.3
+    min_charge_power: 0
+    start_power_degradation: 0.8
+  brand: Volkswagen
+  model: e-Golf
+  probability: 0.08801479138478754
+- battery:
+    capacity: 16.7
+    efficiency: 1
+    max_charge_power: 150
+    max_power_degredation: 0.3
+    min_charge_power: 0
+    start_power_degradation: 0.8
+  brand: Smart
+  model: Fortwo ED
+  probability: 0.07529141343070092
+- battery:
+    capacity: 76.0
+    efficiency: 1
+    max_charge_power: 150
+    max_power_degredation: 0.3
+    min_charge_power: 0
+    start_power_degradation: 0.8
+  brand: Tesla
+  model: Model 3
+  probability: 0.08530829118058103
+- battery:
+    capacity: 37.9
+    efficiency: 1
+    max_charge_power: 150
+    max_power_degredation: 0.3
+    min_charge_power: 0
+    start_power_degradation: 0.8
+  brand: BMW
+  model: i3 BEV
+  probability: 0.07043478259663118
+- battery:
+    capacity: 64.0
+    efficiency: 1
+    max_charge_power: 150
+    max_power_degredation: 0.3
+    min_charge_power: 0
+    start_power_degradation: 0.8
+  brand: Hyundai
+  model: Kona Electric
+  probability: 0.06976447027827398
+- battery:
+    capacity: 32.3
+    efficiency: 1
+    max_charge_power: 150
+    max_power_degredation: 0.3
+    min_charge_power: 0
+    start_power_degradation: 0.8
+  brand: Volkswagen
+  model: e-up!
+  probability: 0.06156371993992887
+- battery:
+    capacity: 77.0
+    efficiency: 1
+    max_charge_power: 150
+    max_power_degredation: 0.3
+    min_charge_power: 0
+    start_power_degradation: 0.8
+  brand: Volkswagen
+  model: ID,3
+  probability: 0.06324846204142037
+- battery:
+    capacity: 85.0
+    efficiency: 1
+    max_charge_power: 150
+    max_power_degredation: 0.3
+    min_charge_power: 0
+    start_power_degradation: 0.8
+  brand: Audi
+  model: e-tron
+  probability: 0.04074194116197375
+- battery:
+    capacity: 16.7
+    efficiency: 1
+    max_charge_power: 150
+    max_power_degredation: 0.3
+    min_charge_power: 0
+    start_power_degradation: 0.8
+  brand: Smart
+  model: Forfour ED
+  probability: 0.03223339585158563
+- battery:
+    capacity: 56.0
+    efficiency: 1
+    max_charge_power: 150
+    max_power_degredation: 0.3
+    min_charge_power: 0
+    start_power_degradation: 0.8
+  brand: Nissan
+  model: Leaf
+  probability: 0.027999960763938327
+- battery:
+    capacity: 39.2
+    efficiency: 1
+    max_charge_power: 150
+    max_power_degredation: 0.3
+    min_charge_power: 0
+    start_power_degradation: 0.8
+  brand: Kia
+  model: Soul EV
+  probability: 0.02237159488943915
+- battery:
+    capacity: 45.0
+    efficiency: 1
+    max_charge_power: 150
+    max_power_degredation: 0.3
+    min_charge_power: 0
+    start_power_degradation: 0.8
+  brand: Opel
+  model: Corsa-e
+  probability: 0.02554343367512133
+- battery:
+    capacity: 28.9
+    efficiency: 1
+    max_charge_power: 150
+    max_power_degredation: 0.3
+    min_charge_power: 0
+    start_power_degradation: 0.8
+  brand: Mini
+  model: Cooper SE Electric
+  probability: 0.02219933081981128
+- battery:
+    capacity: 38.3
+    efficiency: 1
+    max_charge_power: 150
+    max_power_degredation: 0.3
+    min_charge_power: 0
+    start_power_degradation: 0.8
+  brand: Hyundai
+  model: Ioniq Electric
+  probability: 0.01612430095330172
+- battery:
+    capacity: 36.8
+    efficiency: 1
+    max_charge_power: 150
+    max_power_degredation: 0.3
+    min_charge_power: 0
+    start_power_degradation: 0.8
+  brand: "\u0160koda"
+  model: Citigo-e
+  probability: 0.018088051965749582
+- battery:
+    capacity: 77.0
+    efficiency: 1
+    max_charge_power: 150
+    max_power_degredation: 0.3
+    min_charge_power: 0
+    start_power_degradation: 0.8
+  brand: Volkswagen
+  model: ID,4
+  probability: 0.014570025693931997
+- battery:
+    capacity: 45.0
+    efficiency: 1
+    max_charge_power: 150
+    max_power_degredation: 0.3
+    min_charge_power: 0
+    start_power_degradation: 0.8
+  brand: Peugeot
+  model: e-208
+  probability: 0.015156363405901596
+- battery:
+    capacity: 64.0
+    efficiency: 1
+    max_charge_power: 150
+    max_power_degredation: 0.3
+    min_charge_power: 0
+    start_power_degradation: 0.8
+  brand: Kia
+  model: Niro EV
+  probability: 0.015939061790012674
+- battery:
+    capacity: 80.0
+    efficiency: 1
+    max_charge_power: 150
+    max_power_degredation: 0.3
+    min_charge_power: 0
+    start_power_degradation: 0.8
+  brand: Mercedes-Benz
+  model: EQC
+  probability: 0.014621446023409194
+- battery:
+    capacity: 71.0
+    efficiency: 1
+    max_charge_power: 150
+    max_power_degredation: 0.3
+    min_charge_power: 0
+    start_power_degradation: 0.8
+  brand: Porsche
+  model: Taycan
+  probability: 0.012304301297657819
+- battery:
+    capacity: 37.3
+    efficiency: 1
+    max_charge_power: 150
+    max_power_degredation: 0.3
+    min_charge_power: 0
+    start_power_degradation: 0.8
+  brand: Fiat
+  model: 500e
+  probability: 0.008540675038682137
+- battery:
+    capacity: 115.0
+    efficiency: 1
+    max_charge_power: 150
+    max_power_degredation: 0.3
+    min_charge_power: 0
+    start_power_degradation: 0.8
+  brand: Tesla
+  model: Model S
+  probability: 0.00846688127460483
+- battery:
+    capacity: 88.0
+    efficiency: 1
+    max_charge_power: 150
+    max_power_degredation: 0.3
+    min_charge_power: 0
+    start_power_degradation: 0.8
+  brand: Mazda
+  model: MX-30
+  probability: 0.011710207942663628
+- battery:
+    capacity: 32.3
+    efficiency: 1
+    max_charge_power: 150
+    max_power_degredation: 0.3
+    min_charge_power: 0
+    start_power_degradation: 0.8
+  brand: Seat
+  model: Mii Electric
+  probability: 0.009364857094785238
+- battery:
+    capacity: 45.0
+    efficiency: 1
+    max_charge_power: 150
+    max_power_degredation: 0.3
+    min_charge_power: 0
+    start_power_degradation: 0.8
+  brand: Peugeot
+  model: e-2008
+  probability: 0.006671012879070754
+- battery:
+    capacity: 84.7
+    efficiency: 1
+    max_charge_power: 150
+    max_power_degredation: 0.3
+    min_charge_power: 0
+    start_power_degradation: 0.8
+  brand: Jaguar
+  model: I-Pace
+  probability: 0.007642418960918372
+- battery:
+    capacity: 90.0
+    efficiency: 1
+    max_charge_power: 150
+    max_power_degredation: 0.3
+    min_charge_power: 0
+    start_power_degradation: 0.8
+  brand: Tesla
+  model: Model X
+  probability: 0.005887792827378768
+- battery:
+    capacity: 21.3
+    efficiency: 1
+    max_charge_power: 150
+    max_power_degredation: 0.3
+    min_charge_power: 0
+    start_power_degradation: 0.8
+  brand: Renault
+  model: Twingo Z,E,
+  probability: 0.006425412891912656
