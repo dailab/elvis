@@ -14,7 +14,7 @@ except OSError:
 setuptools.setup(
     name="py-elvis",
     version="0.1.0",
-    author="Moritz Markschläger, Jonas Zell, Marcus Voss, Izgh Hadachi",
+    author="Moritz Markschläger, Jonas Zell, Marcus Voss, Mahmoud Draz, and Izgh Hadachi",
     author_email="moritz.markschlaeger@dai-labor.de",
     description="A planning and management tool for electric vehicles charging infrastructure",
     long_description=long_description,
