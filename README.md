@@ -51,13 +51,13 @@ It's conceputally based on earlier similar simulations tools that have been peer
 
 An earlier version has been presented at the poster sesssion at the 10th European openmod Workshop in Berlin (15.-17.1.2020).
 
-It has been reimplemented as a software tool to be used with a web-based [Graphical User Interface](https://elvis.aot.tu-berlin.de/) (contact izgh.hadachi[at]dai-labor.de if you want to get test user access) and to be integrated prototypically as a load in DIgSILENT PowerFactory for Stromnetz Berlin. It's conceptually based on the earlier versions, but further conceputally inspired by similar tools such as:
+This work has been completely reimplemented as a software tool to be used with a web-based [Graphical User Interface](https://elvis.aot.tu-berlin.de/) (contact izgh.hadachi[at]dai-labor.de if you want to get test user access) and to be integrated prototypically as a load in DIgSILENT PowerFactory for Stromnetz Berlin. It's conceptually related to earlier versions, but further conceputally inspired by similar tools such as:
 * https://github.com/RAMP-project/RAMP-mobility
 * https://github.com/TUMFTM/urbanev
 * https://github.com/rl-institut/spice_ev
 * https://gitlab.com/diw-evu/emobpy/emobpy
 
-The simulations has been used to simulate data in the peer-reviewed paper:
+The simulations have been used to simulate data in the peer-reviewed paper:
 * Hadachi, Izgh, Marcus Voss, and Sahin Albayrak. "Sector-Coupled District Energy Management with Heating and Bi-Directional EV-Charging." 2021 IEEE Madrid PowerTech. IEEE, 2021.
 
 [This talk](https://www.youtube.com/watch?v=bayf0SAoyPk) at the Berliner Energietage presents some example results of the tool.
